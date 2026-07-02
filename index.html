@@ -1,0 +1,1102 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>ESIC · Display & RTB · Sesión 1 · El viaje de una impresión</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Sistema visual original (componentes, tarjetas, tablas, boards…) -->
+  <link rel="stylesheet" href="assets/styles.css">
+  <!-- Capa SPW: barra superior sticky + scrollspy + apilado de secciones -->
+  <link rel="stylesheet" href="assets/spw.css">
+  <!-- Capa dinámica: componentes interactivos del rediseño de secciones -->
+  <link rel="stylesheet" href="assets/dynamic.css">
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════
+     BARRA SUPERIOR STICKY  ·  Menú con Scrollspy (estilo ESIC)
+     Los <a href="#sNN"> son anclas internas; el desplazamiento
+     suave lo aporta `html{scroll-behavior:smooth}` de styles.css.
+     El resaltado activo lo gestiona assets/spw.js (IntersectionObserver).
+     ══════════════════════════════════════════════════════════════ -->
+<header class="topnav">
+  <div class="topnav-inner">
+    <div class="topnav-brand">
+      <svg class="brand-logo" viewBox="0 0 120 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ESIC University">
+        <text x="0" y="22" font-family="Inter,sans-serif" font-weight="900" font-size="24" fill="white" letter-spacing="-1">ESIC</text>
+        <text x="58" y="22" font-family="Inter,sans-serif" font-weight="400" font-size="12" fill="#94a3b8" letter-spacing="1">UNIVERSITY</text>
+      </svg>
+      <span class="topnav-session"><span class="dot"></span>Sesión 1 · Viernes</span>
+    </div>
+
+    <nav class="topnav-links" id="spw-nav" aria-label="Secciones de la sesión">
+      <a href="#s00" class="active">Bienvenida</a>
+      <a href="#s01">Evolución digital</a>
+      <a href="#s02">Inventario y formatos</a>
+      <a href="#s03">Detectives AdTech</a>
+      <a href="#s04">Inspector AdTech</a>
+      <a href="#s05">Header Bidding</a>
+      <a href="#s06">DevTools real</a>
+      <a href="#s07">Subasta RTB</a>
+      <a href="#s08">Caso Last Look</a>
+      <a href="#s09">Floor &amp; GAM</a>
+      <a href="#s10">Impresión y viewability</a>
+      <a href="#s11">Cierre sesión 1</a>
+    </nav>
+
+    <div class="topnav-actions">
+      <a class="tn-btn tn-btn-primary" href="https://docs.google.com/spreadsheets/d/1OsMyOx1eSzY2bn0XF4uiH4vZr4511WT5BBZG2ZeqS1U/edit" target="_blank" rel="noopener">Google Sheet</a>
+    </div>
+  </div>
+  <div class="topnav-progress"><span id="progress-fill"></span></div>
+</header>
+
+<!-- ── Overlay de clave eliminado (modo profesor desactivado) ──── -->
+
+<main class="spw-main">
+
+  <!-- ══════════ S00 · Bienvenida ══════════ -->
+  <section class="screen flag" id="s00">
+
+    <!-- Hero -->
+    <div class="hero2" data-reveal>
+      <div class="hero2-main">
+        <p class="eyebrow">Pantalla 00 · 5–10 min · Bienvenida</p>
+        <h2>El viaje de una impresión publicitaria</h2>
+        <p class="hero2-sub">Una sesión práctica: cómo una web convierte un espacio publicitario en una impresión servida, medida y monetizada.</p>
+        <div class="stat-row">
+          <div class="stat"><b>12</b><span>pantallas</span></div>
+          <div class="stat"><b>4</b><span>roles por grupo</span></div>
+          <div class="stat"><b>5+</b><span>herramientas</span></div>
+          <div class="stat"><b>0</b><span>diapositivas</span></div>
+        </div>
+        <div class="actions">
+          <a class="btn" href="https://docs.google.com/spreadsheets/d/1OsMyOx1eSzY2bn0XF4uiH4vZr4511WT5BBZG2ZeqS1U/edit#gid=99691456" target="_blank" rel="noopener">Abrir Google Sheet</a>
+          <a class="btn alt" href="https://docs.google.com/spreadsheets/d/1OsMyOx1eSzY2bn0XF4uiH4vZr4511WT5BBZG2ZeqS1U/edit#gid=1535924209" target="_blank" rel="noopener">Ver grupos</a>
+        </div>
+      </div>
+      <div class="hero2-aside">
+        <div class="ph dark" style="min-height:240px"><span>[ FOTO / VISUAL · aula o mapa de programática ]</span></div>
+      </div>
+    </div>
+
+    <!-- Hilo unificador: el viaje (vista previa) -->
+    <div class="thread-wrap" data-reveal>
+      <p class="blocktitle">Esto es lo que vamos a recorrer hoy</p>
+      <div class="journey acc-red is-in" data-journey data-static>
+        <div class="journey-track">
+          <div class="journey-node done" style="--i:0"><span class="jn-dot">1</span><span class="jn-label">Inventario</span></div>
+          <div class="journey-node done" style="--i:1"><span class="jn-dot">2</span><span class="jn-label">Slot</span></div>
+          <div class="journey-node done" style="--i:2"><span class="jn-dot">3</span><span class="jn-label">Subasta</span></div>
+          <div class="journey-node done" style="--i:3"><span class="jn-dot">4</span><span class="jn-label">Creatividad</span></div>
+          <div class="journey-node done" style="--i:4"><span class="jn-dot">5</span><span class="jn-label">Impresión</span></div>
+          <div class="journey-node done" style="--i:5"><span class="jn-dot">6</span><span class="jn-label">Viewability</span></div>
+          <div class="journey-node done" style="--i:6"><span class="jn-dot">7</span><span class="jn-label">Conversión</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Qué vamos a hacer hoy -->
+    <div data-reveal>
+      <p class="blocktitle">Qué vamos a hacer hoy</p>
+      <p class="blocklead">No vamos a trabajar con PowerPoint. Trabajaremos con una web de clase, un Google Sheet, simuladores, DevTools y casos prácticos.</p>
+      <div class="qcards">
+        <div class="qcard"><div class="k">01</div><b>Observaremos</b><span>anuncios reales en webs reales.</span></div>
+        <div class="qcard"><div class="k">02</div><b>Investigaremos</b><span>señales técnicas con DevTools y Google Publisher Console.</span></div>
+        <div class="qcard"><div class="k">03</div><b>Simularemos</b><span>subastas RTB y decisiones de precio.</span></div>
+        <div class="qcard"><div class="k">04</div><b>Explicaremos</b><span>el viaje completo de una impresión.</span></div>
+      </div>
+    </div>
+
+    <!-- Cómo trabajaremos: carrusel de roles -->
+    <div data-reveal>
+      <p class="blocktitle">Cómo trabajaremos · roles por grupo</p>
+      <div class="esic-carousel">
+        <div class="ec-track">
+          <div class="ec-card"><div class="ec-num">1</div><h4>Navigator</h4><p>Controla la web y los pasos.</p></div>
+          <div class="ec-card"><div class="ec-num">2</div><h4>Inspector</h4><p>Abre DevTools, consola o recurso técnico.</p></div>
+          <div class="ec-card"><div class="ec-num">3</div><h4>Recorder</h4><p>Anota evidencias en el Sheet.</p></div>
+          <div class="ec-card"><div class="ec-num">4</div><h4>Speaker</h4><p>Explica conclusiones del grupo.</p></div>
+        </div>
+        <div class="ec-controls">
+          <div class="ec-segs">
+            <button class="ec-seg on" aria-label="Ir al rol 1"></button>
+            <button class="ec-seg" aria-label="Ir al rol 2"></button>
+            <button class="ec-seg" aria-label="Ir al rol 3"></button>
+            <button class="ec-seg" aria-label="Ir al rol 4"></button>
+          </div>
+          <div class="ec-arrows">
+            <button class="ec-arrow ec-prev" type="button" aria-label="Anterior">‹</button>
+            <button class="ec-arrow ec-next" type="button" aria-label="Siguiente">›</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quién os acompaña + cita -->
+    <div class="note-card" data-reveal>
+      <span class="tag tag-teoria">Introducción</span>
+      <p>Trabajo con campañas, datos, leads y plataformas reales. Por eso he diseñado esta sesión como me habría gustado que me explicaran la programática al principio: viendo el proceso, tocando herramientas y tomando decisiones.</p>
+    </div>
+
+    <aside class="teacher-card">
+      <span class="tag tag-reto">Guía docente</span>
+      <h3>Pantalla 00</h3>
+      <p><b>Objetivo docente:</b> romper la expectativa de clase teórica y colocar al alumno en modo investigación.</p>
+      <p><b>Guion:</b> "Hoy no vamos a estudiar programática desde una lista de siglas. Vamos a seguir una impresión publicitaria."</p>
+      <p><b>Evitar:</b> convertir la bienvenida en un CV largo.</p>
+    </aside>
+    <div class="pager"><span></span><a href="#s01">01 · Evolución de la compra digital →</a></div>
+  </section>
+
+  <!-- ══════════ S01 · Evolución ══════════ -->
+  <section class="screen flag" id="s01">
+    <div class="screen-head" data-reveal>
+      <p class="eyebrow">Pantalla 01 · 20 min</p>
+      <h2>Evolución de la compra digital</h2>
+      <p class="subtitle">De comprar espacios a comprar impresiones en tiempo real.</p>
+      <p class="lead">La programática aparece porque la compra manual no podía escalar al ritmo de Internet.</p>
+      <div class="sec-meta"><span><b>Objetivo</b> · entender por qué nace la programática</span><span><b>Tiempo</b> · 20 min</span><span><b>Tipo</b> · Teoría</span></div>
+    </div>
+    <div class="content-grid" data-reveal>
+      <main class="student-card session01-card">
+        <span class="tag tag-teoria">Teoría</span>
+        <div class="accordion-stack">
+          <article class="dynamic-block is-open" data-reveal>
+            <div class="dynamic-head">
+              <div>
+                <span class="dynamic-kicker">Modelo económico</span>
+                <h3>Si nadie paga por entrar, ¿quién sostiene el contenido?</h3>
+              </div>
+            </div>
+            <div class="dynamic-panel">
+              <div class="dark-board economic-board">
+                <div class="brand-grid">
+                  <span>YouTube</span><span>Marca</span><span>El País</span><span>Twitch</span>
+                  <span>Spotify</span><span>TikTok</span><span>Atresplayer</span><span>Amazon</span>
+                </div>
+                <div class="value-stack" aria-label="Elementos que sostienen el contenido">
+                  <span>Contenido</span><span>Audiencia</span><span>Publicidad</span><span>Datos</span><span>Suscripción</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="dynamic-block is-open" data-reveal>
+            <div class="dynamic-head">
+              <div>
+                <span class="dynamic-kicker">Evolución de la compra digital</span>
+                <h3>Antes comprábamos espacios. Hoy compramos oportunidades de impacto.</h3>
+              </div>
+            </div>
+            <div class="dynamic-panel">
+              <p class="dynamic-question">¿Qué problema aparece cuando la compra directa ya no puede gestionar todo el inventario?</p>
+              <div class="dark-board evolution-board evolution-interactive">
+                <div class="evolution-grid evolution-options" aria-label="Modelos de compra digital">
+                  <button class="evolution-choice active" type="button" data-evolution="directa"><b>Compra directa</b><span>Venta directa</span></button>
+                  <button class="evolution-choice" type="button" data-evolution="redes"><b>Redes</b><span>Agrupan inventario</span></button>
+                  <button class="evolution-choice" type="button" data-evolution="rtb"><b>Programática y RTB</b><span>Decisión impresión a impresión</span></button>
+                </div>
+
+                <div class="evolution-detail active" data-evolution-panel="directa">
+                  <div class="timeline-card direct-card">
+                    <div class="timeline-year">1995</div>
+                    <div class="timeline-title"><span>1</span>Venta directa</div>
+                    <p class="timeline-copy">Marca.com vende directamente a Coca-Cola</p>
+                    <div class="timeline-flow">
+                      <div class="flow-node">Publisher</div><div class="flow-arrow">→</div><div class="flow-node">Anunciante</div>
+                    </div>
+                    <div class="timeline-note">
+                      <b>Problema:</b>
+                      <ul><li>Escala muy limitada</li><li>Mucha gestión comercial</li><li>Difícil vender todo el inventario</li></ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="evolution-detail" data-evolution-panel="redes" hidden>
+                  <div class="timeline-card network-card">
+                    <div class="timeline-title"><span>2</span>Redes - agrupan inventario</div>
+                    <p class="timeline-copy">DoubleClick<br>ValueClick<br>Advertising.com</p>
+                    <div class="timeline-flow three">
+                      <div class="flow-node">Publishers</div><div class="flow-arrow">→</div><div class="flow-node">Ad network</div><div class="flow-arrow">→</div><div class="flow-node">Anunciante</div>
+                    </div>
+                    <div class="timeline-note">
+                      <b>Ventajas:</b>
+                      <ul><li>Más escala</li><li>Compra centralizada</li></ul>
+                      <b>Problemas:</b>
+                      <ul><li>Segmentación limitada</li><li>Poca transparencia</li><li>Compras “a ciegas”</li></ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="evolution-detail" data-evolution-panel="rtb" hidden>
+                  <div class="timeline-card rtb-card">
+                    <div class="timeline-title"><span>4</span>Programática y RTB</div>
+                    <p class="timeline-copy">Ad Exchange<br>SSP<br>DSP<br>Real Time Bidding</p>
+                    <div class="timeline-flow five">
+                      <div class="flow-node">Usuario entra en una web</div><div class="flow-arrow">→</div><div class="flow-node">SSP</div><div class="flow-arrow">→</div><div class="flow-node">Ad exchange</div><div class="flow-arrow">→</div><div class="flow-node">DSPs compiten</div><div class="flow-arrow">→</div><div class="flow-node">Ganador muestra anuncio</div>
+                    </div>
+                    <div class="timeline-note">
+                      <b>Ventajas:</b>
+                      <ul><li>Compra impresión a impresión</li><li>Compra audiencias</li><li>Automatización</li><li>Escala masiva</li><li>Optimización algorítmica</li></ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </main>
+      <aside class="teacher-card">
+        <span class="tag tag-reto">Guía docente</span>
+        <h3>Pantalla 01</h3>
+        <p><b>Objetivo docente:</b> que entiendan la necesidad de la programática antes de aprender sus piezas técnicas.</p>
+        <p><b>Pregunta:</b> Si una marca quiere anunciarse hoy en miles de webs, apps y vídeos, ¿puede negociarlo todo manualmente?</p>
+        <p><b>Evitar:</b> explicar todavía DSP, SSP, Ad Exchange, Open Bidding o GAM.</p>
+      </aside>
+    </div>
+    <div class="pager"><a href="#s00">← 00 · Bienvenida</a><a href="#s02">02 · Inventario y formatos →</a></div>
+  </section>
+
+  <!-- ══════════ S02 · Inventario ══════════ -->
+  <section class="screen flag" id="s02">
+    <div class="screen-head" data-reveal>
+      <p class="eyebrow">Pantalla 02 · 30 min</p>
+      <h2>El inventario programático</h2>
+      <p class="subtitle">Aquí encontramos dónde puede aparecer la publicidad digital.</p>
+      <p class="lead">El inventario no vive solo en una web: el mecanismo viaja entre canales, aunque cada canal tenga señales y restricciones distintas.</p>
+      <div class="sec-meta"><span><b>Objetivo</b> · pensar en inventario, no en banners sueltos</span><span><b>Tiempo</b> · 30 min</span><span><b>Tipo</b> · Práctica</span></div>
+    </div>
+
+    <!-- Canales como tarjetas clicables -->
+    <div data-reveal>
+      <p class="blocktitle">La programática está en todas partes</p>
+      <p class="blocklead">El mecanismo viaja entre canales, aunque cada canal tenga señales y restricciones distintas. Toca un canal para ver qué se compra.</p>
+      <div class="qcards" data-channels style="grid-template-columns:repeat(3,1fr)">
+        <button type="button" class="qcard acc-practica channel-card" data-channel="display"><div class="k" style="color:var(--practica)">Display</div><b>Web y app</b><span>¿Qué haces en la web?</span></button>
+        <button type="button" class="qcard acc-practica channel-card" data-channel="video"><div class="k" style="color:var(--practica)">Vídeo / CTV</div><b>Pantalla y TV</b><span>¿Qué estás viendo?</span></button>
+        <button type="button" class="qcard acc-practica channel-card" data-channel="retail"><div class="k" style="color:var(--practica)">Retail Media</div><b>E-commerce</b><span>¿Qué quieres comprar?</span></button>
+        <button type="button" class="qcard acc-practica channel-card" data-channel="dooh"><div class="k" style="color:var(--practica)">DOOH</div><b>Exterior</b><span>¿Dónde estás?</span></button>
+        <button type="button" class="qcard acc-practica channel-card" data-channel="audio"><div class="k" style="color:var(--practica)">Audio</div><b>Streaming y podcast</b><span>¿Qué estás escuchando?</span></button>
+        <button type="button" class="qcard acc-practica channel-card" data-channel="gaming"><div class="k" style="color:var(--practica)">Gaming</div><b>Juegos y apps</b><span>¿A qué estás jugando?</span></button>
+      </div>
+      <div class="channel-detail" data-channel-panel="display" hidden>
+        <div class="vs">
+          <div><b>¿Qué se compra?</b>Impresiones web/app</div>
+          <div><b>Señales principales</b>Cookies, contexto, URL, dispositivo</div>
+        </div>
+        <p class="channel-example">Ejemplo · <a href="https://www.xataka.com/" target="_blank" rel="noopener">www.xataka.com →</a></p>
+      </div>
+      <div class="channel-detail" data-channel-panel="video" hidden>
+        <div class="vs">
+          <div><b>¿Qué se compra?</b>Audiencias + reproducciones de vídeo (impresiones de vídeo)</div>
+          <div><b>Señales principales</b>Contenido · Hogar · TV · Login</div>
+        </div>
+      </div>
+      <div class="channel-detail" data-channel-panel="retail" hidden>
+        <div class="vs">
+          <div><b>¿Qué se compra?</b>Compradores</div>
+          <div><b>Señales principales</b>Historial · Productos · Intención</div>
+        </div>
+      </div>
+      <div class="channel-detail" data-channel-panel="dooh" hidden>
+        <div class="vs">
+          <div><b>¿Qué se compra?</b>Impactos</div>
+          <div><b>Señales principales</b>Ubicación · Hora · Tráfico</div>
+        </div>
+      </div>
+      <div class="channel-detail" data-channel-panel="audio" hidden>
+        <div class="vs">
+          <div><b>¿Qué se compra?</b>Reproducciones</div>
+          <div><b>Señales principales</b>Programa · Momento · Dispositivo</div>
+        </div>
+      </div>
+      <div class="channel-detail" data-channel-panel="gaming" hidden>
+        <div class="vs">
+          <div><b>¿Qué se compra?</b>Jugadores</div>
+          <div><b>Señales principales</b>Juego · Nivel · Sesión</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- La web como escaparate + tabla de formatos -->
+    <div class="callout" data-reveal>
+      <p class="blocktitle" style="color:var(--reto)">Actividad</p>
+      <p>Selección de canales programáticos.</p>
+    </div>
+
+    <!-- El display en 2025: antes → ahora -->
+    <div class="panel-card acc-practica" data-reveal>
+      <p class="evo-headline">El display no desaparece, <b>cambia de forma</b>.</p>
+      <div class="evo-grid">
+        <div class="evo-col before">
+          <p class="evo-eyebrow">Antes · display era casi sinónimo de</p>
+          <h4>Formatos fijos</h4>
+          <div class="evo-chips" data-evo-chips>
+            <button type="button" class="evo-chip-btn" data-evo="robapaginas">MPU/Robapáginas/Medium Rectangle</button><button type="button" class="evo-chip-btn" data-evo="leaderboard">Leaderboard</button><button type="button" class="evo-chip-btn" data-evo="billboard">Billboard/Megabanner</button>
+            <button type="button" class="evo-chip-btn" data-evo="halfpage">Half Page / Media página</button>
+          </div>
+          <div class="evo-detail" data-evo-panel="robapaginas" hidden>
+            <div class="ad-slot-mock">
+              <span class="pub-label">PUBLICIDAD</span>
+              Ad Slot: Medium Rectangle 300x250
+            </div>
+            <p class="evo-eyebrow" style="color:#6ee7b7">MPU / Robapáginas / Medium Rectangle · ventajas</p>
+            <ul>
+              <li>Fácil de identificar.</li>
+              <li>Muy usado.</li>
+              <li>Sirve en desktop y mobile.</li>
+              <li>Entra en muchas subastas.</li>
+            </ul>
+            <p class="evo-eyebrow" style="color:#fca5a5;margin-top:14px">Desventajas</p>
+            <ul>
+              <li>Menor impacto visual que formatos grandes.</li>
+              <li>Expuesto a "banner blindness".</li>
+              <li>CTR habitualmente bajo.</li>
+            </ul>
+          </div>
+          <div class="evo-detail" data-evo-panel="billboard" hidden>
+            <div class="ad-slot-stack">
+              <div class="ad-slot-mock" style="max-width:100%;aspect-ratio:970/250"><span class="pub-label">PUBLICIDAD</span>Ad Slot: Billboard 970x250</div>
+              <div class="ad-slot-mock" style="max-width:100%;aspect-ratio:728/90"><span class="pub-label">PUBLICIDAD</span>Ad Slot: Megabanner 728x90</div>
+            </div>
+            <p class="evo-eyebrow" style="color:#6ee7b7">Billboard / Megabanner · ventajas</p>
+            <ul>
+              <li>Gran visibilidad.</li>
+              <li>Impacto superior.</li>
+              <li>Mejor para branding.</li>
+              <li>Suele tener CPM más alto.</li>
+            </ul>
+            <p class="evo-eyebrow" style="color:#fca5a5;margin-top:14px">Riesgo</p>
+            <ul>
+              <li>No siempre convierte.</li>
+              <li>Si se mide solo por CTR, parece peor de lo que realmente es.</li>
+            </ul>
+          </div>
+          <div class="evo-detail" data-evo-panel="leaderboard" hidden>
+            <div class="ad-slot-stack">
+              <div class="ad-slot-mock" style="max-width:100%;aspect-ratio:728/90"><span class="pub-label">PUBLICIDAD</span>Ad Slot: Leaderboard 728x90</div>
+              <div class="ad-slot-mock" style="max-width:100%;aspect-ratio:970/90"><span class="pub-label">PUBLICIDAD</span>Ad Slot: Large Leaderboard 970x90</div>
+            </div>
+            <p class="evo-eyebrow" style="color:#6ee7b7">Leaderboard · ventajas</p>
+            <ul>
+              <li>Formato muy reconocido.</li>
+              <li>Buena visibilidad si está en cabecera.</li>
+              <li>Inventario relativamente abundante.</li>
+            </ul>
+            <p class="evo-eyebrow" style="color:#fca5a5;margin-top:14px">Desventajas</p>
+            <ul>
+              <li>Puede sufrir "banner blindness".</li>
+              <li>Puede desaparecer rápido con el scroll.</li>
+              <li>CTR normalmente modesto.</li>
+            </ul>
+          </div>
+          <div class="evo-detail" data-evo-panel="halfpage" hidden>
+            <div class="ad-slot-mock" style="max-width:300px;aspect-ratio:300/600"><span class="pub-label">PUBLICIDAD</span>Ad Slot: Half Page 300x600</div>
+            <p class="evo-eyebrow" style="color:#6ee7b7">Half Page / Media página · ventajas</p>
+            <ul>
+              <li>Mayor impacto visual que un 300x250.</li>
+              <li>Muy bueno para branding y consideración.</li>
+              <li>Permite mejor creatividad.</li>
+            </ul>
+            <p class="evo-eyebrow" style="color:#fca5a5;margin-top:14px">Desventajas</p>
+            <ul>
+              <li>Inventario menos abundante.</li>
+              <li>CPM más alto.</li>
+              <li>No siempre es ideal para performance pura.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="evo-arrow" aria-hidden="true">→</div>
+        <div class="evo-col now">
+          <p class="evo-eyebrow">Ahora · display incluye</p>
+          <h4>Formatos ricos y programáticos</h4>
+          <div class="evo-chips">
+            <span class="hot">Vídeo</span><span class="hot">Native</span><span class="hot">Rich media</span>
+            <span>Interstitials</span><span>Skins</span>
+            <span>Contextuales</span><span>DCO</span><span>Creatividad dinámica</span>
+            <span>Alto impacto</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Display y vídeo: la frontera se difumina -->
+    <div class="panel-card acc-practica" data-reveal>
+      <p class="evo-headline">Display y vídeo: <b>la frontera se difumina</b>.</p>
+      <div class="evo-grid">
+        <div class="evo-col before">
+          <p class="evo-eyebrow">Antes</p>
+          <div class="evo-chips">
+            <span>Display = banner</span><span>Vídeo = YouTube / pre-roll</span>
+          </div>
+        </div>
+        <div class="evo-arrow" aria-hidden="true">→</div>
+        <div class="evo-col now">
+          <p class="evo-eyebrow">Ahora · display puede ser</p>
+          <div class="evo-chips" data-evo-chips>
+            <button type="button" class="evo-chip-btn" data-evo="preroll">Vídeo pre-roll</button>
+            <button type="button" class="evo-chip-btn" data-evo="midroll">Vídeo mid-roll</button>
+            <button type="button" class="evo-chip-btn" data-evo="outstream">Outstream video</button>
+            <button type="button" class="evo-chip-btn" data-evo="videobanner">Vídeo banner</button>
+            <button type="button" class="evo-chip-btn" data-evo="bumper">Bumper video</button>
+          </div>
+          <div class="evo-detail" data-evo-panel="preroll" hidden>
+            <p class="evo-eyebrow" style="color:#6ee7b7">Vídeo pre-roll · ventajas</p>
+            <ul>
+              <li>Alta atención.</li>
+              <li>Muy bueno para storytelling.</li>
+              <li>Recuerdo de marca.</li>
+            </ul>
+            <p class="evo-eyebrow" style="color:#fca5a5;margin-top:14px">Desventajas</p>
+            <ul>
+              <li>Puede ser percibido como interrupción.</li>
+              <li>Riesgo de skip.</li>
+              <li>CPM más alto que display estándar.</li>
+            </ul>
+          </div>
+          <div class="evo-detail" data-evo-panel="midroll" hidden>
+            <p class="evo-eyebrow" style="color:#6ee7b7">Vídeo mid-roll · ventajas</p>
+            <ul>
+              <li>El usuario ya está consumiendo contenido.</li>
+              <li>Buena tasa de visualización.</li>
+              <li>Bueno para reforzar campañas de notoriedad.</li>
+            </ul>
+            <p class="evo-eyebrow" style="color:#fca5a5;margin-top:14px">Desventajas</p>
+            <ul>
+              <li>Más intrusivo que el pre-roll.</li>
+              <li>Inventario más limitado.</li>
+              <li>Puede tener CPM elevado.</li>
+            </ul>
+          </div>
+          <div class="evo-detail" data-evo-panel="outstream" hidden>
+            <p class="evo-eyebrow" style="color:#6ee7b7">Outstream video · ventajas</p>
+            <ul>
+              <li>No necesita contenido de vídeo editorial.</li>
+              <li>Amplía mucho el inventario de vídeo.</li>
+              <li>Buena integración en contenido editorial.</li>
+            </ul>
+            <p class="evo-eyebrow" style="color:#fca5a5;margin-top:14px">Desventajas</p>
+            <ul>
+              <li>Atención más variable.</li>
+              <li>Calidad de inventario desigual.</li>
+              <li>Debe cuidarse la viewability.</li>
+            </ul>
+          </div>
+          <div class="evo-detail" data-evo-panel="videobanner" hidden>
+            <p class="evo-eyebrow" style="color:#6ee7b7">Vídeo banner · ventajas</p>
+            <ul>
+              <li>Une display y vídeo.</li>
+              <li>Más llamativo que un banner estático.</li>
+              <li>Bueno para mostrar producto o gameplay.</li>
+            </ul>
+            <p class="evo-eyebrow" style="color:#fca5a5;margin-top:14px">Desventajas</p>
+            <ul>
+              <li>Limitaciones técnicas.</li>
+              <li>Puede cargar más lento.</li>
+              <li>No siempre se reproduce como esperamos.</li>
+            </ul>
+          </div>
+          <div class="evo-detail" data-evo-panel="bumper" hidden>
+            <p class="evo-eyebrow" style="color:#6ee7b7">Bumper video · ventajas</p>
+            <ul>
+              <li>Mensaje muy rápido.</li>
+              <li>Bueno para frecuencia.</li>
+              <li>Útil como refuerzo de campaña.</li>
+            </ul>
+            <p class="evo-eyebrow" style="color:#fca5a5;margin-top:14px">Desventajas</p>
+            <ul>
+              <li>No permite explicar demasiado.</li>
+              <li>Depende mucho de la creatividad.</li>
+              <li>Puede saturar si se repite demasiado.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actividad -->
+    <div class="callout" data-reveal>
+      <p class="blocktitle" style="color:var(--reto)">Actividad</p>
+      <p>Entrad en MediaLab, elegid varios formatos y completad la pestaña <b>03 · Inventario y valor</b>.</p>
+    </div>
+
+    <blockquote data-reveal>El coste de un anuncio en compra programática (CPM) viene dictado por el valor que aporta al anunciante. Las razones principales por las que formatos como el Billboard (970x250) o el Half-Page (300x600) alcanzan precios premium son: Visibilidad, engagement y escasez de inventario.</blockquote>
+
+    <aside class="teacher-card">
+      <span class="tag tag-reto">Guía docente</span>
+      <h3>Pantalla 02</h3>
+      <p><b>Objetivo docente:</b> que dejen de pensar en banners como piezas sueltas y empiecen a pensar en inventario monetizable.</p>
+      <p><b>Pregunta:</b> ¿Compraríais un formato grande below the fold antes que uno pequeño muy visible?</p>
+      <p><b>Evitar:</b> convertir la pantalla en una lista completa de formatos IAB.</p>
+    </aside>
+    <div class="pager"><a href="#s01">← 01 · Evolución de la compra digital</a><a href="#s03">03 · Detectives AdTech →</a></div>
+  </section>
+
+  <!-- ══════════ S03 · Detectives ══════════ -->
+  <section class="screen flag" id="s03">
+    <div class="screen-head" data-reveal>
+      <p class="eyebrow">Pantalla 03 · 30 min</p>
+      <h2>03 · Detectives AdTech</h2>
+      <p class="subtitle">Vamos a buscar inventario publicitario en webs reales.</p>
+      <p class="lead">Antes de abrir DevTools, hay que aprender a observar.</p>
+      <div class="sec-meta"><span><b>Objetivo</b> · mirar como publisher e investigador</span><span><b>Tiempo</b> · 30 min</span><span><b>Tipo</b> · Práctica</span></div>
+      <div class="actions">
+        <a class="btn" href="https://docs.google.com/spreadsheets/d/1OsMyOx1eSzY2bn0XF4uiH4vZr4511WT5BBZG2ZeqS1U/edit#gid=196763690" target="_blank" rel="noopener">Abrir Sheet · Detectives</a>
+      </div>
+    </div>
+
+    <!-- Método en dos pasos -->
+    <div data-reveal>
+      <p class="blocktitle">El método, en dos pasos</p>
+      <div class="qcards" style="grid-template-columns:1fr 1fr">
+        <div class="qcard acc-practica"><div class="k" style="color:var(--practica)">Paso 1</div><b>Primero observamos</b><span>Entrad en una web real y miradla como usuarios. Buscad espacios publicitarios visibles: dónde aparecen, qué formato parecen tener, si están above o below the fold, si interrumpen la lectura y qué valor tienen.</span></div>
+        <div class="qcard acc-practica"><div class="k" style="color:var(--practica)">Paso 2</div><b>Después buscamos señales</b><span>Añadid <code>google_console=1</code> a la URL para pedir a la Google Publisher Console que muestre las pistas técnicas de la página.</span></div>
+      </div>
+    </div>
+
+    <!-- Cómo añadir el parámetro -->
+    <div class="panel-card acc-practica" data-reveal>
+      <p class="blocktitle">Cómo añadir el parámetro</p>
+      <div class="codegrid">
+        <code>https://www.ejemplo.com/articulo
+↓
+https://www.ejemplo.com/articulo?google_console=1</code>
+        <code>https://www.ejemplo.com/articulo?utm_source=test
+↓
+https://www.ejemplo.com/articulo?utm_source=test&amp;google_console=1</code>
+      </div>
+    </div>
+
+    <!-- Qué puede mostrar -->
+    <div class="note-card acc-practica" data-reveal style="border-left-color:var(--practica)">
+      <span class="tag tag-practica">Qué puede mostrar</span>
+      <p>Ad units, slots, sizes, delivery info, targeting o espacios unfilled. La consola no nos da toda la verdad, pero nos da pistas muy valiosas.</p>
+    </div>
+
+    <aside class="teacher-card">
+      <span class="tag tag-reto">Guía docente</span>
+      <h3>Pantalla 03</h3>
+      <p><b>Objetivo docente:</b> aprender a mirar una web como publisher, anunciante e investigador.</p>
+      <p><b>Reconducir:</b> "No veo anuncio" puede ser lazy loading, consentimiento, adblocker, inventario no vendido o carga tardía.</p>
+      <p><b>Plan B:</b> incógnito, aceptar consentimiento, desactivar adblocker, recargar o usar MediaLab/capturas.</p>
+    </aside>
+    <div class="pager"><a href="#s02">← 02 · Inventario y formatos</a><a href="#s04">04 · Inspector AdTech →</a></div>
+  </section>
+
+  <!-- ══════════ S04 · Inspector ══════════ -->
+  <section class="screen flag" id="s04">
+    <div class="screen-head" data-reveal>
+      <p class="eyebrow">Pantalla 04 · 30 min</p>
+      <h2>04 · Inspector AdTech</h2>
+      <p class="subtitle">Vamos a abrir el capó de un banner.</p>
+      <p class="lead">El banner no aparece mágicamente. Hay un hueco, una llamada, una decisión, una creatividad y una medición.</p>
+      <div class="sec-meta"><span><b>Objetivo</b> · ver la cadena completa</span><span><b>Tiempo</b> · 30 min</span><span><b>Tipo</b> · Teoría</span></div>
+      <div class="actions">
+        <a class="btn" href="recursos/inspector-adtech.html" target="_blank" rel="noopener">Abrir Inspector AdTech</a>
+        <a class="btn alt" href="recursos/anuncio-en-blanco.html" target="_blank" rel="noopener">Anuncio en blanco</a>
+      </div>
+    </div>
+
+    <!-- El viaje de una impresión: pasos clicables -->
+    <div class="panel-card acc-teoria" data-reveal>
+      <p class="blocktitle">El viaje de una impresión · toca cada paso</p>
+      <div class="journey acc-teoria" data-journey>
+        <div class="journey-track" role="tablist" aria-label="Pasos de un banner">
+          <button class="journey-node" type="button" data-step="slot" style="--i:0"><span class="jn-dot">1</span><span class="jn-label">Slot</span></button>
+          <button class="journey-node" type="button" data-step="adcall" style="--i:1"><span class="jn-dot">2</span><span class="jn-label">Ad call</span></button>
+          <button class="journey-node" type="button" data-step="decision" style="--i:2"><span class="jn-dot">3</span><span class="jn-label">Decisión</span></button>
+          <button class="journey-node" type="button" data-step="creatividad" style="--i:3"><span class="jn-dot">4</span><span class="jn-label">Creatividad</span></button>
+          <button class="journey-node" type="button" data-step="impresion" style="--i:4"><span class="jn-dot">5</span><span class="jn-label">Impresión</span></button>
+          <button class="journey-node" type="button" data-step="view" style="--i:5"><span class="jn-dot">6</span><span class="jn-label">Viewability</span></button>
+          <button class="journey-node" type="button" data-step="clic" style="--i:6"><span class="jn-dot">7</span><span class="jn-label">Clic</span></button>
+        </div>
+        <div class="journey-panels">
+          <div class="journey-panel" data-panel="slot"><h4>Slot</h4><p>El slot es el espacio publicitario reservado dentro de la página. Todavía no es el anuncio: es el hueco donde podría cargarse un anuncio.</p></div>
+          <div class="journey-panel" data-panel="adcall"><h4>Ad call</h4><p>La ad call es la petición que hace la página para solicitar un anuncio. Puede incluir ad unit, tamaño, URL, contexto o parámetros comerciales.</p></div>
+          <div class="journey-panel" data-panel="decision"><h4>Decisión y medición</h4><p>En muchos publishers, Google Ad Manager ayuda a ordenar la decisión entre distintas fuentes de demanda, campañas y reglas. Después se mide impresión, visibilidad, clic y conversión.</p></div>
+          <div class="journey-panel" data-panel="creatividad"><h4>Creatividad</h4><p>La pieza publicitaria que finalmente se carga en el slot. <a href="#s10">Se detalla en la pantalla 10 →</a></p></div>
+          <div class="journey-panel" data-panel="impresion"><h4>Impresión</h4><p>El anuncio servido y registrado por el sistema. <a href="#s10">Se detalla en la pantalla 10 →</a></p></div>
+          <div class="journey-panel" data-panel="view"><h4>Viewability</h4><p>¿Tuvo el anuncio una oportunidad real de ser visto? <a href="#s10">Se detalla en la pantalla 10 →</a></p></div>
+          <div class="journey-panel" data-panel="clic"><h4>Clic</h4><p>La interacción del usuario y la redirección a la landing. <a href="#s10">Se detalla en la pantalla 10 →</a></p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Evidencia visual + idea clave -->
+    <div class="split" data-reveal>
+      <div class="ph"><span>[ SCREENSHOT · Google Publisher Console sobre un banner real ]</span></div>
+      <blockquote class="bq-big">Un banner es solo la parte visible de una cadena de decisiones técnicas, comerciales y de medición.</blockquote>
+    </div>
+
+    <aside class="teacher-card">
+      <span class="tag tag-reto">Guía docente</span>
+      <h3>Pantalla 04</h3>
+      <p><b>Objetivo docente:</b> ordenar el recorrido básico antes de entrar en Header Bidding y DevTools real.</p>
+      <p><b>Frase:</b> "Si entendéis este flujo, DevTools deja de parecer una lista caótica y empieza a parecer una historia."</p>
+      <p><b>Evitar:</b> prioridades de GAM, line items, forecast o trafficking avanzado.</p>
+    </aside>
+    <div class="pager"><a href="#s03">← 03 · Detectives AdTech</a><a href="#s05">05 · Header Bidding →</a></div>
+  </section>
+
+  <!-- ══════════ S05 · Header Bidding ══════════ -->
+  <section class="screen flag" id="s05">
+    <div class="screen-head" data-reveal>
+      <p class="eyebrow">Pantalla 05 · 30 min</p>
+      <h2>05 · Header Bidding</h2>
+      <p class="subtitle">Cuando el publisher invita a más compradores a competir por la misma impresión.</p>
+      <p class="lead">Header Bidding crea una competición previa entre distintas fuentes de demanda antes de que el ad server tome la decisión final.</p>
+      <div class="sec-meta"><span><b>Objetivo</b> · más competencia por la impresión</span><span><b>Tiempo</b> · 30 min</span><span><b>Tipo</b> · Teoría</span></div>
+    </div>
+
+    <!-- El problema + flujo clicable -->
+    <div class="panel-card acc-teoria" data-reveal>
+      <p class="blocktitle">El problema, y cómo lo resuelve · toca cada paso</p>
+      <p class="blocklead">Si solo preguntas a una fuente de demanda, puedes vender la impresión, pero quizá no al mejor precio posible.</p>
+      <div class="journey acc-teoria" data-journey>
+        <div class="journey-track">
+          <button class="journey-node" type="button" data-step="carga" style="--i:0"><span class="jn-dot">1</span><span class="jn-label">Usuario carga página</span></button>
+          <button class="journey-node" type="button" data-step="slot" style="--i:1"><span class="jn-dot">2</span><span class="jn-label">Slot disponible</span></button>
+          <button class="journey-node" type="button" data-step="hb" style="--i:2"><span class="jn-dot">3</span><span class="jn-label">HB consulta demanda</span></button>
+          <button class="journey-node" type="button" data-step="puja" style="--i:3"><span class="jn-dot">4</span><span class="jn-label">Vuelve mejor puja</span></button>
+          <button class="journey-node" type="button" data-step="gam" style="--i:4"><span class="jn-dot">5</span><span class="jn-label">GAM decide</span></button>
+        </div>
+        <div class="journey-panels">
+          <div class="journey-panel" data-panel="carga"><h4>Usuario carga la página</h4><p>Al abrirse la web se disparan las llamadas publicitarias antes de que el ad server tome ninguna decisión.</p></div>
+          <div class="journey-panel" data-panel="slot"><h4>Slot disponible</h4><p>Hay un hueco publicitario listo para recibir demanda desde varias fuentes a la vez.</p></div>
+          <div class="journey-panel" data-panel="hb"><h4>HB consulta demanda</h4><p>Header Bidding lanza una competición previa: pregunta a varias fuentes de demanda simultáneamente.</p></div>
+          <div class="journey-panel" data-panel="puja"><h4>Vuelve la mejor puja</h4><p>Cada fuente responde con su puja; se recoge la mejor de esa competición previa.</p></div>
+          <div class="journey-panel" data-panel="gam"><h4>GAM decide</h4><p>La mejor puja entra en Google Ad Manager, que ordena la decisión final entre todas las fuentes.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HB vs Open Bidding vs GAM como tabs -->
+    <div class="panel-card acc-teoria" data-reveal data-tabs>
+      <p class="blocktitle">Header Bidding vs Open Bidding vs GAM</p>
+      <div class="tabs-nav">
+        <button class="tab-btn active" type="button" data-tab="hb">Header Bidding</button>
+        <button class="tab-btn" type="button" data-tab="ob">Open Bidding</button>
+        <button class="tab-btn" type="button" data-tab="gam">GAM</button>
+      </div>
+      <div class="tab-panel active" data-tab="hb"><p>Competición previa organizada por el publisher, antes de llamar al ad server.</p></div>
+      <div class="tab-panel" data-tab="ob"><p>Competición integrada dentro del entorno de Google Ad Manager.</p></div>
+      <div class="tab-panel" data-tab="gam"><p>Sistema que ayuda al publisher a ordenar la decisión final.</p></div>
+    </div>
+
+    <!-- Stack -->
+    <div data-reveal>
+      <p class="blocktitle">Stack simplificado · de mayor a menor prioridad</p>
+      <div class="stack"><span>Venta directa</span><span>Programática garantizada</span><span>Preferred deals</span><span>Header Bidding</span><span>Open Bidding</span><span>Open auction / backfill</span><span>House ads</span></div>
+    </div>
+
+    <blockquote data-reveal>Header Bidding no sustituye a Google Ad Manager. Aporta competencia.</blockquote>
+
+    <aside class="teacher-card">
+      <span class="tag tag-reto">Guía docente</span>
+      <h3>Pantalla 05</h3>
+      <p><b>Objetivo docente:</b> entender HB como respuesta económica y técnica a "quiero que más compradores compitan por mi inventario".</p>
+      <p><b>Pregunta:</b> Si tienes un espacio valioso, ¿lo ofrecerías a un solo comprador o dejarías competir a varios?</p>
+      <p><b>Errores:</b> HB no es el ad server, no siempre gana y más SSPs no siempre significa más ingresos.</p>
+    </aside>
+    <div class="pager"><a href="#s04">← 04 · Inspector AdTech</a><a href="#s06">06 · DevTools real →</a></div>
+  </section>
+
+  <!-- ══════════ S06 · DevTools ══════════ -->
+  <section class="screen flag" id="s06">
+    <div class="screen-head" data-reveal>
+      <p class="eyebrow">Pantalla 06 · 30 min</p>
+      <h2>06 · DevTools real</h2>
+      <p class="subtitle">Buscamos señales reales del viaje de una impresión.</p>
+      <p class="lead">DevTools no nos da la verdad absoluta. Nos ayuda a construir hipótesis razonables.</p>
+      <div class="sec-meta"><span><b>Objetivo</b> · extraer señales sin sobrerreaccionar</span><span><b>Tiempo</b> · 30 min</span><span><b>Tipo</b> · Práctica</span></div>
+      <div class="actions">
+        <a class="btn" href="https://docs.google.com/spreadsheets/d/1OsMyOx1eSzY2bn0XF4uiH4vZr4511WT5BBZG2ZeqS1U/edit#gid=1364740935" target="_blank" rel="noopener">Sheet · DevTools</a>
+        <a class="btn alt" href="https://docs.google.com/spreadsheets/d/1OsMyOx1eSzY2bn0XF4uiH4vZr4511WT5BBZG2ZeqS1U/edit#gid=20260624" target="_blank" rel="noopener">Chuleta DevTools</a>
+      </div>
+    </div>
+
+    <!-- Preparación como checklist marcable -->
+    <div class="panel-card acc-practica" data-reveal>
+      <p class="blocktitle">Preparación · marca cada paso</p>
+      <ul class="checklist acc-practica">
+        <li><span class="box">✓</span>Abrid Chrome</li>
+        <li><span class="box">✓</span>Desactivad adblocker</li>
+        <li><span class="box">✓</span>Aceptad el consentimiento de cookies</li>
+        <li><span class="box">✓</span>Abrid DevTools</li>
+        <li><span class="box">✓</span>Entrad en Network</li>
+        <li><span class="box">✓</span>Activad Preserve log</li>
+        <li><span class="box">✓</span>Activad Disable cache</li>
+        <li><span class="box">✓</span>Recargad</li>
+        <li><span class="box">✓</span>Haced scroll lentamente</li>
+      </ul>
+    </div>
+
+    <!-- Filtros útiles como chips -->
+    <div data-reveal>
+      <p class="blocktitle">Filtros útiles en Network</p>
+      <p class="chips">
+        <span>gampad</span><span>securepubads</span><span>googletag</span><span>doubleclick</span>
+        <span>prebid</span><span>hb_</span><span>pubmatic</span><span>openx</span>
+        <span>xandr</span><span>criteo</span><span>300x250</span><span>300x600</span>
+      </p>
+    </div>
+
+    <!-- Qué registrar -->
+    <div class="note-card acc-practica" data-reveal style="border-left-color:var(--practica)">
+      <span class="tag tag-practica">Qué registrar</span>
+      <p>Anotad filtro, petición, dominio, parámetro, valor, qué creéis que significa, nivel de certeza, evidencia y qué no podéis confirmar.</p>
+      <blockquote>Un buen diagnóstico distingue evidencia, hipótesis y duda.</blockquote>
+    </div>
+
+    <aside class="teacher-card">
+      <span class="tag tag-reto">Guía docente</span>
+      <h3>Pantalla 06</h3>
+      <p><b>Objetivo docente:</b> perder el miedo a DevTools y extraer señales útiles sin sobrerreaccionar.</p>
+      <p><b>Webs recomendadas:</b> Grupo A LetsFamily, Grupo B Xataka, Grupo C Marca o El País.</p>
+      <p><b>Plan B:</b> si no aparecen anuncios, comprobar consentimiento, adblocker, incógnito, scroll y lazy loading.</p>
+    </aside>
+    <div class="pager"><a href="#s05">← 05 · Header Bidding</a><a href="#s07">07 · Subasta RTB →</a></div>
+  </section>
+
+  <!-- ══════════ S07 · Subasta RTB ══════════ -->
+  <section class="screen flag" id="s07">
+    <div class="screen-head" data-reveal>
+      <p class="eyebrow">Pantalla 07 · 15 min</p>
+      <h2>07 · Subasta RTB</h2>
+      <p class="subtitle">Ahora dejamos de observar y empezamos a pujar.</p>
+      <p class="lead">En RTB no compras un banner. Compras una oportunidad concreta de impactar a un usuario concreto en un contexto concreto.</p>
+      <div class="sec-meta"><span><b>Objetivo</b> · pujar bien, no alto</span><span><b>Tiempo</b> · 15 min</span><span><b>Tipo</b> · Reto</span></div>
+      <div class="actions">
+        <a class="btn" href="https://docs.google.com/spreadsheets/d/1OsMyOx1eSzY2bn0XF4uiH4vZr4511WT5BBZG2ZeqS1U/edit#gid=5052026" target="_blank" rel="noopener">Sheet · Subasta RTB</a>
+      </div>
+    </div>
+
+    <!-- Escenario como dossier -->
+    <div data-reveal>
+      <p class="blocktitle">El escenario de puja</p>
+      <div class="dossier">
+        <div class="df"><b>Publisher</b><span>LetsFamily</span></div>
+        <div class="df"><b>Contexto</b><span>Artículo sobre embarazo</span></div>
+        <div class="df"><b>Formato</b><span>300×250</span></div>
+        <div class="df"><b>Posición</b><span>Above the fold</span></div>
+        <div class="df"><b>Usuario</b><span>Alta afinidad con maternidad</span></div>
+      </div>
+    </div>
+
+    <!-- Las dos rondas como pestañas -->
+    <div class="panel-card acc-reto" data-reveal data-tabs>
+      <p class="blocktitle">Las dos rondas</p>
+      <div class="tabs-nav">
+        <button class="tab-btn active" type="button" data-tab="r1">Ronda 1 · Segundo precio</button>
+        <button class="tab-btn" type="button" data-tab="r2">Ronda 2 · Primer precio</button>
+      </div>
+      <div class="tab-panel active" data-tab="r1">
+        <p>Gana la puja más alta, pero el ganador paga la segunda mejor puja.</p>
+        <div class="vs">
+          <div><b>Quién gana</b>La puja más alta</div>
+          <div><b>Cuánto paga</b>La 2ª mejor puja</div>
+        </div>
+      </div>
+      <div class="tab-panel" data-tab="r2">
+        <p>Gana la puja más alta y paga exactamente lo que ha pujado.</p>
+        <div class="vs">
+          <div><b>Quién gana</b>La puja más alta</div>
+          <div><b>Cuánto paga</b>Justo lo que pujó</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actividad como checklist -->
+    <div class="callout" data-reveal>
+      <p class="blocktitle" style="color:var(--reto)">Actividad</p>
+      <p>Abrid <b>05b. Subasta RTB</b> y rellenad solo las celdas verdes de las rondas 1 y 2:</p>
+      <ul class="checklist acc-reto">
+        <li><span class="box">✓</span>Puja CPM</li>
+        <li><span class="box">✓</span>Motivo de la puja</li>
+        <li><span class="box">✓</span>Reflexión</li>
+      </ul>
+    </div>
+
+    <blockquote data-reveal>La misión no es pujar siempre más alto. La misión es comprar bien.</blockquote>
+
+    <aside class="teacher-card">
+      <span class="tag tag-reto">Guía docente</span>
+      <h3>Pantalla 07</h3>
+      <p><b>Objetivo docente:</b> que entiendan que el modelo de precio cambia el comportamiento del comprador.</p>
+      <p><b>Frase:</b> "Ganar una impresión no significa haber comprado bien."</p>
+      <p><b>No tocar aún:</b> floor price, bid shading, Last Look, GAM avanzado.</p>
+    </aside>
+    <div class="pager"><a href="#s06">← 06 · DevTools real</a><a href="#s08">08 · Caso Last Look →</a></div>
+  </section>
+
+  <!-- ══════════ S08 · Last Look ══════════ -->
+  <section class="screen flag" id="s08">
+    <div class="screen-head" data-reveal>
+      <p class="eyebrow">Pantalla 08 · 10 min</p>
+      <h2>08 · Caso Last Look</h2>
+      <p class="subtitle">Cuando saber el precio a batir cambiaba toda la subasta.</p>
+      <p class="lead">No solo importa quién gana una subasta. También importa qué información tiene cada participante antes de pujar.</p>
+      <div class="sec-meta"><span><b>Objetivo</b> · por qué importa el diseño de la subasta</span><span><b>Tiempo</b> · 10 min</span><span><b>Tipo</b> · Caso</span></div>
+      <div class="actions">
+        <a class="btn" href="recursos/last-look-google.html" target="_blank" rel="noopener">Abrir caso Last Look</a>
+      </div>
+    </div>
+
+    <!-- El caso, paso a paso -->
+    <div class="panel-card acc-teoria" data-reveal>
+      <p class="blocktitle">El caso · toca cada paso</p>
+      <p class="blocklead">Una impresión sale al mercado. Por un lado compiten varias fuentes mediante Header Bidding; por otro, Google AdX también puede competir.</p>
+      <div class="journey acc-teoria" data-journey>
+        <div class="journey-track">
+          <button class="journey-node" type="button" data-step="hb" style="--i:0"><span class="jn-dot">1</span><span class="jn-label">HB genera una puja</span></button>
+          <button class="journey-node" type="button" data-step="gam" style="--i:1"><span class="jn-dot">2</span><span class="jn-label">La puja llega a GAM</span></button>
+          <button class="journey-node" type="button" data-step="adx" style="--i:2"><span class="jn-dot">3</span><span class="jn-label">AdX conoce el precio a superar</span></button>
+          <button class="journey-node" type="button" data-step="compite" style="--i:3"><span class="jn-dot">4</span><span class="jn-label">AdX compite con esa info</span></button>
+          <button class="journey-node" type="button" data-step="impacto" style="--i:4"><span class="jn-dot">5</span><span class="jn-label">Impacto en el publisher</span></button>
+        </div>
+        <div class="journey-panels">
+          <div class="journey-panel" data-panel="hb"><h4>Header Bidding genera una puja</h4><p>Las fuentes de demanda compiten en la competición previa y devuelven su mejor puja.</p></div>
+          <div class="journey-panel" data-panel="gam"><h4>La puja llega a GAM</h4><p>Esa mejor puja entra en Google Ad Manager para la decisión final.</p></div>
+          <div class="journey-panel" data-panel="adx"><h4>AdX conoce el precio a superar</h4><p>Google AdX podía ver el precio que debía batir antes de decidir su propia puja.</p></div>
+          <div class="journey-panel" data-panel="compite"><h4>AdX compite con esa información</h4><p>Con esa ventaja de información, AdX ajustaba su puja sabiendo exactamente qué necesitaba para ganar.</p></div>
+          <div class="journey-panel" data-panel="impacto"><h4>Impacto en el publisher</h4><p>El diseño de la subasta generaba una ventaja estructural de información que afectaba al resultado.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preguntas del caso como tarjetas -->
+    <div data-reveal>
+      <p class="blocktitle">Preguntas durante el caso</p>
+      <div class="qcards">
+        <div class="qcard"><div class="k">01</div><b>¿Quién sabe qué?</b><span>Identifica la información de cada participante.</span></div>
+        <div class="qcard"><div class="k">02</div><b>¿Cuándo lo sabe?</b><span>El momento en que llega esa información.</span></div>
+        <div class="qcard"><div class="k">03</div><b>¿Qué ventaja le da?</b><span>Cómo cambia su decisión de puja.</span></div>
+        <div class="qcard"><div class="k">04</div><b>¿Qué impacto tiene?</b><span>Consecuencias para el publisher.</span></div>
+      </div>
+    </div>
+
+    <div class="callout" data-reveal>
+      <p class="blocktitle" style="color:var(--reto)">Cuidado con la interpretación</p>
+      <p>No nos quedamos con "Google hacía trampas". Nos quedamos con una idea más profesional: el diseño de la subasta generaba una <b>ventaja estructural de información</b>.</p>
+    </div>
+
+    <blockquote data-reveal>En una subasta, la información puede valer tanto como la puja.</blockquote>
+
+    <aside class="teacher-card">
+      <span class="tag tag-reto">Guía docente</span>
+      <h3>Pantalla 08</h3>
+      <p><b>Objetivo docente:</b> entender por qué el diseño de la subasta importa.</p>
+      <p><b>Decir:</b> ventaja estructural de información / asimetría de información.</p>
+      <p><b>Evitar:</b> "Google robaba al publisher" o "first price solucionó todos los problemas".</p>
+    </aside>
+    <div class="pager"><a href="#s07">← 07 · Subasta RTB</a><a href="#s09">09 · Floor, bid shading y GAM →</a></div>
+  </section>
+
+  <!-- ══════════ S09 · Floor & GAM ══════════ -->
+  <section class="screen flag" id="s09">
+    <div class="screen-head" data-reveal>
+      <p class="eyebrow">Pantalla 09 · 30 min</p>
+      <h2>09 · Floor, bid shading y GAM simplificado</h2>
+      <p class="subtitle">Después de la subasta, empieza la estrategia.</p>
+      <p class="lead">El publisher quiere vender bien. El comprador quiere ganar sin pagar de más. GAM ayuda a ordenar la decisión final.</p>
+      <div class="sec-meta"><span><b>Objetivo</b> · cerrar la capa económica</span><span><b>Tiempo</b> · 30 min</span><span><b>Tipo</b> · Teoría</span></div>
+      <div class="actions">
+        <a class="btn" href="recursos/cpm-benchmarks-simulacion-rtb.html" target="_blank" rel="noopener">Benchmarks CPM</a>
+      </div>
+    </div>
+
+    <!-- Tres conceptos como tarjetas -->
+    <div data-reveal>
+      <p class="blocktitle">Tres piezas de la estrategia</p>
+      <div class="qcards" style="grid-template-columns:repeat(3,1fr)">
+        <div class="qcard"><div class="k">01</div><b>Floor price</b><span>Precio mínimo que acepta el publisher.</span></div>
+        <div class="qcard"><div class="k">02</div><b>Bid shading</b><span>Ajuste de puja para ganar sin pagar de más.</span></div>
+        <div class="qcard"><div class="k">03</div><b>GAM</b><span>Organiza campañas, reglas y demanda.</span></div>
+      </div>
+    </div>
+
+    <!-- Detalle en pestañas -->
+    <div class="panel-card acc-teoria" data-reveal data-tabs>
+      <p class="blocktitle">En detalle</p>
+      <div class="tabs-nav">
+        <button class="tab-btn active" type="button" data-tab="floor">Floor price</button>
+        <button class="tab-btn" type="button" data-tab="shading">Bid shading</button>
+        <button class="tab-btn" type="button" data-tab="gam">GAM simplificado</button>
+        <button class="tab-btn" type="button" data-tab="yield">Yield manager</button>
+      </div>
+      <div class="tab-panel active" data-tab="floor"><p>Si ninguna puja supera el mínimo, la impresión puede quedar sin vender. Un floor alto protege el valor, pero si es demasiado alto puede matar la demanda.</p></div>
+      <div class="tab-panel" data-tab="shading"><p>En primer precio, el ganador paga lo que puja. Por eso los compradores ajustan sus pujas para no sobrepagar.</p></div>
+      <div class="tab-panel" data-tab="gam"><p>La puja programática no vive sola. El publisher puede tener directa, acuerdos preferentes, programática garantizada, open auction, backfill o house ads.</p></div>
+      <div class="tab-panel" data-tab="yield"><p>Optimiza ingresos, demanda, fill rate, viewability, formatos, experiencia de usuario y acuerdos comerciales.</p></div>
+    </div>
+
+    <blockquote data-reveal>La monetización no consiste en vender siempre al precio más alto. Consiste en encontrar equilibrio.</blockquote>
+
+    <aside class="teacher-card">
+      <span class="tag tag-reto">Guía docente</span>
+      <h3>Pantalla 09</h3>
+      <p><b>Objetivo docente:</b> cerrar la capa económica: floors, bid shading, GAM y rol del yield manager.</p>
+      <p><b>Usar rondas:</b> 3 floor price, 4 bid shading, 5 GAM simplificado. Solo celdas verdes.</p>
+      <p><b>Frase:</b> "El precio no es un número aislado: es estrategia del publisher, comprador y entrega."</p>
+    </aside>
+    <div class="pager"><a href="#s08">← 08 · Caso Last Look</a><a href="#s10">10 · Creatividad e impresión →</a></div>
+  </section>
+
+  <!-- ══════════ S10 · Viewability ══════════ -->
+  <section class="screen flag" id="s10">
+    <div class="screen-head" data-reveal>
+      <p class="eyebrow">Pantalla 10 · 15 min</p>
+      <h2>10 · Creatividad, impresión, viewability y clic</h2>
+      <p class="subtitle">Ganar la subasta solo es el principio de la medición.</p>
+      <p class="lead">Ganar la subasta no significa que la campaña haya funcionado. Solo significa que tienes derecho a servir una creatividad.</p>
+      <div class="sec-meta"><span><b>Objetivo</b> · no confundir servido, visto, clic y conversión</span><span><b>Tiempo</b> · 15 min</span><span><b>Tipo</b> · Teoría</span></div>
+      <div class="actions">
+        <a class="btn" href="recursos/inspector-adtech.html" target="_blank" rel="noopener">Volver al Inspector</a>
+      </div>
+    </div>
+
+    <!-- La cadena de medición, clicable -->
+    <div class="panel-card acc-teoria" data-reveal>
+      <p class="blocktitle">Después de ganar la subasta · toca cada paso</p>
+      <div class="journey acc-teoria" data-journey>
+        <div class="journey-track">
+          <button class="journey-node" type="button" data-step="crea" style="--i:0"><span class="jn-dot">1</span><span class="jn-label">Creatividad</span></button>
+          <button class="journey-node" type="button" data-step="imp" style="--i:1"><span class="jn-dot">2</span><span class="jn-label">Impresión servida</span></button>
+          <button class="journey-node" type="button" data-step="view" style="--i:2"><span class="jn-dot">3</span><span class="jn-label">Viewability</span></button>
+          <button class="journey-node" type="button" data-step="clic" style="--i:3"><span class="jn-dot">4</span><span class="jn-label">Clic</span></button>
+          <button class="journey-node" type="button" data-step="land" style="--i:4"><span class="jn-dot">5</span><span class="jn-label">Landing</span></button>
+          <button class="journey-node" type="button" data-step="conv" style="--i:5"><span class="jn-dot">6</span><span class="jn-label">Conversión</span></button>
+        </div>
+        <div class="journey-panels">
+          <div class="journey-panel" data-panel="crea"><h4>Creatividad</h4><p>Es la pieza publicitaria que aparece: imagen, HTML5, vídeo, rich media, native o combinación de assets y trackers.</p></div>
+          <div class="journey-panel" data-panel="imp"><h4>Impresión servida ≠ vista</h4><p>Una impresión servida significa que el anuncio se ha entregado y registrado, pero no garantiza que el usuario lo haya visto.</p></div>
+          <div class="journey-panel" data-panel="view"><h4>Viewability</h4><p>Intenta responder a una pregunta: ¿el anuncio tuvo una oportunidad real de ser visto?</p></div>
+          <div class="journey-panel" data-panel="clic"><h4>Clic</h4><p>El clic registra interacción y redirección a landing, pero no siempre termina en conversión útil.</p></div>
+          <div class="journey-panel" data-panel="land"><h4>Landing</h4><p>La página de destino a la que llega el usuario tras el clic. Aquí empieza a jugarse la conversión real.</p></div>
+          <div class="journey-panel" data-panel="conv"><h4>Conversión</h4><p>El objetivo útil de la campaña. Ni la impresión ni el clic la garantizan por sí solos.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="split" data-reveal>
+      <div class="ph"><span>[ SCREENSHOT · creatividad servida + medición de viewability ]</span></div>
+      <blockquote class="bq-big">Servido no significa visto. Visto no significa clicado. Clicado no significa convertido.</blockquote>
+    </div>
+
+    <aside class="teacher-card">
+      <span class="tag tag-reto">Guía docente</span>
+      <h3>Pantalla 10</h3>
+      <p><b>Objetivo docente:</b> evitar la confusión entre impresión servida, vista, clic y conversión.</p>
+      <p><b>Actividad rápida:</b> ordenar Slot → Subasta → Creatividad → Impresión servida → Viewability → Clic → Landing.</p>
+      <p><b>Errores:</b> impresión = vista, clic = conversión, ganar subasta = campaña funciona.</p>
+    </aside>
+    <div class="pager"><a href="#s09">← 09 · Floor, bid shading y GAM</a><a href="#s11">11 · Cierre sesión 1 →</a></div>
+  </section>
+
+  <!-- ══════════ S11 · Cierre ══════════ -->
+  <section class="screen flag" id="s11">
+    <div class="screen-head" data-reveal>
+      <p class="eyebrow">Pantalla 11 · 5–10 min</p>
+      <h2>11 · Cierre sesión 1</h2>
+      <p class="subtitle">Ya sabemos seguir el viaje de una impresión. El sábado aprenderemos a gestionarla.</p>
+      <p class="lead">Esta pantalla es un checkpoint, no el final del curso.</p>
+      <div class="sec-meta"><span><b>Objetivo</b> · progreso, no saturación</span><span><b>Tiempo</b> · 5–10 min</span><span><b>Tipo</b> · Resumen</span></div>
+    </div>
+
+    <!-- El viaje completo reconstruido -->
+    <div class="thread-wrap" data-reveal>
+      <p class="blocktitle">Reconstruimos el viaje completo</p>
+      <div class="journey acc-red is-in" data-journey data-static>
+        <div class="journey-track">
+          <div class="journey-node done" style="--i:0"><span class="jn-dot">1</span><span class="jn-label">Inventario</span></div>
+          <div class="journey-node done" style="--i:1"><span class="jn-dot">2</span><span class="jn-label">Slot</span></div>
+          <div class="journey-node done" style="--i:2"><span class="jn-dot">3</span><span class="jn-label">Ad call</span></div>
+          <div class="journey-node done" style="--i:3"><span class="jn-dot">4</span><span class="jn-label">HB / Open Bidding</span></div>
+          <div class="journey-node done" style="--i:4"><span class="jn-dot">5</span><span class="jn-label">GAM</span></div>
+          <div class="journey-node done" style="--i:5"><span class="jn-dot">6</span><span class="jn-label">Subasta</span></div>
+          <div class="journey-node done" style="--i:6"><span class="jn-dot">7</span><span class="jn-label">Floor / Bid shading</span></div>
+          <div class="journey-node done" style="--i:7"><span class="jn-dot">8</span><span class="jn-label">Creatividad</span></div>
+          <div class="journey-node done" style="--i:8"><span class="jn-dot">9</span><span class="jn-label">Impresión</span></div>
+          <div class="journey-node done" style="--i:9"><span class="jn-dot">10</span><span class="jn-label">Viewability</span></div>
+          <div class="journey-node done" style="--i:10"><span class="jn-dot">11</span><span class="jn-label">Clic</span></div>
+          <div class="journey-node done" style="--i:11"><span class="jn-dot">12</span><span class="jn-label">Conversión</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ticket de salida como checklist -->
+    <div class="callout" data-reveal>
+      <p class="blocktitle" style="color:var(--reto)">Ticket de salida</p>
+      <p>Responded en grupo en la pestaña <b>07 · Reflexión final</b>:</p>
+      <ul class="checklist acc-reto">
+        <li><span class="box">✓</span>Qué entendéis mejor</li>
+        <li><span class="box">✓</span>Qué sigue generando dudas</li>
+        <li><span class="box">✓</span>Qué queréis ver el sábado</li>
+        <li><span class="box">✓</span>Qué miraríais primero como yield managers</li>
+      </ul>
+    </div>
+
+    <!-- Mañana sábado como tarjetas -->
+    <div data-reveal>
+      <p class="blocktitle">Mañana, sábado</p>
+      <div class="qcards">
+        <div class="qcard"><div class="k">01</div><b>Inventario</b><span>Cómo se organiza.</span></div>
+        <div class="qcard"><div class="k">02</div><b>Google Ad Manager</b><span>Cómo se configura.</span></div>
+        <div class="qcard"><div class="k">03</div><b>Campañas</b><span>Cómo se priorizan.</span></div>
+        <div class="qcard"><div class="k">04</div><b>Tags</b><span>Cómo se usan.</span></div>
+        <div class="qcard"><div class="k">05</div><b>Espacios vacíos</b><span>Cómo se evita dejarlos.</span></div>
+        <div class="qcard"><div class="k">06</div><b>Yield manager</b><span>Cómo piensa.</span></div>
+      </div>
+    </div>
+
+    <blockquote data-reveal>Hoy hemos seguido la impresión. El sábado vamos a aprender a gestionarla.</blockquote>
+
+    <aside class="teacher-card">
+      <span class="tag tag-reto">Guía docente</span>
+      <h3>Pantalla 11</h3>
+      <p><b>Objetivo docente:</b> cerrar con sensación de progreso, no de saturación.</p>
+      <p><b>Guion:</b> "Hoy no quería que memorizarais siglas. Quería que entendierais el viaje."</p>
+      <p><b>Evitar:</b> añadir teoría nueva o resolver todas las dudas técnicas. Aparcar lo que encaje con sábado.</p>
+    </aside>
+    <div class="pager"><a href="#s10">← 10 · Creatividad, impresión, viewability y clic</a></div>
+  </section>
+
+</main>
+
+<!-- ══════════════════════════════════════════════════════════════
+     BANNER PUBLICITARIO STICKY  ·  la "nota clave" de cada sección
+     se sirve como una creatividad display que cambia con el scroll.
+     Controlado por assets/adslot.js (evento spw:section).
+     ══════════════════════════════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════════════════════════
+     LEADERBOARD 728×90 STICKY  ·  la "nota clave" de cada sección
+     se sirve como creatividad display anclada al fondo, y cambia con
+     el scroll. Controlado por assets/adslot.js (evento spw:section).
+     ══════════════════════════════════════════════════════════════ -->
+<aside class="adslot" id="adslot" aria-label="Espacio publicitario simulado (leaderboard 728×90)">
+  <button class="adslot-close" id="adClose" type="button" title="Cerrar anuncio" aria-label="Cerrar anuncio">×</button>
+  <div class="adslot-creative" id="adCreative" style="--adbg:linear-gradient(135deg,#0D1F3C,#1A3058)">
+    <div class="adslot-left">
+      <span class="adslot-tag">Anuncio · 728×90</span>
+      <span class="adslot-kicker" id="adKicker">Puja ganadora · 3,20 €</span>
+    </div>
+    <p class="adslot-copy" id="adCopy">No gana quien más términos técnicos use. Gana quien mejor observa, justifica y explica.</p>
+    <span class="adslot-cta">Saber más →</span>
+    <div class="adslot-serving" id="adServing"><span class="pulse"></span> Subasta en curso…</div>
+  </div>
+</aside>
+<button class="adslot-reopen" id="adReopen" type="button" hidden>Mostrar anuncio</button>
+
+<!-- Lógica SPW: scrollspy + progreso + modo profesor + bloques dinámicos -->
+<script src="assets/spw.js"></script>
+<!-- Interacciones dinámicas: reveal, carrusel, viaje clicable, tabs, checklist -->
+<script src="assets/dynamic.js"></script>
+<!-- Banner publicitario sticky: sirve la nota clave de cada sección -->
+<script src="assets/adslot.js"></script>
+</body>
+</html>
