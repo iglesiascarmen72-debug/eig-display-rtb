@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Benchmarks CPM · España 2025 · ESIC Display & RTB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:#0D1F3C; --navy-dark:#08132A; --navy-mid:#1A3058;
+      --esic-red:#C8102E; --silver:#F2F4F7; --white:#ffffff;
+      --muted:#64748b; --line:#e2e8f0; --ink:#0f172a;
+      --shadow:0 8px 28px rgba(13,31,60,.12);
+      --shadow-sm:0 2px 8px rgba(13,31,60,.08);
+      --r:18px; --r-lg:24px;
+      --font:'Inter',ui-sans-serif,system-ui,-apple-system,Arial,sans-serif;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:var(--font);font-size:15px;line-height:1.6;color:var(--ink);background:#eef2f8;min-height:100vh;}
+
+    /* ── Page shell ── */
+    .page-header{
+      background:linear-gradient(135deg,var(--navy-dark),var(--navy-mid));
+      color:white;padding:28px 36px 24px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .page-header-top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px;}
+    .back-link{
+      display:inline-flex;align-items:center;gap:6px;
+      color:#94a3b8;font-size:13px;font-weight:700;text-decoration:none;
+      border:1px solid rgba(255,255,255,.15);border-radius:999px;padding:6px 12px;
+      transition:color .15s,border-color .15s;
+    }
+    .back-link:hover{color:white;border-color:rgba(255,255,255,.3);}
+    .brand-line{font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#fca5a5;margin-bottom:8px;}
+    .page-title{font-size:30px;font-weight:900;letter-spacing:-.03em;margin:0 0 6px;color:white;}
+    .page-sub{font-size:14px;color:#94a3b8;margin:0;}
+
+    .page-body{max-width:960px;margin:0 auto;padding:28px 24px 72px;}
+
+    /* ── Caso card ── */
+    .caso{
+      background:white;border:1px solid var(--line);border-radius:var(--r-lg);
+      box-shadow:var(--shadow);overflow:hidden;margin-bottom:20px;
+    }
+    .caso-head{
+      padding:22px 26px 18px;border-bottom:1px solid var(--line);
+      position:relative;
+    }
+    .caso-head::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:4px;
+    }
+    .caso-1 .caso-head::before{background:linear-gradient(90deg,#1d4ed8,#60a5fa);}
+    .caso-2 .caso-head::before{background:linear-gradient(90deg,#0f766e,#34d399);}
+    .caso-3 .caso-head::before{background:linear-gradient(90deg,#b45309,#fbbf24);}
+
+    .caso-num-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+    .caso-num{
+      width:32px;height:32px;border-radius:10px;
+      display:grid;place-items:center;font-size:14px;font-weight:900;flex-shrink:0;
+    }
+    .caso-1 .caso-num{background:#eff6ff;color:#1d4ed8;}
+    .caso-2 .caso-num{background:#f0fdfa;color:#0f766e;}
+    .caso-3 .caso-num{background:#fffbeb;color:#b45309;}
+
+    .caso-title{font-size:17px;font-weight:800;color:var(--navy);margin:0 0 3px;}
+    .caso-subtitle{font-size:13px;color:var(--muted);}
+
+    .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+    .chip{font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;border:1px solid;}
+    .chip-blue{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe;}
+    .chip-green{background:#f0fdfa;color:#0f766e;border-color:#99f6e4;}
+    .chip-amber{background:#fffbeb;color:#b45309;border-color:#fcd34d;}
+    .chip-gray{background:#f8fafc;color:#475569;border-color:#cbd5e1;}
+    .chip-red{background:#fff1f2;color:#be123c;border-color:#fecdd3;}
+
+    /* ── Grupos grid ── */
+    .grupos{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:20px 26px;}
+    .grupo{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fbfcfe;}
+    .grupo-label{font-size:10.5px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+    .grupo-cpm{font-size:26px;font-weight:900;letter-spacing:-.03em;color:var(--navy);line-height:1.1;margin-bottom:6px;}
+    .grupo-rol{font-size:12.5px;color:var(--muted);line-height:1.45;}
+
+    .caso-1 .grupo{border-top:3px solid #bfdbfe;}
+    .caso-2 .grupo{border-top:3px solid #99f6e4;}
+    .caso-3 .grupo{border-top:3px solid #fcd34d;}
+
+    /* ── Razón ── */
+    .razon{
+      margin:0 26px 22px;padding:14px 16px;
+      background:#f8fafc;border:1px solid var(--line);
+      border-left-width:4px;border-radius:0 12px 12px 0;
+      font-size:13.5px;line-height:1.7;color:#334155;
+    }
+    .caso-1 .razon{border-left-color:#1d4ed8;}
+    .caso-2 .razon{border-left-color:#0f766e;}
+    .caso-3 .razon{border-left-color:#b45309;}
+    .razon strong{color:var(--navy);font-weight:800;}
+
+    /* ── Nota global ── */
+    .nota-global{
+      background:linear-gradient(135deg,var(--navy-dark),var(--navy-mid));
+      color:white;border-radius:var(--r-lg);padding:22px 26px;margin-top:8px;
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .nota-global .eyebrow{font-size:10.5px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#fca5a5;margin-bottom:10px;}
+    .nota-global p{font-size:13.5px;color:#cbd5e1;line-height:1.7;margin:0;}
+    .nota-global strong{color:white;}
+
+    @media(max-width:700px){
+      .page-header{padding:20px 18px 18px;}
+      .page-body{padding:18px 14px 48px;}
+      .grupos{grid-template-columns:1fr;padding:16px 18px;}
+      .caso-head{padding:18px 18px 14px;}
+      .razon{margin:0 18px 18px;}
+      .page-title{font-size:24px;}
+    }
+  </style>
+</head>
+<body>
+
+  <header class="page-header">
+    <div class="page-header-top">
+      <div class="brand-line">ESIC · Display & RTB · Recurso</div>
+      <a class="back-link" href="../alumno/index.html#s09">← Volver a Floor & GAM</a>
+    </div>
+    <h1 class="page-title">Benchmarks CPM · España 2025</h1>
+    <p class="page-sub">Open RTB, mercado español. Los grupos simulan distintos perfiles de DSP / estrategia de puja.</p>
+  </header>
+
+  <div class="page-body">
+
+    <!-- Caso 1 -->
+    <div class="caso caso-1">
+      <div class="caso-head">
+        <div class="caso-num-row">
+          <div class="caso-num">1</div>
+          <div>
+            <div class="caso-title">Medio generalista · portada noticias · 300×250 ATF desktop</div>
+            <div class="caso-subtitle">Audiencia general · viewability 55% · floor 0,80 €</div>
+          </div>
+        </div>
+        <div class="chips">
+          <span class="chip chip-gray">Inventario commodity</span>
+          <span class="chip chip-gray">Sin segmento específico</span>
+          <span class="chip chip-gray">Alta competencia</span>
+          <span class="chip chip-blue">Desktop favorece viewability</span>
+        </div>
+      </div>
+      <div class="grupos">
+        <div class="grupo">
+          <div class="grupo-label">Grupo A · conservador</div>
+          <div class="grupo-cpm">0,80–1,20 €</div>
+          <div class="grupo-rol">Raspa el floor. Retargeting amplio o prospecting sin data.</div>
+        </div>
+        <div class="grupo">
+          <div class="grupo-label">Grupo B · medio</div>
+          <div class="grupo-cpm">1,20–1,80 €</div>
+          <div class="grupo-rol">Algo de segmentación contextual o sociodemográfica básica.</div>
+        </div>
+        <div class="grupo">
+          <div class="grupo-label">Grupo C · agresivo</div>
+          <div class="grupo-cpm">1,80–2,50 €</div>
+          <div class="grupo-rol">Retargeting propio o 1st-party data del anunciante.</div>
+        </div>
+      </div>
+      <div class="razon">
+        <strong>Por qué este rango:</strong> inventario generalista sin nicho definido. La audiencia "general" no tiene valor diferencial para la mayoría de anunciantes. ATF desktop sube ligeramente frente a BTF. CPM medio real de open market en España ronda 0,80–1,50 €. El techo (2,50 €) solo lo justifica retargeting con 1st-party data muy preciso.
+      </div>
+    </div>
+
+    <!-- Caso 2 -->
+    <div class="caso caso-2">
+      <div class="caso-head">
+        <div class="caso-num-row">
+          <div class="caso-num">2</div>
+          <div>
+            <div class="caso-title">LetsFamily · artículo embarazo · 300×250 ATF mobile</div>
+            <div class="caso-subtitle">Embarazadas / familias con bebé · viewability 60% · floor 1,20 €</div>
+          </div>
+        </div>
+        <div class="chips">
+          <span class="chip chip-green">Nicho de alto valor</span>
+          <span class="chip chip-green">Audiencia cualificada</span>
+          <span class="chip chip-red">Mobile descuenta ~15%</span>
+          <span class="chip chip-green">Contexto señal fuerte</span>
+        </div>
+      </div>
+      <div class="grupos">
+        <div class="grupo">
+          <div class="grupo-label">Grupo A · conservador</div>
+          <div class="grupo-cpm">1,20–1,80 €</div>
+          <div class="grupo-rol">Puja contextual básica. Marcas de gran consumo sin data propia.</div>
+        </div>
+        <div class="grupo">
+          <div class="grupo-label">Grupo B · medio</div>
+          <div class="grupo-cpm">1,80–2,80 €</div>
+          <div class="grupo-rol">Categoría bebés/puericultura. Anunciantes como Dodot, Chicco, Bimanan.</div>
+        </div>
+        <div class="grupo">
+          <div class="grupo-label">Grupo C · agresivo</div>
+          <div class="grupo-cpm">2,80–4,50 €</div>
+          <div class="grupo-rol">Retargeting pharma, seguros, financieras con data de maternidad.</div>
+        </div>
+      </div>
+      <div class="razon">
+        <strong>Por qué este rango:</strong> nicho parenting/maternidad tiene demanda sostenida de anunciantes con alto LTV (seguros de vida, clínicas, puericultura premium, financieras). El contexto actúa como señal de intención muy precisa. Mobile aplica un descuento por peor viewability y menor tasa de conversión, pero la audiencia compensa. Este inventario en deal privado con Seedtag o PMP llegaría a 5–8 €.
+      </div>
+    </div>
+
+    <!-- Caso 3 -->
+    <div class="caso caso-3">
+      <div class="caso-head">
+        <div class="caso-num-row">
+          <div class="caso-num">3</div>
+          <div>
+            <div class="caso-title">Medio tecnología · review móviles · 728×90 BTF desktop</div>
+            <div class="caso-subtitle">Usuarios tech · viewability 38% · floor 1,50 €</div>
+          </div>
+        </div>
+        <div class="chips">
+          <span class="chip chip-amber">Viewability crítica: 38%</span>
+          <span class="chip chip-blue">Audiencia premium tech</span>
+          <span class="chip chip-red">Megabanner BTF penalizado</span>
+          <span class="chip chip-amber">Floor alto vs. viewability baja</span>
+        </div>
+      </div>
+      <div class="grupos">
+        <div class="grupo">
+          <div class="grupo-label">Grupo A · conservador</div>
+          <div class="grupo-cpm">1,50–1,90 €</div>
+          <div class="grupo-rol">Raspa el floor. Muchos DSPs excluirán este slot por viewability &lt;50%.</div>
+        </div>
+        <div class="grupo">
+          <div class="grupo-label">Grupo B · medio</div>
+          <div class="grupo-cpm">1,90–2,80 €</div>
+          <div class="grupo-rol">Marcas tech (telecos, fabricantes) que valoran el contexto sobre viewability.</div>
+        </div>
+        <div class="grupo">
+          <div class="grupo-label">Grupo C · agresivo</div>
+          <div class="grupo-cpm">2,80–4,00 €</div>
+          <div class="grupo-rol">Anunciantes de electrónica/gaming con retargeting propio. Muy escasos.</div>
+        </div>
+      </div>
+      <div class="razon">
+        <strong>El conflicto de este caso:</strong> la audiencia tech es valiosa (usuarios con alto poder adquisitivo, in-market de electrónica), pero el slot BTF con 38% de viewability es un problema serio. <strong>Muchos DSPs con filtro de viewability mínimo del 50% ni siquiera pujarán.</strong> Esto reduce la demanda y presiona el CPM a la baja a pesar del floor de 1,50 €. El publisher tiene aquí un floor mal calibrado para su viewability real — excelente caso de discusión en clase.
+      </div>
+    </div>
+
+    <!-- Nota global -->
+    <div class="nota-global">
+      <div class="eyebrow">Contexto de mercado · España 2025</div>
+      <p>Open exchange opera con CPMs medios de <strong>0,80–1,50 €</strong> para inventario generalista. Private marketplace (PMP) mueve <strong>5–15 €</strong>. La caída del 30% en CPMs open market reportada en 2025 afecta principalmente al inventario sin señal de audiencia ni contexto diferencial. LetsFamily tiene ventaja estructural por nicho; el medio tech tiene el problema inverso: <strong>audiencia valiosa, slot mal posicionado.</strong></p>
+    </div>
+
+  </div>
+</body>
+</html>

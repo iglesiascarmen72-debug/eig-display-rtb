@@ -1,0 +1,413 @@
+/* ============================================================
+   ESIC · Display & RTB · Sesión 1 — CAPA DINÁMICA
+   Componentes interactivos para el rediseño de secciones:
+   reveal al scroll · hero · carrusel numerado (estilo ESIC) ·
+   "viaje" horizontal clicable · dossier · tabs · checklist ·
+   placeholders de imagen. Todo vanilla, se apoya en los tokens
+   de styles.css (--navy, --esic-red, --line, --muted, --font…).
+   ============================================================ */
+
+/* Acentos por tipo de sección (la lógica de color por bloque) */
+.acc-teoria   { --acc: var(--teoria); }
+.acc-practica { --acc: var(--practica); }
+.acc-reto     { --acc: var(--reto); }
+.acc-red      { --acc: var(--esic-red); }
+
+/* Ritmo vertical de las secciones rediseñadas */
+.screen.flag > * + * { margin-top: 24px; }
+
+/* Micro-cabeceras reutilizables */
+.blocktitle {
+  font-size: 13px; font-weight: 900; text-transform: uppercase;
+  letter-spacing: .1em; color: var(--esic-red); margin: 0 0 14px;
+}
+.blocklead { margin: -4px 0 16px; color: var(--muted); max-width: 780px; }
+.sec-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; }
+.sec-meta span {
+  font-size: 11.5px; font-weight: 600; color: var(--muted);
+  background: #fff; border: 1px solid var(--line);
+  border-radius: 999px; padding: 5px 12px;
+}
+.sec-meta b { color: var(--navy); }
+
+/* ─── 1) REVEAL AL HACER SCROLL (mejora progresiva) ──────────
+   Sin JS todo es visible. spw/dynamic.js añade .js-reveal al <html>,
+   oculta y luego revela con .is-in al entrar en pantalla. */
+.js-reveal [data-reveal] {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity .6s cubic-bezier(.2,.7,.2,1), transform .6s cubic-bezier(.2,.7,.2,1);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+.js-reveal [data-reveal].is-in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js-reveal [data-reveal] { opacity: 1 !important; transform: none !important; transition: none; }
+  [data-journey] .journey-node { animation: none !important; opacity: 1 !important; }
+}
+
+/* ─── 2) HERO (S00) ──────────────────────────────────────── */
+.hero2 {
+  position: relative; overflow: hidden;
+  background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-mid) 100%);
+  color: #fff; border-radius: 24px; padding: 46px;
+  display: grid; grid-template-columns: 1.3fr .9fr; gap: 38px; align-items: center;
+}
+.hero2::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+  background: linear-gradient(90deg, var(--esic-red), #f97316);
+}
+.hero2 .eyebrow { color: #fca5a5; }
+.hero2 h2 {
+  font-size: 46px; font-weight: 900; letter-spacing: -.04em;
+  line-height: 1.02; margin: 6px 0 14px; color: #fff;
+}
+.hero2-sub { font-size: 18px; color: #cbd5e1; margin: 0 0 24px; max-width: 540px; }
+.hero2 .btn { background: #fff; color: var(--navy); }
+.hero2 .btn.alt { background: rgba(255,255,255,.12); color: #fff; border: 1px solid rgba(255,255,255,.28); box-shadow: none; }
+
+.stat-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 26px; }
+.stat {
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14);
+  border-radius: 14px; padding: 12px 18px; min-width: 92px;
+}
+.stat b { display: block; font-size: 30px; font-weight: 900; color: #fff; line-height: 1; }
+.stat span { font-size: 12px; color: #94a3b8; font-weight: 600; }
+
+/* ─── 3) PLACEHOLDER DE IMAGEN (a rellenar por el usuario) ─── */
+.ph {
+  position: relative; display: grid; place-items: center; text-align: center;
+  min-height: 200px; padding: 22px; border-radius: 16px;
+  border: 1px solid var(--line); color: #64748b;
+  font-family: var(--mono); font-size: 12px; line-height: 1.5;
+  background: repeating-linear-gradient(45deg, #eef2f8, #eef2f8 10px, #e6ebf3 10px, #e6ebf3 20px);
+}
+.ph span {
+  background: rgba(255,255,255,.9); border: 1px solid var(--line);
+  border-radius: 8px; padding: 7px 12px; max-width: 90%;
+}
+.ph.dark {
+  color: #94a3b8; border-color: rgba(255,255,255,.14);
+  background: repeating-linear-gradient(45deg, #0f2138, #0f2138 10px, #13273f 10px, #13273f 20px);
+}
+.ph.dark span { background: rgba(8,19,42,.6); border-color: rgba(255,255,255,.12); }
+
+/* ─── 4) CARRUSEL NUMERADO (estilo ESIC) ─────────────────── */
+.esic-carousel { position: relative; }
+.ec-track {
+  display: flex; gap: 20px; overflow-x: auto; padding: 4px 2px 8px;
+  scroll-snap-type: x mandatory; scrollbar-width: none; scroll-behavior: smooth;
+}
+.ec-track::-webkit-scrollbar { display: none; }
+.ec-card {
+  scroll-snap-align: start; flex: 0 0 calc(50% - 10px); min-width: 250px;
+  background: #fff; border: 1px solid var(--line); border-radius: 18px;
+  box-shadow: var(--shadow-sm); padding: 28px;
+  transition: transform .18s, box-shadow .18s, border-color .18s;
+}
+.ec-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: #cbd5e1; }
+.ec-num { font-size: 46px; font-weight: 900; color: var(--teoria); line-height: 1; letter-spacing: -.03em; }
+.ec-card h4 { margin: 14px 0 8px; font-size: 18px; color: var(--navy); }
+.ec-card p { margin: 0; color: var(--muted); font-size: 14px; }
+.ec-controls { display: flex; align-items: center; gap: 16px; margin-top: 18px; }
+.ec-segs { display: flex; gap: 8px; flex: 1; }
+.ec-seg { height: 3px; flex: 1; max-width: 60px; background: var(--line); border-radius: 2px; cursor: pointer; transition: background .3s; border: none; padding: 0; }
+.ec-seg.on { background: var(--navy); }
+.ec-arrows { display: flex; gap: 8px; }
+.ec-arrow {
+  width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid var(--navy);
+  background: #fff; color: var(--navy); cursor: pointer; display: grid; place-items: center;
+  font-size: 20px; line-height: 1; transition: background .15s, color .15s, opacity .15s;
+}
+.ec-arrow:hover { background: var(--navy); color: #fff; }
+.ec-arrow:disabled { opacity: .28; background: #fff; color: var(--navy); cursor: default; }
+
+/* ─── 5) EL "VIAJE" HORIZONTAL CLICABLE (hilo unificador) ─── */
+.journey { --acc: var(--esic-red); }
+.journey-track {
+  display: flex; gap: 0; overflow-x: auto; padding: 4px 0 6px;
+  scrollbar-width: none;
+}
+.journey-track::-webkit-scrollbar { display: none; }
+.journey-node {
+  flex: 1 0 auto; min-width: 104px; display: flex; flex-direction: column;
+  align-items: center; gap: 9px; padding: 4px 6px; position: relative;
+  background: none; border: none; cursor: pointer; font-family: var(--font);
+}
+.journey-node::after {
+  content: ""; position: absolute; top: 21px; left: 50%; width: 100%; height: 3px;
+  background: var(--line); z-index: 0;
+}
+.journey-node:last-child::after { display: none; }
+.journey-node.done::after { background: var(--acc); }
+.jn-dot {
+  position: relative; z-index: 1; width: 44px; height: 44px; border-radius: 50%;
+  display: grid; place-items: center; background: #fff; border: 3px solid var(--line);
+  font-weight: 900; color: var(--muted); transition: background .25s, border-color .25s, color .25s, transform .25s;
+}
+.journey-node.done .jn-dot { border-color: var(--acc); color: var(--acc); }
+.journey-node.active .jn-dot { background: var(--acc); border-color: var(--acc); color: #fff; transform: scale(1.1); }
+.jn-label { font-size: 12px; font-weight: 700; color: var(--muted); text-align: center; max-width: 120px; }
+.journey-node.active .jn-label,
+.journey-node.done .jn-label { color: var(--navy); }
+.journey[data-static] .journey-node { cursor: default; }
+
+/* Aparición escalonada de los nodos al entrar en pantalla */
+.js-reveal [data-journey] .journey-node { opacity: 0; transform: translateY(10px); }
+[data-journey].is-in .journey-node { animation: jn-pop .5s both; animation-delay: calc(var(--i, 0) * 90ms); }
+@keyframes jn-pop { to { opacity: 1; transform: none; } }
+
+.journey-panels { margin-top: 24px; }
+.journey-panel { display: none; }
+.journey-panel.active { display: block; animation: fade-up .35s both; }
+.journey-panel h4 { margin: 0 0 8px; font-size: 19px; color: var(--navy); }
+.journey-panel p { margin: 0; color: var(--ink-mid); font-size: 15px; line-height: 1.6; }
+.journey-panel a { color: var(--acc); font-weight: 700; text-decoration: none; }
+.journey-panel a:hover { text-decoration: underline; }
+@keyframes fade-up { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* ─── 6) TARJETAS "QUÉ HAREMOS" + NOTA + PANELES ─────────── */
+.qcards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.qcard {
+  background: #fff; border: 1px solid var(--line); border-radius: 16px;
+  padding: 22px; box-shadow: var(--shadow-sm);
+  transition: transform .18s, box-shadow .18s, border-color .18s;
+}
+.qcard:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: #cbd5e1; }
+.qcard .k { font-size: 12px; font-weight: 900; color: var(--teoria); letter-spacing: .06em; margin-bottom: 10px; }
+.qcard b { display: block; font-size: 16px; color: var(--navy); margin-bottom: 4px; }
+.qcard span { color: var(--muted); font-size: 13.5px; }
+
+/* Tarjetas de canal clicables (S02) */
+.channel-card { font-family: var(--font); text-align: left; cursor: pointer; transition: background .25s, color .25s, transform .18s, box-shadow .18s; }
+.channel-card.active {
+  background: linear-gradient(135deg, var(--navy-dark), var(--navy-mid));
+  border-color: transparent; color: #fff; transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(8,19,42,.28);
+}
+.channel-card.active .k { color: #6ee7b7 !important; }
+.channel-card.active b { color: #fff; }
+.channel-card.active span { color: #cbd5e1; }
+.channel-detail {
+  margin-top: 18px; position: relative;
+  background: linear-gradient(135deg, var(--navy-dark), var(--navy-mid));
+  color: #fff; border: none; border-radius: 18px;
+  box-shadow: 0 16px 40px rgba(8,19,42,.28); padding: 26px 28px;
+  animation: detail-pop .32s cubic-bezier(.2,.8,.2,1) both;
+}
+.channel-detail::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  border-radius: 18px 18px 0 0; background: linear-gradient(90deg, var(--practica), #34d399);
+}
+.channel-detail[hidden] { display: none; }
+.channel-detail .vs { margin: 0; }
+.channel-detail .vs div {
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16);
+  color: #fff; border-radius: 14px; padding: 18px 20px; font-size: 16px;
+}
+.channel-detail .vs b {
+  color: #6ee7b7; font-size: 11px; letter-spacing: .07em; text-transform: uppercase; margin-bottom: 8px;
+}
+.channel-example { margin: 16px 0 0; font-size: 14px; font-weight: 700; color: #cbd5e1; }
+.channel-example a { color: #6ee7b7; text-decoration: none; }
+.channel-example a:hover { text-decoration: underline; }
+@keyframes detail-pop { from { opacity: 0; transform: translateY(10px) scale(.98); } to { opacity: 1; transform: none; } }
+
+/* ─── Evolución del display "Antes → Ahora" (S02) ──────────── */
+.evo-headline { font-size: 22px; font-weight: 900; color: var(--navy); letter-spacing: -.02em; margin: 0 0 4px; }
+.evo-headline b { color: var(--esic-red); }
+.evo-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; align-items: stretch; margin-top: 18px; }
+.evo-col { border-radius: 16px; padding: 22px; }
+.evo-col.before { background: var(--silver); border: 1px solid var(--line); }
+.evo-col.now { background: linear-gradient(135deg, var(--navy-dark), var(--navy-mid)); color: #fff; position: relative; overflow: hidden; }
+.evo-col.now::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--esic-red), #f97316); }
+.evo-eyebrow { font-size: 11px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; margin: 0 0 4px; }
+.evo-col.before .evo-eyebrow { color: var(--muted); }
+.evo-col.now .evo-eyebrow { color: #fca5a5; }
+.evo-col h4 { margin: 0 0 14px; font-size: 17px; font-weight: 800; }
+.evo-col.before h4 { color: var(--navy); }
+.evo-col.now h4 { color: #fff; }
+.evo-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.evo-chips span {
+  font-size: 13px; font-weight: 700; border-radius: 999px; padding: 7px 13px; white-space: nowrap;
+}
+.evo-col.before .evo-chips span { background: #fff; border: 1px solid var(--line); color: #64748b; }
+.evo-col.now .evo-chips span { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.24); color: #fff; }
+.evo-col.now .evo-chips span.hot { background: var(--esic-red); border-color: var(--esic-red); }
+.evo-arrow { display: grid; place-items: center; color: var(--esic-red); font-size: 34px; font-weight: 900; }
+
+/* Chip clicable dentro del bloque de evolución (S02) */
+.evo-chip-btn {
+  font-family: var(--font); font-size: 13px; font-weight: 700; cursor: pointer;
+  border-radius: 999px; padding: 7px 13px; white-space: nowrap;
+  background: #fff; border: 1px solid var(--practica); color: var(--practica);
+  transition: background .18s, color .18s, transform .18s;
+}
+.evo-chip-btn::after { content: " +"; font-weight: 900; }
+.evo-chip-btn:hover { transform: translateY(-1px); }
+.evo-chip-btn.active { background: var(--practica); color: #fff; border-color: var(--practica); }
+.evo-chip-btn.active::after { content: " –"; }
+.evo-detail {
+  margin-top: 16px; background: linear-gradient(135deg, var(--navy-dark), var(--navy-mid));
+  color: #fff; border-radius: 14px; padding: 18px 22px; animation: detail-pop .3s cubic-bezier(.2,.8,.2,1) both;
+}
+.evo-detail[hidden] { display: none; }
+.evo-detail ul { margin: 10px 0 0; padding-left: 20px; }
+.evo-detail li { margin: 5px 0; font-size: 15px; color: #e2e8f0; }
+
+/* Maqueta de slot publicitario dentro del detalle de formato (S02) */
+.ad-slot-mock {
+  position: relative; margin: 4px 0 12px; border-radius: 12px;
+  border: 2px dashed #c3ccdb;
+  background: repeating-linear-gradient(45deg, #eef1f6, #eef1f6 10px, #e4e9f1 10px, #e4e9f1 20px);
+  display: grid; place-items: center; text-align: center;
+  color: var(--navy); font-weight: 800; font-size: 15px;
+  width: 100%; max-width: 300px; aspect-ratio: 300 / 250; padding: 18px;
+}
+.ad-slot-mock .pub-label {
+  position: absolute; top: 12px; left: 14px; font-size: 10px;
+  letter-spacing: .16em; color: #8a97ab; font-weight: 800;
+}
+.ad-slot-stack { display: flex; flex-direction: column; gap: 12px; margin-bottom: 6px; }
+@media (max-width: 780px) {
+  .evo-grid { grid-template-columns: 1fr; }
+  .evo-arrow { transform: rotate(90deg); font-size: 26px; }
+}
+
+.note-card, .panel-card, .thread-wrap {
+  background: #fff; border: 1px solid var(--line); border-radius: 20px;
+  box-shadow: var(--shadow-sm); padding: 28px;
+}
+.note-card { border-left: 4px solid var(--teoria); }
+
+/* ─── 7) DOSSIER (escenario S07) ─────────────────────────── */
+.dossier {
+  background: linear-gradient(135deg, var(--navy-dark), var(--navy-mid));
+  color: #fff; border-radius: 18px; padding: 26px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 18px;
+}
+.dossier .df { border-left: 3px solid var(--esic-red); padding-left: 13px; }
+.dossier .df b { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: #fca5a5; margin-bottom: 5px; }
+.dossier .df span { font-size: 15px; font-weight: 700; }
+
+/* ─── 8) TABS (rondas S07) ───────────────────────────────── */
+.tabs-nav { display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 2px solid var(--line); }
+.tab-btn {
+  border: none; background: none; font-family: var(--font); font-weight: 800; font-size: 14px;
+  color: var(--muted); padding: 12px 16px; cursor: pointer;
+  border-bottom: 3px solid transparent; margin-bottom: -2px; transition: color .15s, border-color .15s;
+}
+.tab-btn:hover { color: var(--navy); }
+.tab-btn.active { color: var(--navy); border-bottom-color: var(--acc); }
+.tab-panel { display: none; padding: 20px 2px 2px; }
+.tab-panel.active { display: block; animation: fade-up .3s both; }
+.tab-panel p { margin: 0; font-size: 15px; color: var(--ink-mid); }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0 0; }
+.vs div { background: var(--silver); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; font-size: 15px; font-weight: 700; color: var(--navy); }
+.vs b { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 800; margin-bottom: 5px; }
+
+/* ─── 9) CHECKLIST (actividad) ──────────────────────────── */
+.callout { background: var(--reto-bg); border: 1px solid #fcd34d; border-radius: 16px; padding: 20px 22px; }
+.checklist { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 8px; }
+.checklist li {
+  display: flex; align-items: center; gap: 12px; background: #fff;
+  border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px;
+  cursor: pointer; font-weight: 600; font-size: 14px; transition: border-color .15s, color .15s;
+}
+.checklist li:hover { border-color: var(--acc); }
+.checklist .box {
+  width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--line);
+  display: grid; place-items: center; flex: 0 0 auto; color: transparent; font-size: 13px; transition: .15s;
+}
+.checklist li.done .box { background: var(--acc); border-color: var(--acc); color: #fff; }
+.checklist li.done { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
+
+/* ─── 10) SPLIT (imagen + cita en S04) ───────────────────── */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: stretch; }
+.bq-big {
+  margin: 0; display: flex; align-items: center;
+  border-left: 4px solid var(--esic-red); background: var(--esic-red-light);
+  border-radius: 0 16px 16px 0; padding: 24px; font-size: 18px; font-weight: 800;
+  color: #7f0e1e; line-height: 1.35;
+}
+
+/* ─── Responsive ─────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .hero2 { grid-template-columns: 1fr; padding: 30px; }
+  .hero2 h2 { font-size: 34px; }
+  .qcards { grid-template-columns: repeat(2, 1fr); }
+  .split { grid-template-columns: 1fr; }
+  .ec-card { flex-basis: 82%; }
+}
+@media (max-width: 560px) {
+  .qcards { grid-template-columns: 1fr; }
+  .dossier { grid-template-columns: 1fr 1fr; }
+  .vs { grid-template-columns: 1fr; }
+}
+
+/* ─── 11) LEADERBOARD 728×90 STICKY (nota = creatividad) ─────
+   Anchor ad anclado al fondo, centrado, tipo Visa/Wise. La "nota
+   clave" de cada sección se sirve como creatividad y cambia con el
+   scroll. Lo controla assets/adslot.js (evento spw:section). */
+.adslot {
+  position: fixed; left: 50%; transform: translateX(-50%); bottom: 0;
+  width: calc(100% - 24px); max-width: 728px; z-index: 45;
+  border-radius: 10px 10px 0 0; overflow: hidden; font-family: var(--font);
+  box-shadow: 0 -10px 44px rgba(8,19,42,.32);
+}
+.adslot[hidden] { display: none; }
+.adslot-creative {
+  position: relative; display: flex; align-items: center; gap: 18px;
+  height: 90px; padding: 0 46px 0 20px; color: #fff;
+  background: var(--adbg, linear-gradient(135deg, #0D1F3C, #1A3058));
+  transition: background .45s ease;
+}
+.adslot-creative.loading { filter: blur(1.5px); opacity: .4; }
+.adslot-creative.served { animation: ad-in .4s both; }
+@keyframes ad-in { from { opacity: 0; } to { opacity: 1; } }
+.adslot-left {
+  flex: 0 0 auto; display: flex; flex-direction: column; gap: 4px;
+  padding-right: 18px; border-right: 1px solid rgba(255,255,255,.28);
+}
+.adslot-tag { font-size: 9px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.72); white-space: nowrap; }
+.adslot-kicker { font-size: 12px; font-weight: 800; color: #fff; white-space: nowrap; }
+.adslot-copy {
+  flex: 1; margin: 0; font-size: 15px; font-weight: 800; line-height: 1.2; letter-spacing: -.01em;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.adslot-cta {
+  flex: 0 0 auto; font-size: 12px; font-weight: 800; white-space: nowrap;
+  background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.4);
+  border-radius: 999px; padding: 7px 15px;
+}
+.adslot-close {
+  position: absolute; top: 6px; right: 8px; z-index: 3; border: none; cursor: pointer;
+  background: rgba(0,0,0,.2); color: #fff; font-size: 13px; line-height: 1;
+  width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center;
+}
+.adslot-close:hover { background: rgba(0,0,0,.4); }
+.adslot-serving {
+  position: absolute; inset: 0; display: none; align-items: center; justify-content: center;
+  gap: 9px; background: rgba(8,19,42,.82); color: #fff; font-size: 12px; font-weight: 700;
+}
+.adslot-serving.on { display: flex; }
+.adslot-serving .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--esic-red); animation: adpulse 1s infinite; }
+@keyframes adpulse { 0%,100% { opacity: .3; transform: scale(.75); } 50% { opacity: 1; transform: scale(1.35); } }
+.adslot-reopen {
+  position: fixed; left: 50%; transform: translateX(-50%); bottom: 0; z-index: 45; cursor: pointer;
+  border: 1px solid var(--line); border-bottom: none; background: #fff; color: var(--navy);
+  font-weight: 800; font-size: 12px; font-family: var(--font);
+  border-radius: 10px 10px 0 0; padding: 8px 18px; box-shadow: 0 -6px 24px rgba(8,19,42,.18);
+  display: inline-flex; align-items: center; gap: 7px;
+}
+.adslot-reopen::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--esic-red); }
+.adslot-reopen[hidden] { display: none; }
+
+/* Aire al final para que el leaderboard no tape la última sección */
+.spw-main { padding-bottom: 130px; }
+
+@media (max-width: 560px) {
+  .adslot { width: 100%; border-radius: 0; }
+  .adslot-left, .adslot-cta { display: none; }
+  .adslot-creative { height: auto; min-height: 66px; padding: 12px 40px 12px 16px; }
+  .adslot-copy { font-size: 13px; -webkit-line-clamp: 3; }
+}

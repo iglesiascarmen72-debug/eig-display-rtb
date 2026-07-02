@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Inspector AdTech · Descubre qué ocurre detrás de un banner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#0E1116; --panel:#161A21; --panel-2:#1E232C; --raised:#252B36;
+    --line:#2A3039; --text:#E7EAF0; --dim:#9AA4B4; --faint:#5C6675;
+    --paper:#FFFFFF; --app:#EAECF1; --app-line:#D6DAE2; --ink-text:#1A1E26; --ink-dim:#5A6472;
+    --signal:#1A73E8; --signal-soft:#4C8DF0; --bid:#1E8E3E; --bid-soft:#34A853;
+    --live:#F9AB00; --alert:#D93025; --grape:#7C4DFF;
+    --ui:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,"SF Mono",Consolas,monospace;
+    --r:10px; --r-sm:7px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  button{font-family:inherit;cursor:pointer;border:none;background:none}
+  body{font-family:var(--ui);background:var(--app);color:var(--ink-text);-webkit-font-smoothing:antialiased;line-height:1.5;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+  :focus-visible{outline:2px solid var(--signal);outline-offset:2px;border-radius:4px}
+
+  .top{flex:0 0 auto;background:var(--ink);color:var(--text);border-bottom:1px solid var(--line);padding:10px 16px;display:flex;align-items:center;gap:18px}
+  .brand{display:flex;align-items:center;gap:10px;flex:0 0 auto}
+  .logo{width:30px;height:30px;border-radius:8px;flex:0 0 auto;background:conic-gradient(from 200deg,var(--signal),var(--grape),var(--bid),var(--live),var(--signal));position:relative}
+  .logo::after{content:"";position:absolute;inset:6px;border-radius:4px;background:var(--ink)}
+  .logo::before{content:"";position:absolute;inset:11px;border-radius:50%;background:var(--text);z-index:1}
+  .brand h1{font-size:15px;font-weight:700;letter-spacing:.2px;line-height:1.1}
+  .brand p{font-size:11px;color:var(--dim);font-weight:400}
+  .progress{flex:1 1 auto;display:flex;align-items:center;overflow-x:auto;padding:2px 4px;scrollbar-width:thin}
+  .chip{--c:var(--faint);flex:0 0 auto;display:flex;align-items:center;gap:7px;font-size:11px;color:var(--dim);position:relative;padding:3px 2px}
+  .chip .dot{width:20px;height:20px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;font-size:10px;font-weight:700;border:1.5px solid var(--c);color:var(--c);background:transparent;transition:.25s}
+  .chip .lbl{white-space:nowrap;font-weight:500;transition:.25s}
+  .chip .bar{width:14px;height:1.5px;background:var(--line);margin:0 6px;flex:0 0 auto}
+  .chip[data-state="done"]{--c:var(--bid)}
+  .chip[data-state="done"] .dot{background:var(--bid);border-color:var(--bid);color:#fff}
+  .chip[data-state="done"] .lbl{color:var(--text)}
+  .chip[data-state="current"]{--c:var(--signal)}
+  .chip[data-state="current"] .dot{border-color:var(--signal);color:#fff;background:var(--signal);box-shadow:0 0 0 4px rgba(26,115,232,.22)}
+  .chip[data-state="current"] .lbl{color:#fff;font-weight:700}
+  .chip[data-state="locked"]{opacity:.5}
+  .chip[data-clickable="1"]{cursor:pointer}
+  .chip[data-clickable="1"]:hover .lbl{color:#fff}
+  .nav{flex:0 0 auto;display:flex;align-items:center;gap:8px}
+  .step-count{font-size:11px;color:var(--dim);font-variant-numeric:tabular-nums;min-width:74px;text-align:right}
+  .btn{font-size:13px;font-weight:600;padding:8px 14px;border-radius:var(--r-sm);background:var(--raised);color:var(--text);border:1px solid var(--line);transition:.15s}
+  .btn:hover:not(:disabled){background:#2E3645}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.primary{background:var(--signal);border-color:var(--signal);color:#fff}
+  .btn.primary:hover:not(:disabled){background:#1765d8}
+  .btn.ghost{background:transparent}
+
+  .wrap{flex:1 1 auto;display:grid;grid-template-columns:1fr 360px;gap:12px;padding:12px;min-height:0}
+  .stage{display:grid;gap:12px;min-height:0;grid-template-columns:1.85fr 1fr;grid-template-rows:1fr 1fr}
+  .stage[data-focus="web"]{grid-template-areas:"web net" "web eco"}
+  .stage[data-focus="network"]{grid-template-areas:"net web" "net eco"}
+  .stage[data-focus="ecosystem"]{grid-template-areas:"eco web" "eco net"}
+  #panel-web{grid-area:web} #panel-net{grid-area:net} #panel-eco{grid-area:eco}
+  .panel{border-radius:var(--r);overflow:hidden;min-height:0;display:flex;flex-direction:column;border:1px solid var(--app-line);background:var(--paper);position:relative;transition:box-shadow .3s}
+  .panel.dark{background:var(--panel);border-color:var(--line);color:var(--text)}
+  .panel.is-hero{box-shadow:0 6px 24px rgba(20,30,60,.16)}
+  .phead{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:8px 12px;font-size:11px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;border-bottom:1px solid var(--app-line);color:var(--ink-dim);background:#fafbfc}
+  .panel.dark .phead{border-color:var(--line);color:var(--dim);background:#11151b}
+  .phead .tag{margin-left:auto;font-size:9px;text-transform:none;letter-spacing:0;padding:2px 7px;border-radius:20px;background:var(--app-line);color:var(--ink-dim);font-weight:600}
+  .panel.dark .phead .tag{background:var(--raised);color:var(--dim)}
+  .pbody{flex:1 1 auto;overflow:auto;min-height:0;position:relative}
+
+  .site{font-size:13px;color:#2b2f36}
+  .site-bar{display:flex;align-items:center;gap:8px;padding:7px 12px;background:#f1f3f6;border-bottom:1px solid #e4e7ec}
+  .site-bar .u{flex:1;background:#fff;border:1px solid #e0e3e9;border-radius:20px;padding:3px 12px;font-family:var(--mono);font-size:10.5px;color:#5a6472;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+  .site-bar .dotrow{display:flex;gap:5px}
+  .site-bar .dotrow i{width:9px;height:9px;border-radius:50%;display:block}
+  .masthead{padding:14px 18px 10px;border-bottom:2px solid #1A1E26}
+  .masthead .name{font-size:21px;font-weight:800;letter-spacing:-.4px;color:#101317}
+  .masthead .name span{color:var(--alert)}
+  .masthead .nav2{display:flex;gap:14px;margin-top:7px;font-size:11px;font-weight:600;color:#6a7280;text-transform:uppercase;letter-spacing:.4px;flex-wrap:wrap}
+  .article{padding:16px 18px;display:grid;gap:14px}
+  .article h2{font-size:18px;line-height:1.25;color:#14181d;font-weight:800;letter-spacing:-.3px}
+  .article .meta{font-size:11px;color:#9098a4;margin-top:-6px}
+  .article p{font-size:12.5px;color:#444b55;line-height:1.65}
+  .skel{height:9px;border-radius:4px;background:#e9ecf1;margin:7px 0}
+  .skel.s2{width:88%} .skel.s3{width:72%}
+  .adwrap{display:flex;flex-direction:column;align-items:center;gap:6px;margin:6px 0 2px}
+  .adlabel{font-size:9px;color:#aeb4be;text-transform:uppercase;letter-spacing:.8px}
+  .slot{width:300px;max-width:100%;height:250px;border-radius:8px;position:relative;overflow:hidden;display:grid;place-items:center;text-align:center;border:2px dashed #c4cad4;background:#f7f8fa;color:#9aa1ad;font-size:12px;transition:.3s}
+  .slot .ph{display:flex;flex-direction:column;gap:6px;align-items:center;padding:14px}
+  .slot .ph b{font-size:13px;color:#79818f}
+  .slot .sz{font-family:var(--mono);font-size:10.5px;color:#aab1bc}
+  .slot .sz.hint{color:var(--signal);font-weight:600;margin-top:6px;font-family:var(--ui)}
+  .slot.locate{cursor:pointer;border-color:var(--signal);background:#eef4fe;color:var(--signal);animation:slotPulse 1.6s ease-in-out infinite}
+  .slot.locate:hover{background:#e3eefe}
+  .slot.found{border-style:solid;border-color:var(--bid);background:#eefaf1;color:var(--bid)}
+  .slot.found .ph b{color:var(--bid)}
+  .slot.loading{border-style:solid;border-color:#e0e3e9;background:#fbfcfd}
+  .slot.auction{border-color:var(--live);background:#fffaf0}
+  .slot .shimmer{position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(26,115,232,.10) 50%,transparent 70%);background-size:200% 100%;animation:shimmer 1.3s linear infinite}
+  .slot .ov{position:absolute;inset:auto 0 0 0;padding:8px;font-size:10.5px;font-weight:600;background:rgba(255,255,255,.92);border-top:1px solid #eef0f3;display:flex;align-items:center;gap:7px;justify-content:center;color:#5a6472}
+  .slot .ov .pip{width:8px;height:8px;border-radius:50%;background:var(--live);animation:blink 1s infinite}
+  .badge-found{position:absolute;top:8px;right:8px;background:var(--bid);color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:20px;z-index:2}
+  .slot.creative{border:none;background:#06205a;padding:0;cursor:default}
+  .ad{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:18px 16px;background:radial-gradient(120% 120% at 80% 0%,#1763d8 0%,#0b3a8f 45%,#06205a 100%);color:#fff;text-align:left}
+  .ad-top{display:flex;align-items:center;justify-content:space-between}
+  .ad-brand{font-weight:800;font-size:18px;letter-spacing:.3px}
+  .ad-spark{font-size:20px;color:#FFD23F;filter:drop-shadow(0 0 6px rgba(249,171,0,.9))}
+  .ad-h{font-size:21px;font-weight:800;line-height:1.15;letter-spacing:-.4px}
+  .ad-sub{font-size:11.5px;opacity:.85;margin-top:8px}
+  .ad-cta{align-self:flex-start;background:#FFD23F;color:#0b2350;font-weight:700;font-size:13px;padding:9px 16px;border-radius:7px;pointer-events:none}
+  .ad-flag{position:absolute;top:6px;right:8px;font-size:8px;opacity:.55;background:rgba(0,0,0,.3);padding:1px 5px;border-radius:3px}
+  .slot.clickable-ad{cursor:pointer}
+  .slot.clickable-ad:hover .ad{filter:brightness(1.08)}
+  .cbadge{position:absolute;top:8px;left:8px;background:var(--signal);color:#fff;font-size:9px;font-weight:700;padding:3px 9px;border-radius:20px;z-index:3;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+  .cbadge.view{background:var(--bid)}
+  .scrollsim{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:4;background:#0b1020;color:#fff;font-weight:600;font-size:11px;padding:9px 15px;border-radius:20px;box-shadow:0 6px 16px rgba(0,0,0,.4);animation:bob 1.4s ease-in-out infinite;border:1px solid rgba(255,255,255,.15)}
+  .clickov{position:absolute;inset:0;background:rgba(6,16,40,.82);color:#fff;display:grid;place-items:center;font-weight:600;font-size:13px;z-index:5;gap:6px;text-align:center;padding:16px;animation:rowIn .25s}
+  .clickov small{font-family:var(--mono);font-size:10px;opacity:.8;font-weight:400}
+  @keyframes slotPulse{0%,100%{box-shadow:0 0 0 0 rgba(26,115,232,0)}50%{box-shadow:0 0 0 6px rgba(26,115,232,.14)}}
+  @keyframes shimmer{to{background-position:-200% 0}}
+  @keyframes blink{50%{opacity:.3}}
+  @keyframes bob{50%{transform:translateX(-50%) translateY(-3px)}}
+
+  .dt-tabs{display:flex;gap:2px;padding:0 8px;background:#11151b;border-bottom:1px solid var(--line);font-size:11px}
+  .dt-tabs .t{padding:7px 10px;color:var(--faint);border-bottom:2px solid transparent}
+  .dt-tabs .t.on{color:var(--text);border-bottom-color:var(--signal)}
+  .dt-filter{display:flex;align-items:center;gap:8px;padding:6px 10px;border-bottom:1px solid var(--line);background:#11151b}
+  .dt-filter .f{background:var(--ink);border:1px solid var(--line);border-radius:5px;padding:4px 9px;font-family:var(--mono);font-size:10.5px;color:var(--dim);flex:1}
+  .net-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11px}
+  .net-table th{position:sticky;top:0;background:#11151b;color:var(--faint);font-weight:500;text-align:left;padding:6px 10px;border-bottom:1px solid var(--line);font-size:10px;text-transform:uppercase;letter-spacing:.4px}
+  .net-table td{padding:6px 10px;border-bottom:1px solid #1b212a;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:0}
+  .net-table td.name{color:var(--text)}
+  .net-row{transition:background .15s;animation:rowIn .45s ease both}
+  .net-row.clickable{cursor:pointer}
+  .net-row.clickable:hover{background:#1d2530}
+  .net-row.sel{background:rgba(26,115,232,.16)}
+  .st{font-weight:700}
+  .st.ok{color:var(--bid-soft)} .st.pend{color:var(--live)} .st.redir{color:var(--signal-soft)}
+  .net-empty{padding:26px 16px;text-align:center;color:var(--faint);font-size:12px;font-family:var(--ui)}
+  .net-empty .ic{font-size:22px;opacity:.5;display:block;margin-bottom:6px}
+  .net-note{padding:10px 12px;font-family:var(--ui);font-size:11px;color:var(--faint);border-top:1px dashed var(--line);line-height:1.5}
+  .bidtag{font-family:var(--mono);font-size:10px;color:var(--live);background:rgba(249,171,0,.12);padding:1px 6px;border-radius:4px;margin-left:6px}
+  @keyframes rowIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+  .drawer{border-top:1px solid var(--line);background:#10141a;padding:10px 12px;font-family:var(--mono);font-size:11px;animation:rowIn .3s ease both}
+  .drawer h4{font-family:var(--ui);font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--dim);margin-bottom:7px}
+  .kv{display:grid;grid-template-columns:96px 1fr;gap:3px 10px}
+  .kv .k{color:var(--signal-soft)} .kv .v{color:var(--text);word-break:break-all;white-space:normal}
+
+  .eco{position:absolute;inset:0;padding:8px}
+  .eco svg{width:100%;height:100%;display:block}
+  .node .body{fill:var(--panel-2);stroke:var(--line);stroke-width:1.2;transition:.3s}
+  .node text{font-family:var(--ui);font-weight:700;fill:var(--faint);transition:.3s}
+  .node .sub{font-weight:500;font-size:7px;fill:var(--faint)}
+  .node.active .body{fill:#172338;stroke:var(--signal);stroke-width:2}
+  .node.active text{fill:#fff}
+  .node.win .body{fill:#13261a;stroke:var(--bid);stroke-width:2.4}
+  .node.win text{fill:#fff}
+  .node.dim{opacity:.34}
+  .node.clickable{cursor:pointer}
+  .edge{stroke:var(--line);stroke-width:1.6;fill:none;transition:.3s}
+  .edge.active{stroke:var(--signal);stroke-width:2.4;stroke-dasharray:5 5;animation:flow 1s linear infinite}
+  .edge.hb.active{stroke:var(--live)}
+  .edge.win.active{stroke:var(--bid)}
+  .edge.dim{opacity:.3}
+  @keyframes flow{to{stroke-dashoffset:-20}}
+
+  .learn{grid-column:2;background:var(--paper);border:1px solid var(--app-line);border-radius:var(--r);display:flex;flex-direction:column;min-height:0;overflow:hidden}
+  .learn-head{flex:0 0 auto;padding:14px 16px;border-bottom:1px solid var(--app-line);background:linear-gradient(180deg,#fbfcfe,#f4f7fb)}
+  .eyebrow{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--signal)}
+  .learn-head h2{font-size:19px;font-weight:800;letter-spacing:-.3px;color:#14181d;margin-top:3px}
+  .objective{font-size:12px;color:var(--ink-dim);margin-top:5px}
+  .learn-body{flex:1 1 auto;overflow:auto;padding:14px 16px}
+  .lb-sec{margin-bottom:16px}
+  .lb-sec > .h{display:flex;align-items:center;gap:7px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#8a93a1;margin-bottom:7px}
+  .lb-sec > .h .ic{width:16px;height:16px;border-radius:5px;display:grid;place-items:center;font-size:10px;color:#fff}
+  .explain{font-size:13px;color:#3b424c;line-height:1.62}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .ce{font-family:var(--mono);font-size:11px;font-weight:500;padding:4px 9px;border-radius:6px;background:#eef1f6;color:#475061;border:1px solid #e2e6ed}
+  .observe{font-size:12px;color:#3b424c;line-height:1.55;background:#f4f7fb;border-left:3px solid var(--signal);border-radius:0 7px 7px 0;padding:9px 11px}
+  .observe code{font-family:var(--mono);font-size:11px;background:#e7eefb;color:#1659c4;padding:1px 5px;border-radius:4px}
+  .quest{border:1.5px solid var(--app-line);border-radius:9px;overflow:hidden}
+  .quest .qh{display:flex;align-items:center;gap:8px;padding:9px 11px;background:#fff6e9;border-bottom:1px solid #f3e3c7;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#b5750a}
+  .quest .qb{padding:11px;font-size:12.5px;color:#3b424c;line-height:1.55}
+  .quest .qhint{margin-top:8px;font-size:11px;color:#8a93a1;display:none}
+  .quest .feedback{margin-top:9px;font-size:12px;font-weight:600;padding:8px 10px;border-radius:7px;display:none;align-items:center;gap:7px}
+  .quest .feedback.show{display:flex}
+  .quest .feedback.ok{background:#eafaef;color:#137a35} .quest .feedback.no{background:#fdecea;color:#c0271b}
+  .quest.solved{border-color:var(--bid)}
+  .quest.solved .qh{background:#eafaef;color:#137a35;border-color:#cdeed6}
+  .opts{display:flex;flex-direction:column;gap:7px;margin-top:10px}
+  .opt{text-align:left;font-family:var(--ui);font-size:12.5px;font-weight:500;padding:10px 12px;border-radius:8px;border:1.5px solid var(--app-line);background:#fff;color:#3b424c;transition:.15s}
+  .opt:hover{border-color:var(--signal);background:#f4f8ff}
+  .opt.bad{border-color:var(--alert);background:#fdecea;color:#c0271b;animation:shake .3s}
+  @keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+  .hint-link{background:none;color:var(--signal);font-size:11px;font-weight:600;padding:2px 0;text-decoration:underline;text-underline-offset:2px}
+  .done-card{text-align:center;padding:6px 4px}
+  .done-card .ring{width:54px;height:54px;border-radius:50%;margin:0 auto 10px;display:grid;place-items:center;background:var(--bid);color:#fff;font-size:28px}
+  .done-card h3{font-size:17px;font-weight:800;color:#14181d}
+  .done-card p{font-size:12px;color:var(--ink-dim);margin-top:8px;line-height:1.55}
+  .done-card .path{font-family:var(--mono);font-size:10.5px;color:#1659c4;background:#eef4ff;border:1px solid #d8e6ff;border-radius:8px;padding:9px;margin-top:10px;line-height:1.7}
+
+  @media (max-width:1080px){
+    body{height:auto;overflow:auto}
+    .wrap{grid-template-columns:1fr;height:auto}
+    .stage{grid-template-columns:1fr;grid-template-rows:none;grid-template-areas:"web" "net" "eco" !important}
+    .panel{min-height:300px}
+    .learn{grid-column:1;min-height:380px}
+    .top{flex-wrap:wrap}
+    .progress{order:3;width:100%}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <div class="logo" aria-hidden="true"></div>
+    <div><h1>Inspector AdTech</h1><p>Qué ocurre detrás de un banner</p></div>
+  </div>
+  <nav class="progress" id="progress" aria-label="Progreso del recorrido"></nav>
+  <div class="nav">
+    <span class="step-count" id="stepCount"></span>
+    <button class="btn ghost" id="resetBtn" title="Reiniciar recorrido">Reiniciar</button>
+    <button class="btn" id="prevBtn">‹ Anterior</button>
+    <button class="btn primary" id="nextBtn">Siguiente ›</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="stage" id="stage" data-focus="web">
+    <div class="panel" id="panel-web">
+      <div class="phead">Web simulada <span class="tag">lo que ve el usuario</span></div>
+      <div class="pbody">
+        <div class="site">
+          <div class="site-bar">
+            <span class="dotrow"><i style="background:#f55"></i><i style="background:#fb5"></i><i style="background:#5c6"></i></span>
+            <span class="u">https://www.eldiariodigital.example/tecnologia/coche-electrico</span>
+          </div>
+          <div class="masthead">
+            <div class="name">El Diario <span>Digital</span></div>
+            <div class="nav2"><span>Portada</span><span>Tecnología</span><span>Economía</span><span>Motor</span><span>Cultura</span></div>
+          </div>
+          <div class="article">
+            <h2>El coche eléctrico alcanza por primera vez el 20% de las matriculaciones</h2>
+            <div class="meta">Por Redacción · hace 2 horas · 4 min de lectura</div>
+            <p>El mercado de la automoción vive un punto de inflexión. Los últimos datos confirman una tendencia que los fabricantes anticipaban desde hace meses y que ahora se acelera de forma decidida en las principales ciudades.</p>
+            <div class="adwrap">
+              <span class="adlabel">Publicidad</span>
+              <div class="slot" id="slot" tabindex="0" role="button" aria-label="Espacio publicitario 300 por 250"></div>
+            </div>
+            <p>Los analistas señalan que la combinación de ayudas públicas, ampliación de la red de recarga y bajada de precios de las baterías ha sido determinante para llegar a este umbral simbólico.</p>
+            <div class="skel"></div><div class="skel s2"></div><div class="skel s3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel dark" id="panel-net">
+      <div class="phead">Chrome DevTools · Network <span class="tag">peticiones de red</span></div>
+      <div class="dt-tabs"><span class="t">Elements</span><span class="t">Console</span><span class="t on">Network</span><span class="t">Sources</span><span class="t">Performance</span></div>
+      <div class="dt-filter"><span class="f">Filtrar peticiones…</span></div>
+      <div class="pbody" id="netBody"></div>
+    </div>
+
+    <div class="panel dark" id="panel-eco">
+      <div class="phead">Ecosistema programático <span class="tag">quién participa</span></div>
+      <div class="pbody"><div class="eco" id="ecoWrap"></div></div>
+    </div>
+  </section>
+
+  <aside class="learn">
+    <div class="learn-head">
+      <div class="eyebrow" id="lEyebrow">Paso 1</div>
+      <h2 id="lTitle">El Slot</h2>
+      <div class="objective" id="lObjective"></div>
+    </div>
+    <div class="learn-body" id="learnBody"></div>
+  </aside>
+</main>
+
+<script>
+/* ============================================================
+   INSPECTOR ADTECH — secuencia corregida
+   Header bidding ANTES del ad call · estructura de dos niveles SSP/DSP
+   ============================================================ */
+
+/* ---- Peticiones de red ---- */
+const SSP_BIDS = [
+  {id:"sspA", name:"auction", status:"200", type:"xhr", domain:"rtb.openx.net",        size:"1.4 kB", time:"58 ms", bid:"OpenX · 1,20 €"},
+  {id:"sspB", name:"auction", status:"200", type:"xhr", domain:"htlb.casalemedia.com", size:"1.6 kB", time:"61 ms", bid:"Index Exchange · 1,45 €"},
+  {id:"sspC", name:"auction", status:"200", type:"xhr", domain:"hbopenbid.pubmatic.com",size:"1.3 kB", time:"54 ms", bid:"PubMatic · 0,95 €"}
+];
+const REQ_GAMPAD = {id:"gampad", name:"ads?gdfp_req=1&hb_pb=1.45&iu=/12345/diario/mpu_top", status:"200", type:"fetch",
+  domain:"securepubads.g.doubleclick.net", size:"2.3 kB", time:"108 ms", clickable:true,
+  detail:{iu:"/12345/diario/mpu_top", sz:"300x250", hb_pb:"1.45  (ganador del header bidding)", hb_bidder:"ix  (Index Exchange)", url:"https://www.eldiariodigital.example/tecnologia/coche-electrico", correlator:"3982170455"}};
+const REQ_CRE_HTML = {id:"creHtml", name:"ad.html", status:"200", type:"document", domain:"ad.doubleclick.net", size:"5.2 kB", time:"47 ms"};
+const REQ_CRE_JPG  = {id:"creJpg", name:"creative.jpg", status:"200", type:"jpeg", domain:"googleads.g.doubleclick.net", size:"38.6 kB", time:"63 ms", clickable:true};
+const REQ_CRE_JS   = {id:"creJs", name:"creative.js", status:"200", type:"script", domain:"googleads.g.doubleclick.net", size:"12.1 kB", time:"29 ms"};
+const REQ_IMPRESSION = {id:"imp", name:"pixel?ev=impression", status:"200", type:"gif", domain:"pagead2.googlesyndication.com", size:"42 B", time:"18 ms", clickable:true,
+  detail:{ev:"impression", adunit:"/12345/diario/mpu_top", cpm:"1,45 €", postor:"Index Exchange (SSP)"}};
+const REQ_VIEW   = {id:"view", name:"pcs/view?ev=viewable", status:"200", type:"gif", domain:"googleads.g.doubleclick.net", size:"42 B", time:"15 ms"};
+const REQ_CLICK  = {id:"click", name:"pcs/click?adurl=voltgo.example", status:"302", type:"redirect", domain:"ad.doubleclick.net", size:"0 B", time:"12 ms"};
+const REQ_LANDING= {id:"landing", name:"/promo-recarga", status:"200", type:"document", domain:"voltgo.example", size:"118 kB", time:"210 ms"};
+
+/* ---- Acumulados de Network (orden corregido: SSPs primero, luego GAM) ---- */
+const NET_HB    = [...SSP_BIDS];
+const NET_GAM   = [...SSP_BIDS, REQ_GAMPAD];
+const NET_CRE   = [...NET_GAM, REQ_CRE_HTML, REQ_CRE_JPG, REQ_CRE_JS];
+const NET_IMP   = [...NET_CRE, REQ_IMPRESSION];
+const NET_VIEW  = [...NET_IMP, REQ_VIEW];
+const NET_CLICK = [...NET_VIEW, REQ_CLICK, REQ_LANDING];
+
+/* ---- Los 10 pasos (secuencia corregida) ---- */
+const STEPS = [
+  { id:"slot", label:"Slot", focus:"web", title:"El Slot", objective:"Descubre el hueco reservado para publicidad.",
+    banner:"locate", net:[], eco:{active:["publisher"]},
+    explain:"Toda la publicidad empieza en un espacio vacío. El medio reserva un hueco en la página —un <b>slot</b>, o <b>ad unit</b>— con un tamaño fijo (aquí, 300×250). Todavía no hay ningún anuncio: solo un contenedor esperando a que alguien lo llene.",
+    concepts:["Slot / Ad unit","Inventario","Tamaño 300×250","Posición"],
+    observe:'En una web real lo verás en <b>DevTools › Elements</b> como un <code>&lt;div id="div-gpt-ad-…"&gt;</code> que envuelve un <code>&lt;iframe&gt;</code>.',
+    challenge:{prompt:"Localiza el slot: haz clic sobre el hueco publicitario de la web.", target:"slot",
+      hint:"Está bajo la palabra «Publicidad», con el borde azul parpadeante.",
+      ok:"¡Eso es! Has localizado el slot. Es el punto de partida de todo el recorrido."} },
+
+  { id:"hb", label:"Header Bidding", focus:"ecosystem", title:"Header Bidding", objective:"El medio pregunta a varios compradores a la vez.",
+    banner:"auction", bannerText:"Preguntando a varias SSPs (header bidding)…", net:NET_HB,
+    eco:{active:["publisher","prebid","sspA","sspB","sspC"], edges:["e-pub-prebid","e-prebid-a","e-prebid-b","e-prebid-c"]},
+    explain:"En el header bidding (con <b>Prebid</b>), el medio ofrece la impresión a varias <b>SSPs a la vez</b>, en paralelo, y <b>antes</b> de llamar a su ad server. Es el primer paso de la subasta, no el último.",
+    concepts:["Header bidding","Prebid.js","Puja en paralelo","Antes del ad call"],
+    observe:'En Network verás varias llamadas a SSPs casi simultáneas (OpenX, Index Exchange, PubMatic) y todavía <b>ninguna a GAM</b>.',
+    challenge:{type:"choice", prompt:"Antes de llamar a su ad server, ¿qué hace el medio con la impresión?",
+      options:[{label:"Pregunta a varias SSPs a la vez con Prebid", correct:true},{label:"Llama directamente a Google Ad Manager"},{label:"Se la queda sin venderla"}],
+      no:"Recuerda el orden: el header bidding va antes que GAM.",
+      ok:"Exacto. En el header bidding el medio pregunta a varias SSPs en paralelo, ANTES de llamar a su ad server."} },
+
+  { id:"sspdsp", label:"SSP·DSP", focus:"ecosystem", title:"Las SSPs y sus DSPs", objective:"Cada SSP puja con sus DSPs y devuelve su mejor oferta.",
+    banner:"auction", bannerText:"Las SSPs pujan con sus DSPs…", net:NET_HB,
+    eco:{active:["prebid","sspA","sspB","sspC","dsps"], edges:["e-prebid-a","e-prebid-b","e-prebid-c","e-dsps-a","e-dsps-b","e-dsps-c"]},
+    explain:"Cada SSP no puja sola: por dentro organiza su propia <b>subasta RTB entre sus DSPs</b> (DV360, The Trade Desk, Amazon…). Cuando termina, la SSP elige su mejor puja y se la devuelve al medio. El medio ve la SSP y su precio, no el detalle de los DSPs.",
+    concepts:["SSP (nivel 1)","DSP (nivel 2)","RTB interno","Una oferta por SSP"],
+    observe:'Las pujas de los DSPs ocurren <b>dentro</b> de cada SSP: no aparecen en el navegador. El medio solo recibe el resultado de cada SSP.',
+    challenge:{type:"choice", prompt:"Cada SSP organiza su subasta RTB entre sus DSPs. ¿Qué le devuelve al medio?",
+      options:[{label:"Su mejor puja, ya elegida entre sus DSPs", correct:true},{label:"El detalle de lo que pujó cada DSP"},{label:"Nada hasta que GAM decida"}],
+      no:"La subasta interna de los DSPs ya está resuelta cuando llega al medio.",
+      ok:"Correcto. La SSP resuelve su subasta interna y le pasa al medio solo su mejor puja. El medio no ve qué DSP pujó cuánto: esa cocina se queda dentro de la SSP."} },
+
+  { id:"winner", label:"Ganador", focus:"ecosystem", title:"Ganador del Header Bidding", objective:"Se elige la mejor puja entre las SSPs.",
+    banner:"auction", bannerText:"Eligiendo la mejor puja…", net:NET_HB,
+    eco:{active:["prebid","sspA","sspC","dsps"], win:["sspB"], edges:["e-prebid-a","e-prebid-b","e-prebid-c","e-dsps-a","e-dsps-b","e-dsps-c"], winEdges:["e-prebid-b"]},
+    explain:"El medio compara las mejores ofertas de cada SSP y se queda con la más alta. Esa es la <b>ganadora del header bidding</b>, la que llevará a su ad server.",
+    concepts:["Mejor oferta","CPM","Ganador del HB","Index Exchange · 1,45 €"],
+    observe:'El medio solo ve el nombre de la SSP y su precio (Index Exchange, 1,45 €), no qué anunciante hay detrás.',
+    challenge:{prompt:"Las SSPs han devuelto su mejor puja. Haz clic en la <b>ganadora</b> (el CPM más alto) en el diagrama.", target:"sspB",
+      hint:"OpenX 1,20 € · Index Exchange 1,45 € · PubMatic 0,95 €. ¿Cuál es mayor?",
+      ok:"¡Correcto! Gana Index Exchange con 1,45 €. Esa oferta viajará a GAM dentro del ad call.",
+      no:"Esa no es la más alta. Fíjate en los importes."} },
+
+  { id:"adcall", label:"Ad Call", focus:"network", title:"Ad Call a GAM", objective:"El medio llama a GAM llevando la oferta ganadora.",
+    banner:"auction", bannerText:"Llamando a GAM con la oferta ganadora…", net:NET_GAM,
+    eco:{active:["prebid","gam"], win:["sspB"], edges:["e-prebid-gam"], winEdges:["e-prebid-b"]},
+    explain:"Ahora sí, el GPT lanza el <b>ad call</b> a Google Ad Manager… pero el medio ha <b>retenido</b> esa llamada hasta tener el ganador del header bidding, y se lo adjunta como parámetros. Por eso el ad call va <b>después</b> del header bidding.",
+    concepts:["Ad call","GPT","hb_pb · hb_bidder","gampad/ads"],
+    observe:'En la petición a <code>securepubads.g.doubleclick.net</code> verás <code>hb_pb=1.45</code>: el precio del ganador del header bidding viajando dentro del ad call.',
+    challenge:{prompt:"El medio llama a GAM. Haz clic en la petición <b>ads</b> (gampad) y fíjate en lo que lleva.", target:"gampad",
+      hint:"Mira el parámetro hb_pb (header bidding price).",
+      ok:"Clave: el ad call lleva hb_pb=1.45 y hb_bidder=ix. El medio retuvo la llamada a GAM hasta tener el ganador del header bidding y se lo adjuntó. Por eso el ad call va DESPUÉS del header bidding."} },
+
+  { id:"gam", label:"GAM", focus:"ecosystem", title:"GAM decide", objective:"El ad server elige el anuncio: prioridad vs. precio.",
+    banner:"auction", bannerText:"GAM decide el anuncio…", net:NET_GAM,
+    eco:{active:["publisher","gam"], win:["sspB"]},
+    explain:"GAM recibe la oferta del header bidding (1,45 €) y la hace competir con su propia subasta (<b>AdX / Open Bidding</b>) y con la <b>venta directa</b> del medio. No decide solo por precio: aplica una <b>pirámide de prioridad</b>.",
+    concepts:["Ad server","Prioridad vs precio","AdX","Venta directa / House"],
+    observe:'En GAM real esto son <b>líneas de pedido (line items)</b> con tipos y prioridades distintas.',
+    challenge:{type:"choice", prompt:"En GAM, la oferta del header bidding (1,45 €) compite con la subasta de Google (AdX) y la venta directa. ¿Qué manda al decidir?",
+      options:[{label:"La prioridad de la línea: la venta directa garantizada va primero", correct:true},{label:"Siempre el CPM más alto"},{label:"El orden de llegada de las ofertas"}],
+      no:"En GAM la prioridad puede ganar al precio.",
+      ok:"Eso es: en GAM la prioridad manda sobre el precio. Aquí no hay venta directa elegible, así que gana la mejor oferta programática (1,45 €) y se sirve su creatividad."} },
+
+  { id:"creative", label:"Creatividad", focus:"network", title:"La Creatividad", objective:"El navegador descarga el anuncio ganador.",
+    banner:"creative", net:NET_CRE, eco:{active:["gam","advertiser"], win:["sspB"], edges:["e-gam-adv"]},
+    explain:"Con el ganador decidido, el navegador <b>descarga los assets</b> del anuncio: el HTML del anuncio, la imagen, su JavaScript y un iframe que lo aísla de la página. Por fin aparece algo en el hueco.",
+    concepts:["Creatividad / Assets","ad.html · creative.jpg","creative.js","iframe"],
+    observe:'Cada asset es una petición real en <b>Network</b>: aquí <code>creative.jpg</code> llega desde <code>googleads.g.doubleclick.net</code>.',
+    challenge:{prompt:"Localiza la imagen del anuncio: haz clic en <b>creative.jpg</b> en el panel Network.", target:"creJpg",
+      hint:"Es la fila de tipo «jpeg», de unos 38 kB.",
+      ok:"Eso es. Esa imagen es la creatividad que el comprador ganador quiere mostrar. Ya está en el navegador."} },
+
+  { id:"impression", label:"Impresión", focus:"network", title:"La Impresión", objective:"El banner se pinta y se cuenta como impresión.",
+    banner:"served", net:NET_IMP, eco:{active:["advertiser","publisher"], win:["sspB"]},
+    explain:"Al renderizarse el anuncio, se dispara un <b>píxel de impresión</b>: una llamada diminuta que registra que el anuncio se sirvió. «Impresión servida» significa que el anuncio se entregó y se pintó… pero todavía no sabemos si alguien llegó a verlo.",
+    concepts:["Impresión servida","Píxel de impresión","Tracking","Servida ≠ vista"],
+    observe:'El píxel suele pesar pocos bytes (un GIF transparente) y va a un dominio de medición como <code>pagead2.googlesyndication.com</code>.',
+    challenge:{prompt:"Haz clic en el <b>píxel de impresión</b> del panel Network para inspeccionarlo.", target:"imp",
+      hint:"Es la fila «pixel?ev=impression», de solo 42 B.",
+      ok:"Servida y contada. Fíjate: «servida» aún no es lo mismo que «vista». Eso lo medimos en el paso siguiente."} },
+
+  { id:"view", label:"Viewability", focus:"web", title:"Viewability", objective:"Comprueba si el anuncio estuvo realmente a la vista.",
+    banner:"served", net:NET_IMP, netAfter:NET_VIEW, eco:{active:["publisher","advertiser"], win:["sspB"]},
+    explain:"Servir no es ver. El estándar del <b>MRC</b> considera un display <b>viewable</b> si al menos el <b>50% de sus píxeles</b> están en pantalla durante <b>1 segundo continuo</b>. Cuando el usuario hace scroll y el banner entra en el viewport el tiempo suficiente, se dispara el <b>evento de viewability</b>.",
+    concepts:["Viewability","MRC: 50% · 1 s","Viewport","Calidad de la impresión"],
+    observe:'El evento de viewability es otra petición de medición (aquí <code>pcs/view</code>). Los anunciantes pagan y exigen viewability para no pagar por anuncios que nadie pudo ver.',
+    challenge:{prompt:"El banner está cargado pero fuera de vista. <b>Simula el scroll</b> hasta el anuncio para que entre en el viewport.", target:"scroll",
+      hint:"Usa el botón «Simular scroll» sobre el banner en la web simulada.",
+      ok:"¡Ahora sí es viewable! El banner estuvo ≥50% a la vista ≥1 segundo y se ha disparado el evento. Esto es lo que de verdad cuenta como «visto»."} },
+
+  { id:"click", label:"Click", focus:"web", title:"El Click", objective:"Sigue el recorrido completo hasta la landing.",
+    banner:"viewable", net:NET_VIEW, netAfter:NET_CLICK,
+    eco:{active:["publisher","prebid","sspA","sspC","dsps","gam","advertiser"], win:["sspB"], edges:["e-pub-prebid","e-prebid-a","e-prebid-b","e-prebid-c","e-dsps-a","e-dsps-b","e-dsps-c","e-prebid-gam","e-pub-gam","e-gam-adv"], winEdges:["e-prebid-b"]},
+    explain:"Si el usuario pulsa el anuncio, el navegador llama primero a un <b>click tracker</b> que registra el clic y responde con una <b>redirección 302</b> hacia la <b>landing</b> del anunciante. Ahí termina el recorrido de la impresión: del hueco vacío a la página de destino.",
+    concepts:["Click tracker","Redirect 302","Landing page","Atribución"],
+    observe:'En Network el click tracker aparece con estado <code>302</code> (redirección), seguido de la carga de la landing en el dominio del anunciante.',
+    challenge:{prompt:"Cierra el recorrido: <b>haz clic en el anuncio</b> de la web simulada.", target:"banner",
+      hint:"Pulsa directamente sobre la creatividad de VoltGo.",
+      ok:"¡Recorrido completo! Has seguido una impresión del slot al clic."} }
+];
+
+let state = { idx:0, done:{} };
+const $ = s => document.querySelector(s);
+const stage = $("#stage");
+
+/* ---- SVG ecosistema (dos niveles: DSPs -> SSPs -> Prebid -> GAM) ---- */
+function ecoSVG(){
+  return `<svg viewBox="0 0 380 430" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Diagrama del ecosistema programático">
+    <path id="e-pub-prebid" class="edge hb" d="M170,52 C120,72 95,82 87,98"/>
+    <path id="e-pub-gam"    class="edge"    d="M212,52 C270,72 300,82 312,98"/>
+    <path id="e-prebid-a" class="edge hb" d="M65,132 C52,150 50,162 49,176"/>
+    <path id="e-prebid-b" class="edge hb" d="M92,132 C108,150 118,162 125,176"/>
+    <path id="e-prebid-c" class="edge hb" d="M118,132 C160,148 185,162 201,176"/>
+    <path id="e-dsps-a" class="edge hb" d="M49,248 L49,204"/>
+    <path id="e-dsps-b" class="edge hb" d="M125,248 L125,204"/>
+    <path id="e-dsps-c" class="edge hb" d="M201,248 L201,204"/>
+    <path id="e-prebid-gam" class="edge" d="M148,115 C200,115 230,115 258,115"/>
+    <path id="e-gam-adv" class="edge" d="M312,134 L312,316"/>
+    ${nodeSVG("publisher",130,18,120,34,"PUBLISHER","el medio")}
+    ${nodeSVG("prebid",26,98,122,34,"HEADER BIDDING","Prebid")}
+    ${nodeSVG("sspA",14,176,70,28,"SSP A","OpenX")}
+    ${nodeSVG("sspB",90,176,70,28,"SSP B","Index Exch.")}
+    ${nodeSVG("sspC",166,176,70,28,"SSP C","PubMatic")}
+    ${nodeSVG("dsps",14,248,222,42,"DSPs","DV360 · TTD · Amazon")}
+    ${nodeSVG("gam",258,98,108,36,"GAM","ad server · AdX")}
+    ${nodeSVG("advertiser",258,316,108,36,"ADVERTISER","creatividad ganadora")}
+  </svg>`;
+}
+function nodeSVG(id,x,y,w,h,label,sub){
+  const cx=x+w/2; const ty = sub ? y+h/2+1 : y+h/2+3;
+  return `<g class="node" id="n-${id}" data-node="${id}">
+    <rect class="body" x="${x}" y="${y}" width="${w}" height="${h}" rx="8"/>
+    <text x="${cx}" y="${ty}" text-anchor="middle" font-size="${w<76?8.5:9.5}">${label}</text>
+    ${sub?`<text class="sub" x="${cx}" y="${y+h-6}" text-anchor="middle">${sub}</text>`:""}
+  </g>`;
+}
+
+/* ---- Banner según paso ---- */
+function bannerState(s){
+  if(s.id==="view")  return state.done.view  ? "viewable" : "served";
+  if(s.id==="click") return state.done.click ? "clicked"  : "viewable";
+  return s.banner;
+}
+function bannerCreative(){
+  return `<div class="ad">
+    <div class="ad-top"><span class="ad-brand">VoltGo</span><span class="ad-spark">⚡</span></div>
+    <div><div class="ad-h">Carga tu coche<br>eléctrico en 20 min</div><div class="ad-sub">Red de 4.000 puntos de recarga en España</div></div>
+    <button class="ad-cta" tabindex="-1">Descúbrelo →</button>
+    <span class="ad-flag">Ad</span>
+  </div>`;
+}
+
+/* ============================================================ RENDER */
+function render(){
+  const s = STEPS[state.idx];
+  stage.setAttribute("data-focus", s.focus || "web");
+  renderProgress(); renderControls(); renderHeroThumbs();
+  renderBanner(bannerState(s), s);
+  renderNetwork(s.net||[]);
+  renderEco(s.eco||{});
+  renderLearn(s);
+}
+function renderProgress(){
+  const wrap=$("#progress"); wrap.innerHTML="";
+  STEPS.forEach((s,i)=>{
+    let stt = state.done[s.id] ? "done" : (i===state.idx ? "current" : (isUnlocked(i) ? "ready" : "locked"));
+    const unlocked=isUnlocked(i);
+    const c=document.createElement("button");
+    c.className="chip"; c.dataset.state=stt; c.dataset.clickable=unlocked?"1":"0";
+    c.innerHTML=`<span class="dot">${state.done[s.id]?"✓":(i+1)}</span><span class="lbl">${s.label}</span>`;
+    if(unlocked) c.onclick=()=>go(i);
+    wrap.appendChild(c);
+    if(i<STEPS.length-1){const b=document.createElement("span");b.className="bar";c.appendChild(b);}
+  });
+}
+function renderControls(){
+  $("#stepCount").textContent = `Paso ${state.idx+1} / ${STEPS.length}`;
+  $("#prevBtn").disabled = state.idx===0;
+  const s=STEPS[state.idx];
+  $("#nextBtn").disabled = !(state.done[s.id] && (state.idx+1<STEPS.length) && isUnlocked(state.idx+1));
+}
+function renderHeroThumbs(){
+  const f=(STEPS[state.idx].focus)||"web";
+  const map={web:"#panel-web",network:"#panel-net",ecosystem:"#panel-eco"};
+  ["#panel-web","#panel-net","#panel-eco"].forEach(p=>$(p).classList.toggle("is-hero", map[f]===p));
+}
+function renderBanner(stt, step){
+  const slot=$("#slot");
+  slot.className="slot"; slot.onclick=null; slot.style.cursor="";
+  const done = step && state.done[step.id];
+  let html="";
+  if(stt==="locate"){
+    if(done){ slot.classList.add("found");
+      html=`<div class="badge-found">✓ Slot localizado</div><div class="ph"><b>Slot localizado</b><span class="sz">id: div-gpt-ad-mpu_top · 300×250</span></div>`;
+    } else {
+      slot.classList.add("locate");
+      html=`<div class="ph"><b>Espacio publicitario</b><span class="sz">300 × 250</span><span class="sz hint">👆 Haz clic para localizar el slot</span></div>`;
+      slot.onclick=()=>solveIf("slot");
+    }
+  } else if(stt==="loading" || stt==="auction"){
+    slot.classList.add("loading"); if(stt==="auction") slot.classList.add("auction");
+    const txt=(step&&step.bannerText)||"Cargando anuncio…";
+    html=`<div class="ph"><b>${stt==="auction"?"Decidiendo el anuncio":"Cargando anuncio"}</b><span class="sz">300 × 250</span></div><div class="shimmer"></div><div class="ov"><span class="pip"></span><span>${txt}</span></div>`;
+  } else {
+    slot.classList.add("creative");
+    html=bannerCreative();
+    if(stt==="served")  html+=`<div class="cbadge">Impresión ✓</div>`;
+    if(stt==="viewable")html+=`<div class="cbadge view">Viewable ✓</div>`;
+    if(stt==="clicked") html+=`<div class="cbadge view">Click ✓</div>`;
+    if(step && step.id==="view" && !done) html+=`<button class="scrollsim" id="scrollSim">▼ Simular scroll hasta el anuncio</button>`;
+    if(step && step.id==="click" && !done){ slot.classList.add("clickable-ad"); slot.style.cursor="pointer"; slot.onclick=()=>solveIf("banner"); }
+    if(stt==="clicked") html+=`<div class="clickov">Redirigiendo a la landing…<small>302 → voltgo.example/promo-recarga</small></div>`;
+  }
+  slot.innerHTML=html;
+  const ss=$("#scrollSim"); if(ss) ss.onclick=()=>solveIf("scroll");
+}
+function statusClass(st){ return st[0]==="3" ? "redir" : (st==="pending" ? "pend" : "ok"); }
+function renderNetwork(rows){
+  const body=$("#netBody"); const s=STEPS[state.idx];
+  if(!rows.length){ body.innerHTML=`<div class="net-empty"><span class="ic">⏵</span>Sin peticiones todavía.<br>Aún no se ha pedido ningún anuncio.</div>`; return; }
+  let html=`<table class="net-table"><thead><tr><th>Name</th><th>Status</th><th>Type</th><th>Domain</th><th>Size</th><th>Time</th></tr></thead><tbody>`;
+  rows.forEach(r=>{
+    const cls=["net-row"]; if(r.clickable) cls.push("clickable");
+    const bid=r.bid?`<span class="bidtag">${r.bid}</span>`:"";
+    html+=`<tr class="${cls.join(' ')}" data-req="${r.id}"><td class="name">${r.name}${bid}</td><td><span class="st ${statusClass(r.status)}">${r.status}</span></td><td>${r.type}</td><td>${r.domain}</td><td>${r.size}</td><td>${r.time}</td></tr>`;
+  });
+  html+=`</tbody></table>`;
+  if(s.id==="sspdsp") html+=`<div class="net-note">Las pujas de los DSPs ocurren dentro de cada SSP y no se ven aquí: el medio solo recibe la mejor oferta de cada SSP.</div>`;
+  html+=`<div id="reqDrawer"></div>`;
+  body.innerHTML=html;
+  body.querySelectorAll(".net-row.clickable").forEach(row=>{
+    row.onclick=()=>{
+      const r=rows.find(x=>x.id===row.dataset.req);
+      body.querySelectorAll(".net-row").forEach(x=>x.classList.remove("sel"));
+      row.classList.add("sel");
+      if(r.detail) showDrawer(r);
+      if(s.challenge && s.challenge.target===r.id) solveChallenge(true);
+    };
+  });
+}
+function showDrawer(r){
+  const d=$("#reqDrawer"); if(!d) return;
+  const rows=Object.entries(r.detail).map(([k,v])=>`<span class="k">${k}</span><span class="v">${v}</span>`).join("");
+  d.innerHTML=`<div class="drawer"><h4>${r.detail.ev?'Parámetros del evento':'Query string'} · ${r.name.split('?')[0]}</h4><div class="kv">${rows}</div></div>`;
+}
+function renderEco(eco){
+  const w=$("#ecoWrap"); w.innerHTML=ecoSVG();
+  const s=STEPS[state.idx];
+  const reveal = !(s.challenge && /^ssp/.test(s.challenge.target||"")) || !!state.done[s.id];
+  const active=new Set(eco.active||[]);
+  const win=new Set(reveal?(eco.win||[]):[]);
+  const edges=new Set([...(eco.edges||[]), ...(!reveal?(eco.winEdges||[]):[])]);
+  const winEdges=new Set(reveal?(eco.winEdges||[]):[]);
+  ["publisher","prebid","sspA","sspB","sspC","dsps","gam","advertiser"].forEach(id=>{
+    const n=w.querySelector("#n-"+id); if(!n) return;
+    if(win.has(id)) n.classList.add("win"); else if(active.has(id)) n.classList.add("active"); else n.classList.add("dim");
+  });
+  w.querySelectorAll(".edge").forEach(e=>{
+    if(winEdges.has(e.id)) e.classList.add("active","win");
+    else if(edges.has(e.id)) e.classList.add("active"); else e.classList.add("dim");
+  });
+  if(s.challenge && (s.challenge.target||"").startsWith("ssp")){
+    ["sspA","sspB","sspC"].forEach(id=>{
+      const n=w.querySelector("#n-"+id); if(!n) return;
+      n.classList.add("clickable"); n.style.cursor="pointer"; n.setAttribute("tabindex","0"); n.setAttribute("role","button");
+      const h=()=>solveChallenge(id===s.challenge.target);
+      n.onclick=h; n.onkeydown=(e)=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault();h();} };
+    });
+  }
+}
+function renderLearn(s){
+  $("#lEyebrow").textContent=`Paso ${state.idx+1}`;
+  $("#lTitle").textContent=s.title;
+  $("#lObjective").textContent=s.objective;
+  const solved=!!state.done[s.id]; const ch=s.challenge; const isFinal = s.id==="click";
+  let questBlock;
+  if(isFinal && solved){
+    questBlock=`<div class="quest solved"><div class="qh"><span>✓ Recorrido completado</span></div><div class="qb"><div class="done-card"><div class="ring">🏆</div><h3>¡Lo has seguido entero!</h3><p>Una impresión publicitaria, de principio a fin:</p><div class="path">Slot → Header&nbsp;Bidding → SSPs&nbsp;y&nbsp;DSPs → Ganador → Ad&nbsp;Call → GAM → Creatividad → Impresión → Viewability → Click</div><p>Ya puedes explicar qué ocurre detrás de un banner.</p></div></div></div>`;
+  } else {
+    let inner;
+    if(solved){ inner=`<div class="feedback ok show">✓ ${ch.ok}</div>`; }
+    else if(ch.type==="choice"){ inner=`<div>${ch.prompt}</div><div class="opts">${ch.options.map((o,i)=>`<button class="opt" data-i="${i}">${o.label}</button>`).join("")}</div><div class="feedback" id="feedback"></div>`; }
+    else { inner=`<div>${ch.prompt}</div><button class="hint-link" id="hintBtn">¿Necesitas una pista?</button><div class="qhint" id="qhint">${ch.hint||""}</div><div class="feedback" id="feedback"></div>`; }
+    questBlock=`<div class="quest ${solved?'solved':''}"><div class="qh"><span>${solved?'✓ Reto superado':'◷ Mini reto'}</span></div><div class="qb">${inner}</div></div>`;
+  }
+  $("#learnBody").innerHTML=`
+    <div class="lb-sec"><div class="h"><span class="ic" style="background:var(--signal)">i</span>Qué ocurre</div><p class="explain">${s.explain}</p></div>
+    <div class="lb-sec"><div class="h"><span class="ic" style="background:var(--grape)">#</span>Conceptos clave</div><div class="chips">${(s.concepts||[]).map(c=>`<span class="ce">${c}</span>`).join("")}</div></div>
+    <div class="lb-sec"><div class="h"><span class="ic" style="background:var(--bid)">◎</span>Observación práctica</div><div class="observe">${s.observe}</div></div>
+    <div class="lb-sec">${questBlock}</div>`;
+  const hb=$("#hintBtn"); if(hb) hb.onclick=()=>{$("#qhint").style.display="block"; hb.style.display="none";};
+  $("#learnBody").querySelectorAll(".opt").forEach(b=>{
+    b.onclick=()=>{ if(ch.options[+b.dataset.i].correct) solveChallenge(true);
+      else { b.classList.add("bad"); const fb=$("#feedback"); fb.className="feedback no show"; fb.textContent="✕ "+(ch.no||"No es la opción correcta."); } };
+  });
+}
+
+/* ============================================================ LÓGICA */
+function isUnlocked(i){ if(i===0) return true; for(let k=0;k<i;k++){ if(!state.done[STEPS[k].id]) return false; } return true; }
+function go(i){ if(i<0||i>=STEPS.length||!isUnlocked(i)) return; state.idx=i; render(); const lb=$("#learnBody"); if(lb) lb.scrollTop=0; }
+function next(){ if(state.done[STEPS[state.idx].id]) go(state.idx+1); }
+function prev(){ go(state.idx-1); }
+function solveIf(target){ const s=STEPS[state.idx]; if(s.challenge && s.challenge.target===target) solveChallenge(true); }
+function solveChallenge(correct){
+  const s=STEPS[state.idx]; const ch=s.challenge;
+  if(!correct){ const fb=$("#feedback"); if(fb){ fb.className="feedback no show"; fb.textContent="✕ "+(ch.no||"No es correcto, inténtalo de nuevo."); } return; }
+  state.done[s.id]=true;
+  renderProgress(); renderControls(); renderLearn(s);
+  renderBanner(bannerState(s), s);
+  if(/^ssp/.test(ch.target||"")) renderEco(s.eco||{});
+  if(s.netAfter) renderNetwork(s.netAfter);
+}
+
+$("#nextBtn").onclick=next;
+$("#prevBtn").onclick=prev;
+$("#resetBtn").onclick=()=>{ state={idx:0,done:{}}; render(); };
+$("#slot").onkeydown=(e)=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault(); $("#slot").click();} };
+document.addEventListener("keydown",(e)=>{
+  if(e.key==="ArrowRight" && !$("#nextBtn").disabled) next();
+  if(e.key==="ArrowLeft" && !$("#prevBtn").disabled) prev();
+});
+render();
+</script>
+</body>
+</html>

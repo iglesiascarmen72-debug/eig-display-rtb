@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Clase Máster: Demo Google Publisher Tag</title>
+
+    <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+    
+    <script>
+        window.googletag = window.googletag || {cmd: []};
+        
+        googletag.cmd.push(function() {
+            // 2. Definición del espacio publicitario (Ad Slot)
+            // Reemplaza '1234567' por tu código de red de Google Ad Manager
+            // El nombre 'bloque_inventado' causará el error "Unfilled impression" si no existe en tu inventario
+            googletag.defineSlot('/22908118888/bloque_inventado', [300, 250], 'div-gpt-ad-misterio')
+                     .addService(googletag.pubads());
+            
+            // 3. Configuración de la Arquitectura de Petición Única (SRA)
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; color: #333; }
+        .contenedor-anuncio { border: 2px dashed #ccc; width: 300px; height: 250px; display: flex; align-items: center; justify-content: center; background-color: #f9f9f9; }
+    </style>
+</head>
+<body>
+
+    <h1>Caso de Estudio: El misterio del anuncio en blanco</h1>
+    <p>Instrucciones: Abrir la consola con <strong>Ctrl + F10</strong> y diagnosticar el error.</p>
+    
+    <div id="div-gpt-ad-misterio" class="contenedor-anuncio">
+        </div>
+
+    <script>
+        googletag.cmd.push(function() {
+            // 5. Comando para solicitar y mostrar el anuncio
+            googletag.display('div-gpt-ad-misterio');
+        });
+    </script>
+
+</body>
+</html>

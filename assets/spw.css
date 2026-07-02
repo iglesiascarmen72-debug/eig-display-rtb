@@ -1,0 +1,169 @@
+/* ============================================================
+   ESIC · Display & RTB · Sesión 1 — CAPA SPW (Single Page Website)
+   Se carga DESPUÉS de styles.css y solo sobrescribe lo necesario:
+   · Neutraliza el carrusel (todas las secciones visibles)
+   · Sustituye el sidebar por una barra superior sticky (estilo ESIC)
+   · Añade el resaltado Scrollspy y la reveladora de notas docentes
+   ============================================================ */
+
+/* 1) TODAS LAS SECCIONES VISIBLES ---------------------------------
+   styles.css declara `.screen{display:none}` para el modo carrusel.
+   Al cargarse después, esta regla lo revierte: scroll continuo real. */
+.screen { display: block; }
+
+body { background: #eef2f8; }
+
+/* 2) BARRA SUPERIOR STICKY (estilo landing ESIC) ------------------ */
+.topnav {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: var(--navy-dark);
+  color: #fff;
+  box-shadow: 0 2px 18px rgba(8,19,42,.28);
+}
+.topnav-inner {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 11px 24px;
+}
+.topnav-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 0 0 auto;
+}
+.topnav-brand .brand-logo {
+  height: 24px;
+  filter: brightness(0) invert(1);
+  opacity: .95;
+}
+.topnav-session {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(200,16,46,.22);
+  border: 1px solid rgba(200,16,46,.4);
+  color: #fca5a5;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  padding: 5px 10px;
+  white-space: nowrap;
+}
+.topnav-session .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--esic-red); }
+
+/* Enlaces de navegación: fila horizontal con scroll si no caben */
+.topnav-links {
+  display: flex;
+  gap: 3px;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,.25) transparent;
+  padding-bottom: 2px;
+  scroll-behavior: smooth;
+}
+.topnav-links::-webkit-scrollbar { height: 6px; }
+.topnav-links::-webkit-scrollbar-thumb { background: rgba(255,255,255,.22); border-radius: 999px; }
+.topnav-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+  text-decoration: none;
+  color: #94a3b8;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 7px 11px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.topnav-links a .n {
+  font-size: 10px;
+  font-weight: 900;
+  background: rgba(255,255,255,.1);
+  border-radius: 6px;
+  padding: 3px 5px;
+  line-height: 1;
+}
+.topnav-links a:hover { background: rgba(255,255,255,.08); color: #e2e8f0; }
+/* --- Estado ACTIVO del Scrollspy (lo aplica/retira spw.js) --- */
+.topnav-links a.active {
+  background: rgba(200,16,46,.22);
+  color: #fff;
+  border-color: rgba(200,16,46,.4);
+}
+.topnav-links a.active .n { background: var(--esic-red); color: #fff; }
+
+/* Acciones a la derecha */
+.topnav-actions { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+.tn-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font);
+  font-size: 12.5px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  border-radius: 999px;
+  padding: 8px 14px;
+  border: 1px solid rgba(255,255,255,.2);
+  background: rgba(255,255,255,.06);
+  color: #e2e8f0;
+  transition: background .15s, border-color .15s, color .15s;
+}
+.tn-btn:hover { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.32); color: #fff; }
+.tn-btn-primary { background: #fff; color: var(--navy); border-color: #fff; }
+.tn-btn-primary:hover { background: #e8edf5; color: var(--navy); }
+/* Botón "Modo profesor" cuando está activo */
+.tn-btn.on { background: var(--esic-red); border-color: var(--esic-red); color: #fff; }
+.tn-btn.on:hover { background: #a50d26; }
+
+/* Barra de progreso de lectura */
+.topnav-progress { height: 3px; background: rgba(255,255,255,.08); }
+#progress-fill { display: block; height: 100%; width: 0; background: var(--esic-red); transition: width .12s linear; }
+
+/* 3) CONTENIDO PRINCIPAL ------------------------------------------ */
+.spw-main {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 26px 24px 110px;
+}
+
+/* Cada sección apilada; scroll-margin-top compensa la barra sticky
+   para que los saltos por ancla (#s05) no queden ocultos bajo el nav. */
+.screen {
+  border-top: 1px solid var(--line);
+  padding: 44px 0 8px;
+  scroll-margin-top: 92px;
+}
+.screen:first-of-type { border-top: 0; padding-top: 22px; }
+
+/* Una sola columna: la ficha docente se apila debajo de la del alumno */
+.content-grid { grid-template-columns: 1fr; }
+
+/* 4) NOTAS DOCENTES: ocultas salvo en modo profesor --------------- */
+.teacher-card { display: none; margin-top: 16px; }
+body.profesor-on .teacher-card { display: block; }
+
+/* 5) RESPONSIVE --------------------------------------------------- */
+@media (max-width: 1024px) {
+  .topnav-session { display: none; }
+}
+@media (max-width: 720px) {
+  .topnav-inner { flex-wrap: wrap; gap: 10px; padding: 10px 16px; }
+  .topnav-links { order: 3; width: 100%; }
+  .topnav-actions { margin-left: auto; }
+  .spw-main { padding: 18px 16px 90px; }
+  .screen { padding: 32px 0 4px; scroll-margin-top: 132px; }
+}

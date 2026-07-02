@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Artículo | MediaLab</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <script defer src="js/main.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">MediaLab</a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="articulo.html">Artículo</a>
+        <a href="video.html">Vídeo</a>
+        <a href="formatos.html">Formatos</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="ad-slot ad-billboard" data-format="Billboard 970x250">
+    <span>Ad Slot: Billboard 970x250</span>
+  </div>
+
+  <main class="container layout">
+    <article class="content article">
+      <span class="tag">Ad Server</span>
+      <h1>Qué ocurre cuando una página carga un anuncio</h1>
+
+      <p class="lead">
+        Esta página sirve para explicar a los alumnos la anatomía de una impresión publicitaria.
+      </p>
+
+      <p>
+        Cuando el usuario abre una página, el navegador carga el contenido editorial y también
+        las etiquetas publicitarias. Estas etiquetas hacen una llamada al ad server para solicitar
+        un anuncio compatible con esa posición.
+      </p>
+
+      <p>
+        El ad server decide qué campaña debe servirse según prioridad, segmentación, disponibilidad
+        de inventario, frecuencia, precio y reglas comerciales.
+      </p>
+
+      <div class="ad-slot ad-inread" data-format="InRead 300x250">
+        <span>Ad Slot: InRead 300x250</span>
+      </div>
+
+      <p>
+        En una operación real, si no hay una campaña directa disponible, el inventario puede pasar
+        a demanda programática: AdSense, Ad Exchange, SSPs, Open Bidding o Header Bidding.
+      </p>
+
+      <h2>Conceptos que puedes enseñar aquí</h2>
+      <ul>
+        <li>Ad call</li>
+        <li>Unidad publicitaria</li>
+        <li>Tamaño del formato</li>
+        <li>Above the fold y below the fold</li>
+        <li>Viewability</li>
+        <li>Prioridades de Google Ad Manager</li>
+      </ul>
+    </article>
+
+    <aside class="sidebar">
+      <div class="ad-slot ad-mpu" data-format="MPU 300x250">
+        <span>Ad Slot: MPU 300x250</span>
+      </div>
+
+      <div class="ad-slot ad-halfpage sticky-side" data-format="Sticky Half Page 300x600">
+        <span>Ad Slot: Sticky Half Page 300x600</span>
+      </div>
+    </aside>
+  </main>
+</body>
+</html>

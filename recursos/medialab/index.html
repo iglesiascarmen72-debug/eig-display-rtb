@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediaLab | Publisher Demo</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <script defer src="js/main.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">MediaLab</a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="articulo.html">Artículo</a>
+        <a href="video.html">Vídeo</a>
+        <a href="formatos.html">Formatos</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="ad-slot ad-leaderboard" data-format="Leaderboard 728x90">
+    <span>Ad Slot: Leaderboard 728x90</span>
+  </div>
+
+  <main class="container layout">
+    <section class="content">
+      <h1>MediaLab: laboratorio de publicidad digital</h1>
+      <p class="lead">
+        Una web ficticia de publisher para explicar Display, RTB, Ad Server, inventario,
+        formatos publicitarios y yield management.
+      </p>
+
+      <article class="card hero-card">
+        <span class="tag">Programática</span>
+        <h2>Cómo se monetiza una página web con publicidad</h2>
+        <p>
+          MediaLab simula un medio digital con diferentes espacios publicitarios:
+          formatos display, rich media, vídeo y posiciones in-read.
+        </p>
+        <a class="button" href="articulo.html">Leer artículo</a>
+      </article>
+
+      <section class="grid">
+        <article class="card">
+          <span class="tag">Display</span>
+          <h3>Formatos IAB</h3>
+          <p>Leaderboard, MPU, half page, billboard y sticky.</p>
+        </article>
+
+        <article class="card">
+          <span class="tag">AdOps</span>
+          <h3>Inventario publicitario</h3>
+          <p>Unidades publicitarias, tamaños, posiciones y visibilidad.</p>
+        </article>
+
+        <article class="card">
+          <span class="tag">RTB</span>
+          <h3>Compra programática</h3>
+          <p>DSP, SSP, Ad Exchange, pujas y subastas en tiempo real.</p>
+        </article>
+      </section>
+    </section>
+
+    <aside class="sidebar">
+      <div class="ad-slot ad-mpu" data-format="MPU 300x250">
+        <span>Ad Slot: MPU 300x250</span>
+      </div>
+
+      <div class="ad-slot ad-halfpage" data-format="Half Page 300x600">
+        <span>Ad Slot: Half Page 300x600</span>
+      </div>
+    </aside>
+  </main>
+
+  <div class="sticky-ad">
+    <span>Sticky Ad 320x50 / 728x90</span>
+    <button aria-label="Cerrar anuncio" onclick="closeStickyAd()">×</button>
+  </div>
+</body>
+</html>
