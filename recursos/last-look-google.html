@@ -1,209 +1,204 @@
-
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caso Last Look de Google · ESIC Display &amp; RTB</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/dynamic.css">
 <style>
-  .caso { padding: 1.5rem 0; font-size: 15px; color: var(--color-text-primary); }
-  .paso-nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; }
-  .paso-btn { padding: 6px 14px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-secondary); font-size: 13px; cursor: pointer; transition: all 0.15s; }
-  .paso-btn.active { background: var(--color-background-secondary); color: var(--color-text-primary); border-color: var(--color-border-primary); font-weight: 500; }
-  .paso-content { display: none; }
-  .paso-content.visible { display: block; }
-  .escenario-label { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-secondary); margin-bottom: 0.5rem; }
-  .tabla-wrap { overflow-x: auto; margin: 1rem 0; }
-  table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  th { text-align: left; padding: 8px 12px; font-weight: 500; font-size: 13px; color: var(--color-text-secondary); border-bottom: 0.5px solid var(--color-border-tertiary); }
-  td { padding: 9px 12px; border-bottom: 0.5px solid var(--color-border-tertiary); color: var(--color-text-primary); }
-  tr:last-child td { border-bottom: none; }
-  .tag { display: inline-block; padding: 2px 8px; border-radius: var(--border-radius-md); font-size: 12px; font-weight: 500; }
-  .tag-winner { background: #EAF3DE; color: #27500A; }
-  .tag-loser { background: #F1EFE8; color: #5F5E5A; }
-  .tag-trampa { background: #FAECE7; color: #712B13; }
-  .tag-ok { background: #E1F5EE; color: #085041; }
-  .callout { border-left: 3px solid; padding: 0.75rem 1rem; border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; margin: 1rem 0; font-size: 14px; line-height: 1.6; }
-  .callout.warning { border-color: #EF9F27; background: #FAEEDA; color: #633806; }
-  .callout.danger { border-color: #E24B4A; background: #FCEBEB; color: #501313; }
-  .callout.success { border-color: #1D9E75; background: #E1F5EE; color: #04342C; }
-  .callout.info { border-color: #378ADD; background: #E6F1FB; color: #042C53; }
-  .metric-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 1rem 0; }
-  .metric { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.875rem 1rem; }
-  .metric-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; }
-  .metric-value { font-size: 22px; font-weight: 500; }
-  .metric-value.danger { color: #A32D2D; }
-  .metric-value.success { color: #0F6E56; }
-  .step-arrow { text-align: center; color: var(--color-text-secondary); font-size: 20px; margin: 0.25rem 0; }
-  .highlight-row { background: #FAEEDA; }
-  .nav-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 0.5px solid var(--color-border-tertiary); }
-  .nav-btn { padding: 8px 18px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary); font-size: 14px; cursor: pointer; }
-  .nav-btn:disabled { opacity: 0.3; cursor: default; }
-  .paso-indicator { font-size: 13px; color: var(--color-text-secondary); }
-  h3 { font-size: 16px; font-weight: 500; margin: 0 0 0.5rem; }
-  p { margin: 0 0 0.75rem; line-height: 1.65; color: var(--color-text-primary); }
-  .persona { display: inline-flex; align-items: center; gap: 6px; font-weight: 500; }
-  .avatar { width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 500; }
-</style>
-
-<div class="caso">
-  <h2 style="sr-only">Caso didáctico: el last look de Google</h2>
-
-  <div class="escenario-label">Caso de aula — letsfamily.es · antes de 2019</div>
-  <h3 style="font-size:18px; margin-bottom: 0.25rem;">El last look de Google: cuando la subasta no era justa</h3>
-  <p style="color: var(--color-text-secondary); font-size: 14px; margin-bottom: 1.25rem;">Sigue los pasos para entender cómo Google ganaba impresiones pagando mucho menos de lo que valían.</p>
-
-  <div class="paso-nav" id="nav"></div>
-  <div id="contenido"></div>
-</div>
-
-<script>
-const pasos = [
-  {
-    titulo: "Contexto",
-    contenido: () => `
-      <h3>La situación de partida</h3>
-      <p>letsfamily.es tiene un espacio publicitario disponible: un banner 300×250 en la sección Embarazo. Se va a subastar.</p>
-      <p>En el sistema hay <strong>dos carriles</strong> paralelos para vender esa impresión:</p>
-      <div class="metric-row">
-        <div class="metric">
-          <div class="metric-label">Carril A</div>
-          <div style="font-size:15px; font-weight:500; margin-top:4px;">Header bidding</div>
-          <div style="font-size:13px; color:var(--color-text-secondary); margin-top:4px;">SSPs externas compiten en subasta de primer precio</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Carril B</div>
-          <div style="font-size:15px; font-weight:500; margin-top:4px;">AdX de Google</div>
-          <div style="font-size:13px; color:var(--color-text-secondary); margin-top:4px;">DSPs de Google compiten en subasta de segundo precio</div>
-        </div>
-      </div>
-      <div class="callout info">El problema: estos dos carriles no empezaban la carrera desde la misma línea. Google tenía una ventaja estructural.</div>
-    `
-  },
-  {
-    titulo: "Header bidding",
-    contenido: () => `
-      <h3>Paso 1 — el header bidding resuelve su subasta</h3>
-      <p>Prebid.js pregunta a tres SSPs simultáneamente. Cada SSP organiza su subasta interna con sus DSPs y devuelve su mejor precio.</p>
-      <div class="tabla-wrap">
-        <table>
-          <thead><tr><th>SSP</th><th>DSP ganador interno</th><th>Mejor puja</th><th>Resultado</th></tr></thead>
-          <tbody>
-            <tr><td>Index Exchange</td><td>The Trade Desk</td><td>1,80 €</td><td><span class="tag tag-winner">Ganadora HB</span></td></tr>
-            <tr><td>OpenX</td><td>DV360</td><td>1,45 €</td><td><span class="tag tag-loser">Eliminada</span></td></tr>
-            <tr><td>PubMatic</td><td>Xandr</td><td>1,20 €</td><td><span class="tag tag-loser">Eliminada</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="callout success">Index Exchange gana el header bidding con <strong>1,80 € CPM</strong>. Ese precio viaja a GAM como parámetro <code>hb_pb=1.80</code>.</div>
-    `
-  },
-  {
-    titulo: "El last look",
-    contenido: () => `
-      <h3>Paso 2 — GAM le da el precio a AdX. Aquí está el problema.</h3>
-      <p>En el sistema anterior a 2019, GAM le comunicaba a AdX el precio ganador del header bidding <em>antes</em> de que AdX lanzara su propia subasta interna.</p>
-      <div class="callout danger">AdX sabía que tenía que superar <strong>1,80 €</strong> para ganar. Los demás habían pujado a ciegas. Google no.</div>
-      <p>Con ese dato, AdX lanza su subasta interna de segundo precio entre sus Authorized Buyers:</p>
-      <div class="tabla-wrap">
-        <table>
-          <thead><tr><th>Comprador (AdX)</th><th>Puja</th><th>Resultado</th></tr></thead>
-          <tbody>
-            <tr class="highlight-row"><td>Google Ads</td><td>1,81 €</td><td><span class="tag tag-trampa">Gana con last look</span></td></tr>
-            <tr><td>DV360 (otro anunciante)</td><td>0,55 €</td><td><span class="tag tag-loser">Eliminado</span></td></tr>
-            <tr><td>Criteo (Authorized Buyer)</td><td>0,48 €</td><td><span class="tag tag-loser">Eliminado</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p>Regla de segundo precio: el ganador paga la segunda puja más alta + 0,01 €.</p>
-      <div class="callout warning">Google Ads gana con 1,81 € pero paga: <strong>0,55 + 0,01 = 0,56 € CPM</strong></div>
-    `
-  },
-  {
-    titulo: "GAM decide",
-    contenido: () => `
-      <h3>Paso 3 — GAM compara los dos carriles</h3>
-      <p>GAM recibe los resultados de ambas subastas y los enfrenta:</p>
-      <div class="tabla-wrap">
-        <table>
-          <thead><tr><th>Carril</th><th>Ganador</th><th>Precio ofrecido</th></tr></thead>
-          <tbody>
-            <tr><td>Header bidding</td><td>Index Exchange / The Trade Desk</td><td>1,80 €</td></tr>
-            <tr class="highlight-row"><td>AdX (Google)</td><td>Google Ads</td><td>1,81 € (paga 0,56 €)</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p>GAM ve que AdX ofrece 1,81 €, que es más que 1,80 €. Elige AdX.</p>
-      <div class="callout danger"><strong>El publisher cobra 0,56 € por una impresión que el mercado había valorado en 1,80 €.</strong> La diferencia desaparece del ecosistema.</div>
-    `
-  },
-  {
-    titulo: "El daño real",
-    contenido: () => `
-      <h3>¿Cuánto perdía letsfamily.es?</h3>
-      <p>Aplica este mecanismo a escala real. Imaginemos que en la sección Embarazo se generan 50.000 impresiones al día y este patrón ocurría en el 30% de ellas.</p>
-      <div class="metric-row">
-        <div class="metric">
-          <div class="metric-label">Precio justo (HB)</div>
-          <div class="metric-value success">1,80 €</div>
-          <div style="font-size:12px; color:var(--color-text-secondary); margin-top:4px;">CPM real del mercado</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Precio cobrado (AdX)</div>
-          <div class="metric-value danger">0,56 €</div>
-          <div style="font-size:12px; color:var(--color-text-secondary); margin-top:4px;">CPM real pagado</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Pérdida por impresión</div>
-          <div class="metric-value danger">−1,24 €</div>
-          <div style="font-size:12px; color:var(--color-text-secondary); margin-top:4px;">CPM perdido</div>
-        </div>
-      </div>
-      <div class="callout warning">50.000 imp/día × 30% afectadas × 1,24 € de pérdida / 1000 = <strong>18,60 € diarios perdidos</strong> solo en esa sección. Multiplicado por toda la red de publishers, el impacto era enorme.</div>
-    `
-  },
-  {
-    titulo: "2019: el cambio",
-    contenido: () => `
-      <h3>Qué cambió Google en 2019</h3>
-      <p>Google eliminó el last look y migró GAM a una <strong>subasta unificada de primer precio</strong>. Las nuevas reglas:</p>
-      <div class="tabla-wrap">
-        <table>
-          <thead><tr><th></th><th>Antes (2nd price + last look)</th><th>Después (1st price unificado)</th></tr></thead>
-          <tbody>
-            <tr><td>¿Google ve el precio HB antes de pujar?</td><td><span class="tag tag-trampa">Sí</span></td><td><span class="tag tag-ok">No</span></td></tr>
-            <tr><td>¿El ganador paga lo que pujó?</td><td><span class="tag tag-trampa">No (2nd price)</span></td><td><span class="tag tag-ok">Sí</span></td></tr>
-            <tr><td>¿Todos pujan en la misma subasta?</td><td><span class="tag tag-trampa">No (dos carriles)</span></td><td><span class="tag tag-ok">Sí (unified auction)</span></td></tr>
-            <tr><td>Floor price</td><td>Reglas separadas por plataforma</td><td>Unified Pricing Rules (una sola regla)</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="callout success">El mismo ejemplo hoy: Google Ads tendría que pujar 1,81 € sin saber que el precio a batir era 1,80 €, y si gana, <strong>paga 1,81 €</strong>. El publisher cobra el precio real del mercado.</div>
-      <p style="font-size:13px; color:var(--color-text-secondary);">Nota: los compradores respondieron desarrollando bid shading (pujar entre el primer y segundo precio teórico) para no sobrepagar sistemáticamente en first price.</p>
-    `
+  /* ── Cabecera simple del recurso (no lleva scrollspy, es una página aparte) ── */
+  .res-top {
+    background: var(--navy-dark); color: #fff;
+    padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px;
   }
-];
+  .res-top-brand { display: flex; align-items: center; gap: 12px; }
+  .res-top-brand svg { height: 20px; }
+  .res-back {
+    font-size: 13px; font-weight: 700; text-decoration: none; color: #cbd5e1;
+    display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px;
+    border-radius: 999px; border: 1px solid rgba(255,255,255,.22); transition: background .15s, color .15s;
+  }
+  .res-back:hover { background: rgba(255,255,255,.1); color: #fff; }
+  .res-main { max-width: 920px; margin: 0 auto; padding: 40px 24px 80px; }
 
-let actual = 0;
+  /* ── Tags de resultado dentro de las tablas del caso ── */
+  .llg-tag { display: inline-block; padding: 3px 11px; border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+  .llg-tag.win  { background: var(--practica-bg); color: var(--practica); }
+  .llg-tag.lose { background: var(--silver); color: var(--muted); }
+  .llg-tag.trap { background: var(--esic-red-light); color: #7f0e1e; }
+  .llg-tag.ok   { background: var(--practica-bg); color: var(--practica); }
+  .llg-row-hi td { background: var(--reto-bg); }
 
-function render() {
-  const nav = document.getElementById('nav');
-  nav.innerHTML = pasos.map((p, i) => `
-    <button class="paso-btn ${i === actual ? 'active' : ''}" onclick="irA(${i})">${i + 1}. ${p.titulo}</button>
-  `).join('');
+  /* ── Métricas ── */
+  .llg-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 16px 0; }
+  .llg-metric { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; box-shadow: var(--shadow-sm); }
+  .llg-metric .lbl { font-size: 11.5px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .llg-metric .val { font-size: 26px; font-weight: 900; letter-spacing: -.01em; }
+  .llg-metric .val.danger { color: #b3211f; }
+  .llg-metric .val.success { color: var(--practica); }
+  .llg-metric .sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
-  const contenido = document.getElementById('contenido');
-  contenido.innerHTML = pasos[actual].contenido() + `
-    <div class="nav-footer">
-      <button class="nav-btn" onclick="irA(${actual - 1})" ${actual === 0 ? 'disabled' : ''}>&larr; Anterior</button>
-      <span class="paso-indicator">${actual + 1} / ${pasos.length}</span>
-      ${actual < pasos.length - 1
-        ? `<button class="nav-btn" onclick="irA(${actual + 1})">Siguiente &rarr;</button>`
-        : `<button class="nav-btn" onclick="sendPrompt('¿Qué es el bid shading y cómo funciona exactamente?')">¿Y el bid shading? ↗</button>`
-      }
+  /* ── Los dos carriles (contexto) ── */
+  .llg-lanes { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 16px 0; }
+  .llg-lane { background: var(--silver); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+  .llg-lane .lbl { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  .llg-lane h4 { margin: 6px 0 4px; font-size: 16px; color: var(--navy); }
+  .llg-lane p { margin: 0; font-size: 13.5px; color: var(--muted); }
+  @media (max-width: 620px) { .llg-lanes { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="res-top">
+  <div class="res-top-brand">
+    <svg viewBox="0 0 120 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ESIC University">
+      <text x="0" y="22" font-family="Inter,sans-serif" font-weight="900" font-size="24" fill="white" letter-spacing="-1">ESIC</text>
+      <text x="58" y="22" font-family="Inter,sans-serif" font-weight="400" font-size="12" fill="#94a3b8" letter-spacing="1">UNIVERSITY</text>
+    </svg>
+  </div>
+  <a class="res-back" href="../index.html#s08">← Volver a la sesión</a>
+</header>
+
+<main class="res-main">
+  <p class="eyebrow">Recurso · Caso de aula — letsfamily.es · antes de 2019</p>
+  <h2 style="font-size:32px; font-weight:900; letter-spacing:-.02em; color:var(--navy); margin:6px 0 10px;">El last look de Google: cuando la subasta no era justa</h2>
+  <p class="lead" style="margin-bottom:28px;">Sigue los pasos para entender cómo Google ganaba impresiones pagando mucho menos de lo que valían.</p>
+
+  <div class="panel-card acc-teoria" data-journey id="llgJourney">
+    <div class="journey-track">
+      <button type="button" class="journey-node" data-step="contexto" style="--i:0"><span class="jn-dot">1</span><span class="jn-label">Contexto</span></button>
+      <button type="button" class="journey-node" data-step="hb" style="--i:1"><span class="jn-dot">2</span><span class="jn-label">Header bidding</span></button>
+      <button type="button" class="journey-node" data-step="lastlook" style="--i:2"><span class="jn-dot">3</span><span class="jn-label">El last look</span></button>
+      <button type="button" class="journey-node" data-step="gam" style="--i:3"><span class="jn-dot">4</span><span class="jn-label">GAM decide</span></button>
+      <button type="button" class="journey-node" data-step="dano" style="--i:4"><span class="jn-dot">5</span><span class="jn-label">El daño real</span></button>
+      <button type="button" class="journey-node" data-step="cambio" style="--i:5"><span class="jn-dot">6</span><span class="jn-label">2019: el cambio</span></button>
     </div>
-  `;
-}
 
-function irA(i) {
-  if (i < 0 || i >= pasos.length) return;
-  actual = i;
-  render();
-}
+    <div class="journey-panels">
 
-render();
+      <div class="journey-panel" data-panel="contexto">
+        <h4>La situación de partida</h4>
+        <p>letsfamily.es tiene un espacio publicitario disponible: un banner 300×250 en la sección Embarazo. Se va a subastar.</p>
+        <p>En el sistema hay <b>dos carriles</b> paralelos para vender esa impresión:</p>
+        <div class="llg-lanes">
+          <div class="llg-lane">
+            <p class="lbl">Carril A</p>
+            <h4>Header bidding</h4>
+            <p>SSPs externas compiten en subasta de primer precio.</p>
+          </div>
+          <div class="llg-lane">
+            <p class="lbl">Carril B</p>
+            <h4>AdX de Google</h4>
+            <p>DSPs de Google compiten en subasta de segundo precio.</p>
+          </div>
+        </div>
+        <div class="callout" style="border-left:3px solid var(--teoria); background:var(--teoria-bg);"><p style="margin:0">El problema: estos dos carriles no empezaban la carrera desde la misma línea. Google tenía una ventaja estructural.</p></div>
+      </div>
+
+      <div class="journey-panel" data-panel="hb">
+        <h4>Paso 1 — el header bidding resuelve su subasta</h4>
+        <p>Prebid.js pregunta a tres SSPs simultáneamente. Cada SSP organiza su subasta interna con sus DSPs y devuelve su mejor precio.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>SSP</th><th>DSP ganador interno</th><th>Mejor puja</th><th>Resultado</th></tr></thead>
+            <tbody>
+              <tr><td>Index Exchange</td><td>The Trade Desk</td><td>1,80 €</td><td><span class="llg-tag win">Ganadora HB</span></td></tr>
+              <tr><td>OpenX</td><td>DV360</td><td>1,45 €</td><td><span class="llg-tag lose">Eliminada</span></td></tr>
+              <tr><td>PubMatic</td><td>Xandr</td><td>1,20 €</td><td><span class="llg-tag lose">Eliminada</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout" style="border-left:3px solid var(--practica); background:var(--practica-bg);"><p style="margin:0">Index Exchange gana el header bidding con <b>1,80 € CPM</b>. Ese precio viaja a GAM como parámetro <code>hb_pb=1.80</code>.</p></div>
+      </div>
+
+      <div class="journey-panel" data-panel="lastlook">
+        <h4>Paso 2 — GAM le da el precio a AdX. Aquí está el problema.</h4>
+        <p>En el sistema anterior a 2019, GAM le comunicaba a AdX el precio ganador del header bidding <em>antes</em> de que AdX lanzara su propia subasta interna.</p>
+        <div class="callout" style="border-left:3px solid var(--esic-red); background:var(--esic-red-light);"><p style="margin:0">AdX sabía que tenía que superar <b>1,80 €</b> para ganar. Los demás habían pujado a ciegas. Google no.</p></div>
+        <p>Con ese dato, AdX lanza su subasta interna de segundo precio entre sus Authorized Buyers:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Comprador (AdX)</th><th>Puja</th><th>Resultado</th></tr></thead>
+            <tbody>
+              <tr class="llg-row-hi"><td>Google Ads</td><td>1,81 €</td><td><span class="llg-tag trap">Gana con last look</span></td></tr>
+              <tr><td>DV360 (otro anunciante)</td><td>0,55 €</td><td><span class="llg-tag lose">Eliminado</span></td></tr>
+              <tr><td>Criteo (Authorized Buyer)</td><td>0,48 €</td><td><span class="llg-tag lose">Eliminado</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Regla de segundo precio: el ganador paga la segunda puja más alta + 0,01 €.</p>
+        <div class="callout" style="border-left:3px solid var(--reto); background:var(--reto-bg);"><p style="margin:0">Google Ads gana con 1,81 € pero paga: <b>0,55 + 0,01 = 0,56 € CPM</b></p></div>
+      </div>
+
+      <div class="journey-panel" data-panel="gam">
+        <h4>Paso 3 — GAM compara los dos carriles</h4>
+        <p>GAM recibe los resultados de ambas subastas y los enfrenta:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Carril</th><th>Ganador</th><th>Precio ofrecido</th></tr></thead>
+            <tbody>
+              <tr><td>Header bidding</td><td>Index Exchange / The Trade Desk</td><td>1,80 €</td></tr>
+              <tr class="llg-row-hi"><td>AdX (Google)</td><td>Google Ads</td><td>1,81 € (paga 0,56 €)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>GAM ve que AdX ofrece 1,81 €, que es más que 1,80 €. Elige AdX.</p>
+        <div class="callout" style="border-left:3px solid var(--esic-red); background:var(--esic-red-light);"><p style="margin:0"><b>El publisher cobra 0,56 € por una impresión que el mercado había valorado en 1,80 €.</b> La diferencia desaparece del ecosistema.</p></div>
+      </div>
+
+      <div class="journey-panel" data-panel="dano">
+        <h4>¿Cuánto perdía letsfamily.es?</h4>
+        <p>Aplica este mecanismo a escala real. Imaginemos que en la sección Embarazo se generan 50.000 impresiones al día y este patrón ocurría en el 30% de ellas.</p>
+        <div class="llg-metrics">
+          <div class="llg-metric"><p class="lbl">Precio justo (HB)</p><p class="val success">1,80 €</p><p class="sub">CPM real del mercado</p></div>
+          <div class="llg-metric"><p class="lbl">Precio cobrado (AdX)</p><p class="val danger">0,56 €</p><p class="sub">CPM real pagado</p></div>
+          <div class="llg-metric"><p class="lbl">Pérdida por impresión</p><p class="val danger">−1,24 €</p><p class="sub">CPM perdido</p></div>
+        </div>
+        <div class="callout" style="border-left:3px solid var(--reto); background:var(--reto-bg);"><p style="margin:0">50.000 imp/día × 30% afectadas × 1,24 € de pérdida / 1000 = <b>18,60 € diarios perdidos</b> solo en esa sección. Multiplicado por toda la red de publishers, el impacto era enorme.</p></div>
+      </div>
+
+      <div class="journey-panel" data-panel="cambio">
+        <h4>Qué cambió Google en 2019</h4>
+        <p>Google eliminó el last look y migró GAM a una <b>subasta unificada de primer precio</b>. Las nuevas reglas:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th></th><th>Antes (2nd price + last look)</th><th>Después (1st price unificado)</th></tr></thead>
+            <tbody>
+              <tr><td>¿Google ve el precio HB antes de pujar?</td><td><span class="llg-tag trap">Sí</span></td><td><span class="llg-tag ok">No</span></td></tr>
+              <tr><td>¿El ganador paga lo que pujó?</td><td><span class="llg-tag trap">No (2nd price)</span></td><td><span class="llg-tag ok">Sí</span></td></tr>
+              <tr><td>¿Todos pujan en la misma subasta?</td><td><span class="llg-tag trap">No (dos carriles)</span></td><td><span class="llg-tag ok">Sí (unified auction)</span></td></tr>
+              <tr><td>Floor price</td><td>Reglas separadas por plataforma</td><td>Unified Pricing Rules (una sola regla)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout" style="border-left:3px solid var(--practica); background:var(--practica-bg);"><p style="margin:0">El mismo ejemplo hoy: Google Ads tendría que pujar 1,81 € sin saber que el precio a batir era 1,80 €, y si gana, <b>paga 1,81 €</b>. El publisher cobra el precio real del mercado.</p></div>
+        <p style="font-size:13px; color:var(--muted); margin-top:12px;">Nota: los compradores respondieron desarrollando bid shading (pujar entre el primer y segundo precio teórico) para no sobrepagar sistemáticamente en first price.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="pager" style="margin-top:24px;">
+    <button type="button" class="btn alt" id="llgPrev">← Anterior</button>
+    <button type="button" class="btn" id="llgNext">Siguiente →</button>
+  </div>
+</main>
+
+<script src="../assets/dynamic.js"></script>
+<script>
+  // Navegación Anterior/Siguiente sobre el mismo componente "journey"
+  // (el resaltado y el cambio de panel ya los gestiona dynamic.js).
+  (function () {
+    var nodes = [].slice.call(document.querySelectorAll('#llgJourney .journey-node'));
+    function activeIndex() { return Math.max(0, nodes.findIndex(function (n) { return n.classList.contains('active'); })); }
+    document.getElementById('llgPrev').addEventListener('click', function () {
+      var i = activeIndex() - 1; if (i >= 0) nodes[i].click();
+    });
+    document.getElementById('llgNext').addEventListener('click', function () {
+      var i = activeIndex() + 1; if (i < nodes.length) nodes[i].click();
+    });
+  })();
 </script>
+</body>
+</html>
