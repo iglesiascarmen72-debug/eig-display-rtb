@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
   <title>ESIC · Display & RTB · Sesión 1 · El viaje de una impresión</title>
+  <template id="__bundler_thumbnail" data-bg-color="#0b1220">
+    <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1200" height="800" fill="#0b1220"/>
+      <text x="600" y="360" font-family="Inter,Arial,sans-serif" font-size="120" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="-4">ESIC</text>
+      <text x="600" y="440" font-family="Inter,Arial,sans-serif" font-size="40" font-weight="400" fill="#94a3b8" text-anchor="middle" letter-spacing="2">Display &amp; RTB · Sesión 1</text>
+      <text x="600" y="520" font-family="Inter,Arial,sans-serif" font-size="30" font-weight="600" fill="#60a5fa" text-anchor="middle">El viaje de una impresión</text>
+    </svg>
+  </template>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -323,10 +331,13 @@
       </div>
     </div>
 
-    <!-- La web como escaparate + tabla de formatos -->
-    <div class="callout" data-reveal>
-      <p class="blocktitle" style="color:var(--reto)">Actividad</p>
-      <p>Selección de canales programáticos.</p>
+    <!-- RTB: la lógica de compra antes de entrar en formatos -->
+    <div class="panel-card acc-teoria" data-reveal>
+      <p class="blocktitle" style="color:var(--teoria)">Antes de seguir: ¿qué es RTB?</p>
+      <p class="blocklead"><b>RTB (Real-Time Bidding)</b> es el modo de compra y venta de espacios publicitarios mediante <b>subastas automáticas en milisegundos</b>. Cada vez que se carga una página, la impresión se subasta en tiempo real al mejor postor.</p>
+      <div class="callout" style="border-left:3px solid var(--teoria); background:var(--teoria-bg); margin-top:14px;">
+        <p style="margin:0">El <b>display web</b> es la puerta de entrada para entender el RTB, pero no confundas los planos: RTB es una <b>lógica de compra</b> dentro de la programática, <b>no es un formato</b>. El display es el formato; el RTB es cómo se compra.</p>
+      </div>
     </div>
 
     <!-- El display en 2025: antes → ahora -->
@@ -335,7 +346,7 @@
       <div class="evo-grid">
         <div class="evo-col before">
           <p class="evo-eyebrow">Antes · display era casi sinónimo de</p>
-          <h4>Formatos fijos</h4>
+          <h4>Formatos fijos (estándar IAB)</h4>
           <div class="evo-chips" data-evo-chips>
             <button type="button" class="evo-chip-btn" data-evo="robapaginas">MPU/Robapáginas/Medium Rectangle</button><button type="button" class="evo-chip-btn" data-evo="leaderboard">Leaderboard</button><button type="button" class="evo-chip-btn" data-evo="billboard">Billboard/Megabanner</button>
             <button type="button" class="evo-chip-btn" data-evo="halfpage">Half Page / Media página</button>
@@ -423,6 +434,7 @@
           </div>
         </div>
       </div>
+      <p style="margin-top:16px;"><a href="https://www.bannerflow.com/blog/display-advertising-best-banner-ads" target="_blank" rel="noopener" onclick="window.open(this.href,'_blank','noopener,width=1200,height=800');return false;" style="display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:13.5px; color:var(--practica); text-decoration:none; padding:9px 15px; border-radius:999px; border:1px solid #99f6e4; background:var(--practica-bg);">Ver ejemplos de banners HTML5 →</a></p>
     </div>
 
     <!-- Display y vídeo: la frontera se difumina -->
@@ -519,10 +531,39 @@
       </div>
     </div>
 
-    <!-- Actividad -->
-    <div class="callout" data-reveal>
-      <p class="blocktitle" style="color:var(--reto)">Actividad</p>
-      <p>Entrad en MediaLab, elegid varios formatos y completad la pestaña <b>03 · Inventario y valor</b>.</p>
+    <!-- Ejemplos de vídeo -->
+    <div class="panel-card acc-practica" data-reveal>
+      <p class="blocktitle" style="color:var(--practica)">Ejemplos de vídeo</p>
+      <p class="blocklead">Dos casos reales de cómo el vídeo funciona como formato publicitario.</p>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin-top:14px;">
+        <a href="https://www.youtube.com/watch?v=sLdOys54Jwg" target="_blank" rel="noopener" style="position:relative; display:block; border:1px solid var(--line); border-radius:14px; overflow:hidden; background:#000; aspect-ratio:16/9; text-decoration:none;">
+          <img src="https://img.youtube.com/vi/sLdOys54Jwg/hqdefault.jpg" alt="Ejemplo de vídeo 1" style="width:100%; height:100%; object-fit:cover; display:block;">
+          <span style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center;"><span style="width:64px; height:44px; border-radius:12px; background:rgba(0,0,0,.72); display:flex; align-items:center; justify-content:center;"><span style="width:0; height:0; border-style:solid; border-width:9px 0 9px 15px; border-color:transparent transparent transparent #fff;"></span></span></span>
+        </a>
+        <a href="https://www.youtube.com/watch?v=RcGaTzFV-pw" target="_blank" rel="noopener" style="position:relative; display:block; border:1px solid var(--line); border-radius:14px; overflow:hidden; background:#000; aspect-ratio:16/9; text-decoration:none;">
+          <img src="https://img.youtube.com/vi/RcGaTzFV-pw/hqdefault.jpg" alt="Ejemplo de vídeo 2" style="width:100%; height:100%; object-fit:cover; display:block;">
+          <span style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center;"><span style="width:64px; height:44px; border-radius:12px; background:rgba(0,0,0,.72); display:flex; align-items:center; justify-content:center;"><span style="width:0; height:0; border-style:solid; border-width:9px 0 9px 15px; border-color:transparent transparent transparent #fff;"></span></span></span>
+        </a>
+      </div>
+      <p style="font-size:12.5px; color:var(--muted); margin-top:10px;">Estos vídeos tienen la incrustación deshabilitada por su autor, así que se abren directamente en YouTube al pulsarlos.</p>
+    </div>
+
+    <!-- DCO: optimización dinámica de creatividades -->
+    <div class="panel-card acc-teoria" data-reveal>
+      <p class="evo-headline">DCO · <b>Optimización dinámica de creatividades</b>.</p>
+      <p class="blocklead">El <b>DCO (Dynamic Creative Optimization)</b> es una tecnología de personalización de anuncios en tiempo real. En lugar de un anuncio único y cerrado, la creatividad se desglosa en <b>elementos individuales</b> (imagen, texto, botón de llamada a la acción…).</p>
+      <div class="callout" style="border-left:3px solid var(--teoria); background:var(--teoria-bg); margin:14px 0;">
+        <p style="margin:0">Una única <b>plantilla creativa</b> puede generar <b>múltiples versiones</b> de anuncios según los datos de audiencia.</p>
+      </div>
+      <p class="evo-eyebrow" style="color:var(--teoria)">Elementos variables</p>
+      <div class="evo-chips" style="margin-top:8px;">
+        <span>Imagen</span><span>Titular</span><span>Texto secundario</span><span>CTA</span><span>Color / fondo</span><span>Producto o sorteo recomendado</span>
+      </div>
+      <p style="margin-top:16px; display:flex; flex-wrap:wrap; gap:10px;">
+        <a href="https://blog.zuuvi.com/dynamic-creative-optimization/3-perfect-dco-ad-examples?utm_source=chatgpt.com#zuuvi" target="_blank" rel="noopener" onclick="window.open(this.href,'_blank','noopener,width=1200,height=800');return false;" style="display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:13.5px; color:var(--teoria); text-decoration:none; padding:9px 15px; border-radius:999px; border:1px solid #bfdbfe; background:var(--teoria-bg);">Ver ejemplos de DCO →</a>
+        <a href="recursos/simulador-dco-oreo-gaming.html" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:13.5px; color:var(--practica); text-decoration:none; padding:9px 15px; border-radius:999px; border:1px solid #99f6e4; background:var(--practica-bg);">Simulador DCO · Oreo Gaming →</a>
+        <a href="recursos/caso-oreo-gaming.html" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:13.5px; color:var(--reto); text-decoration:none; padding:9px 15px; border-radius:999px; border:1px solid #fcd34d; background:var(--reto-bg);">Ejercicio · Caso Oreo →</a>
+      </p>
     </div>
 
     <blockquote data-reveal>El coste de un anuncio en compra programática (CPM) viene dictado por el valor que aporta al anunciante. Las razones principales por las que formatos como el Billboard (970x250) o el Half-Page (300x600) alcanzan precios premium son: Visibilidad, engagement y escasez de inventario.</blockquote>
