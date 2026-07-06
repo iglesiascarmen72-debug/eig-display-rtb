@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulador DCO Gamificado · Oreo Gaming</title>
+  <style>
+    :root{
+      --oreo-blue:#063a82;
+      --oreo-dark:#071426;
+      --oreo-mid:#0e58b8;
+      --cream:#f7f2e8;
+      --cookie:#191919;
+      --green:#44d17a;
+      --yellow:#ffd84d;
+      --red:#ff5a5f;
+      --card:#ffffff;
+      --muted:#65758b;
+      --line:#dfe7f2;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,Arial,sans-serif;background:linear-gradient(135deg,#eef5ff,#ffffff 42%,#f7f2e8);color:#111827}
+    header{background:linear-gradient(135deg,var(--oreo-dark),var(--oreo-blue));color:white;padding:28px 32px;border-bottom:6px solid var(--yellow)}
+    header h1{margin:0 0 8px;font-size:34px;letter-spacing:-.03em}
+    header p{margin:0;max-width:980px;line-height:1.45;color:#d9e8ff;font-size:16px}
+    .wrap{max-width:1420px;margin:0 auto;padding:24px;display:grid;grid-template-columns:320px 1fr 360px;gap:20px}
+    .panel{background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:20px;box-shadow:0 12px 30px rgba(6,58,130,.08);overflow:hidden}
+    .panel h2{margin:0;padding:18px 20px;background:#f8fbff;border-bottom:1px solid var(--line);font-size:17px;color:#0b2854}
+    .panel .body{padding:18px 20px}
+    label{display:block;margin:14px 0 6px;font-weight:700;font-size:13px;color:#25344d}
+    select,input[type=range]{width:100%}
+    select{border:1px solid #cdd8e7;border-radius:12px;padding:11px 12px;background:white;font-size:14px}
+    .pillrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .pill{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 10px;font-size:12px;color:#334155}
+    .main{display:grid;grid-template-rows:auto 1fr;gap:20px}
+    .topgrid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    .banner-stage{background:radial-gradient(circle at 25% 20%,#236dd2,var(--oreo-blue) 46%,#021b42);border-radius:20px;min-height:470px;display:flex;align-items:center;justify-content:center;padding:24px;position:relative;overflow:hidden}
+    .ad{width:300px;height:250px;background:linear-gradient(160deg,#0b4fb3,#031e55);border:4px solid #fff;border-radius:16px;box-shadow:0 28px 60px rgba(0,0,0,.35);color:#fff;position:relative;overflow:hidden;padding:16px;display:flex;flex-direction:column;justify-content:space-between}
+    .ad.wide{width:360px;height:300px}
+    .ad:before{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.08);right:-60px;top:-45px}
+    .brand{font-weight:900;font-size:28px;letter-spacing:-.06em;text-shadow:0 2px 0 rgba(0,0,0,.25)}
+    .xbox{position:absolute;top:16px;right:16px;font-size:11px;background:rgba(68,209,122,.18);border:1px solid rgba(68,209,122,.7);border-radius:999px;padding:5px 8px;color:#d7ffe4}
+    .cookie-line{display:flex;gap:8px;align-items:center;justify-content:center;margin:4px 0}
+    .cookie{width:48px;height:48px;background:radial-gradient(circle,#2b2b2b,#0d0d0d);border:3px solid #3a3a3a;border-radius:50%;position:relative;box-shadow:inset 0 0 0 3px rgba(255,255,255,.05)}
+    .cookie:after{content:"";position:absolute;inset:11px;border:2px dashed #666;border-radius:50%}
+    .symbol{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:22px;color:#f7f2e8;font-weight:900}
+    .headline{font-size:22px;line-height:1.05;font-weight:900;letter-spacing:-.04em;margin:2px 0;z-index:1}
+    .sub{font-size:12px;line-height:1.25;color:#e8f1ff;z-index:1;max-width:250px}
+    .cta{display:inline-flex;align-self:flex-start;background:var(--yellow);color:#101828;font-weight:900;border-radius:999px;padding:9px 13px;font-size:12px;z-index:1;box-shadow:0 6px 0 rgba(0,0,0,.2)}
+    .difficulty{position:absolute;bottom:14px;right:14px;font-size:10px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35);border-radius:8px;padding:5px 7px;color:#fff}
+    .rule{display:grid;grid-template-columns:26px 1fr;gap:10px;padding:12px;border:1px solid var(--line);border-radius:14px;margin-bottom:10px;background:#fff}
+    .dot{width:22px;height:22px;border-radius:50%;background:#dbe4f0;display:flex;align-items:center;justify-content:center;font-size:12px;color:white;font-weight:900}
+    .rule.on .dot{background:var(--green);color:#082412}
+    .rule.off{opacity:.55}
+    .rule b{display:block;font-size:13px;margin-bottom:3px;color:#13233d}
+    .rule span{font-size:12px;color:var(--muted);line-height:1.35}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line)}
+    th{color:#0b2854;background:#f8fbff;font-size:12px}
+    .selected{background:#fff7d6}
+    .metric{display:grid;grid-template-columns:1fr auto;gap:8px;border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px;background:#fff}
+    .metric b{font-size:13px;color:#13233d}.metric span{font-size:18px;font-weight:900;color:var(--oreo-blue)}
+    .explain{line-height:1.48;color:#334155;font-size:14px}
+    .flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .flow span{background:#eef5ff;border:1px solid #cfe1fb;border-radius:999px;padding:8px 10px;font-size:12px;font-weight:800;color:#0b3a78}
+    .arrow{color:#7c8aa0;font-weight:900}.note{background:#fff7d6;border:1px solid #ffe58a;border-radius:14px;padding:12px;font-size:13px;line-height:1.4;color:#4b3b00;margin-top:12px}
+    .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.btn{border:0;border-radius:12px;background:var(--oreo-blue);color:#fff;font-weight:800;padding:11px 13px;cursor:pointer}.btn.secondary{background:#edf4ff;color:#0b3a78;border:1px solid #cfe1fb}
+    @media(max-width:1100px){.wrap{grid-template-columns:1fr}.topgrid{grid-template-columns:1fr}.ad.wide{width:300px;height:250px}}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Simulador DCO Gamificado · Oreo Gaming</h1>
+    <p>Herramienta didáctica para explicar cómo una campaña display programática puede adaptar una experiencia gamificada según perfil, contexto, frecuencia y reglas creativas.</p>
+  </header>
+
+  <div class="wrap">
+    <aside class="panel">
+      <h2>1 · Perfil de la impresión</h2>
+      <div class="body">
+        <label>Tipo de usuario</label>
+        <select id="audience">
+          <option value="gamer_core">Gamer core</option>
+          <option value="gamer_casual">Gamer casual</option>
+          <option value="family_gamer">Padre/madre gamer</option>
+          <option value="snack_lover">Snack lover</option>
+        </select>
+
+        <label>Contexto editorial</label>
+        <select id="context">
+          <option value="gaming">Web de videojuegos</option>
+          <option value="esports">Contenido eSports</option>
+          <option value="streaming">Streaming / entretenimiento</option>
+          <option value="food">Recetas / alimentación</option>
+        </select>
+
+        <label>Dispositivo</label>
+        <select id="device">
+          <option value="mobile">Mobile</option>
+          <option value="desktop">Desktop</option>
+          <option value="ctv">CTV</option>
+        </select>
+
+        <label>Momento</label>
+        <select id="moment">
+          <option value="afternoon">Tarde</option>
+          <option value="night">Noche</option>
+          <option value="weekend">Fin de semana</option>
+          <option value="morning">Mañana</option>
+        </select>
+
+        <label>Frecuencia de impacto: <span id="freqVal">1</span></label>
+        <input id="frequency" type="range" min="1" max="7" value="1" />
+
+        <label>Estado del reto</label>
+        <select id="stage">
+          <option value="new">Primer contacto</option>
+          <option value="started">Reto iniciado</option>
+          <option value="almost">Casi completado</option>
+          <option value="completed">Completado</option>
+        </select>
+
+        <div class="btns">
+          <button class="btn" id="randomize">Generar impresión</button>
+          <button class="btn secondary" id="reset">Reset</button>
+        </div>
+
+        <div class="note"><b>Uso en clase:</b> cambia una variable cada vez y pregunta al alumno qué debería cambiar en la creatividad antes de mostrar la respuesta.</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <section class="topgrid">
+        <div class="panel">
+          <h2>2 · Vista previa del banner HTML5</h2>
+          <div class="body banner-stage">
+            <div class="ad" id="ad">
+              <div>
+                <div class="brand">OREO</div>
+                <div class="xbox" id="partner">Gaming mode</div>
+              </div>
+              <div>
+                <div class="cookie-line" id="cookies"></div>
+                <div class="headline" id="headline"></div>
+                <div class="sub" id="subline"></div>
+              </div>
+              <div class="cta" id="cta"></div>
+              <div class="difficulty" id="difficulty"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>3 · Motor de reglas</h2>
+          <div class="body" id="rules"></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>4 · Feed creativo seleccionado</h2>
+        <div class="body">
+          <table>
+            <thead><tr><th>Módulo</th><th>Valor elegido</th><th>Motivo</th></tr></thead>
+            <tbody id="feedTable"></tbody>
+          </table>
+          <div class="flow">
+            <span>DSP gana subasta</span><b class="arrow">→</b><span>Se carga HTML5</span><b class="arrow">→</b><span>DCO consulta reglas</span><b class="arrow">→</b><span>Construye reto</span><b class="arrow">→</b><span>Se mide interacción</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <aside class="panel">
+      <h2>5 · Lectura pedagógica</h2>
+      <div class="body">
+        <div class="metric"><b>Versión creativa</b><span id="variantId">—</span></div>
+        <div class="metric"><b>Nivel del reto</b><span id="level">—</span></div>
+        <div class="metric"><b>KPI principal</b><span id="kpi">—</span></div>
+        <div class="metric"><b>Prob. interacción</b><span id="prob">—</span></div>
+        <div class="explain" id="explanation"></div>
+        <div class="note"><b>Frase para explicar:</b><br>La programática decide a quién impactar. El DCO gamificado decide qué experiencia recibe esa persona.</div>
+      </div>
+    </aside>
+  </div>
+
+<script>
+const $ = id => document.getElementById(id);
+const symbols = ['↑','↓','←','→','A','B','X','Y'];
+const stateKeys = ['audience','context','device','moment','frequency','stage'];
+
+function getState(){
+  return Object.fromEntries(stateKeys.map(k=>[k,$(k).value]));
+}
+function hashVariant(s){
+  const raw = Object.values(s).join('|');
+  let h=0; for(let i=0;i<raw.length;i++) h=(h*31+raw.charCodeAt(i))%9999;
+  return 'DCO-' + String(h).padStart(4,'0');
+}
+function build(s){
+  const freq = Number(s.frequency);
+  const rules = [
+    {id:'gaming', on:['gamer_core','gamer_casual','family_gamer'].includes(s.audience) || ['gaming','esports'].includes(s.context), title:'Afinidad gamer', desc:'El usuario o el contexto permiten activar códigos, niveles y estética gaming.'},
+    {id:'context', on:['gaming','esports'].includes(s.context), title:'Contexto programático relevante', desc:'La impresión aparece en un entorno donde el reto tiene sentido y puede elevar la interacción.'},
+    {id:'device', on:s.device==='mobile', title:'Interacción táctil', desc:'En mobile el banner prioriza mecánicas simples: tocar, ordenar o desbloquear.'},
+    {id:'night', on:s.moment==='night'||s.moment==='weekend', title:'Momento de juego', desc:'Noche y fin de semana favorecen mensajes de reto y recompensa.'},
+    {id:'freq', on:freq>=3, title:'Secuencia por frecuencia', desc:'Si el usuario ya recibió impactos, la creatividad avanza de teaser a urgencia o continuidad.'},
+    {id:'stage', on:s.stage!=='new', title:'Estado del reto', desc:'El mensaje cambia según si el usuario ya empezó, casi terminó o completó el reto.'}
+  ];
+  let level='Fácil', kpi='Interaction Rate', prob=18, headline='Descubre el código Oreo', subline='Ordena las cookies y desbloquea una recompensa gamer.', cta='Jugar ahora', difficulty='Nivel 1 · Fácil', partner='Gaming mode';
+  let reason='Primer impacto: se prioriza curiosidad y entrada al reto.';
+  if(s.audience==='gamer_core'){ level='Experto'; prob+=14; headline='Desbloquea el cheat secreto'; subline='Combina las Oreo como un código de mando y revela el premio.'; cta='Resolver código'; difficulty='Nivel 3 · Experto'; reason='Perfil gamer core: se usa lenguaje de cheat code y reto más competitivo.'; }
+  if(s.audience==='gamer_casual'){ level='Medio'; prob+=8; headline='Juega con Oreo'; subline='Un mini reto rápido para desbloquear tu recompensa.'; cta='Empezar reto'; difficulty='Nivel 2 · Medio'; reason='Perfil gamer casual: se reduce fricción y se mantiene tono lúdico.'; }
+  if(s.audience==='family_gamer'){ level='Familiar'; prob+=6; headline='Reto Oreo en familia'; subline='Encuentra la combinación y compártela en casa.'; cta='Jugar juntos'; difficulty='Nivel familiar'; reason='Padre/madre gamer: se orienta a compartir y consumo familiar.'; }
+  if(s.context==='esports'){ headline='¿Tienes reflejos de campeón?'; subline='Resuelve el código antes de que acabe la partida.'; cta='Aceptar reto'; prob+=10; reason+=' Contexto eSports: se activa tensión competitiva.'; }
+  if(s.device==='ctv'){ headline='Escanea y desbloquea'; subline='Usa el móvil para resolver el reto Oreo desde la pantalla.'; cta='Escanear QR'; kpi='QR Scan Rate'; prob-=4; }
+  if(s.stage==='started'){ headline='Tu código sigue activo'; subline='Vuelve al reto y completa la siguiente combinación.'; cta='Continuar'; prob+=10; reason='Retargeting: el usuario ya empezó el reto, así que se activa continuidad.'; }
+  if(s.stage==='almost'){ headline='Te falta una cookie'; subline='Completa la combinación final y desbloquea la recompensa.'; cta='Terminar reto'; prob+=18; kpi='Completion Rate'; reason='Usuario casi completado: se prioriza cierre y urgencia.'; }
+  if(s.stage==='completed'){ headline='Recompensa desbloqueada'; subline='Tu código Oreo está listo. Reclama el premio antes de que expire.'; cta='Reclamar'; prob+=22; kpi='Redemption Rate'; reason='Usuario completado: el objetivo pasa de interacción a redención.'; }
+  if(freq>=5 && s.stage!=='completed'){ headline='Última oportunidad'; subline='El reto Oreo está a punto de expirar.'; cta='Desbloquear ya'; prob+=7; reason+=' Alta frecuencia: se cambia el mensaje para evitar fatiga.'; }
+  if(s.moment==='weekend'){ subline += ' Perfecto para el fin de semana.'; prob+=5; }
+  if(s.moment==='morning'){ prob-=3; }
+  prob = Math.max(8, Math.min(72, prob));
+  return {rules, level, kpi, prob, headline, subline, cta, difficulty, partner, reason, variant:hashVariant(s)};
+}
+function render(){
+  const s=getState(); $('freqVal').textContent=s.frequency;
+  const r=build(s);
+  $('headline').textContent=r.headline; $('subline').textContent=r.subline; $('cta').textContent=r.cta; $('difficulty').textContent=r.difficulty; $('partner').textContent=r.partner;
+  $('variantId').textContent=r.variant; $('level').textContent=r.level; $('kpi').textContent=r.kpi; $('prob').textContent=r.prob+'%';
+  $('explanation').innerHTML=`<p><b>Qué está pasando:</b> ${r.reason}</p><p>El banner no es una pieza fija. Es una plantilla HTML5 que recibe variables de contexto, aplica reglas y monta una versión distinta del reto.</p>`;
+  const offset = r.variant.split('-')[1] % symbols.length;
+  $('cookies').innerHTML = [0,1,2,3].map(i=>`<div class="cookie"><div class="symbol">${symbols[(offset+i)%symbols.length]}</div></div>`).join('');
+  $('rules').innerHTML = r.rules.map(rule=>`<div class="rule ${rule.on?'on':'off'}"><div class="dot">${rule.on?'✓':'×'}</div><div><b>${rule.title}</b><span>${rule.desc}</span></div></div>`).join('');
+  const rows=[
+    ['Audiencia', label('audience',s.audience), 'Define tono y dificultad del reto'],
+    ['Contexto', label('context',s.context), 'Ajusta el mensaje al entorno de navegación'],
+    ['Dispositivo', label('device',s.device), 'Condiciona la mecánica de interacción'],
+    ['Momento', label('moment',s.moment), 'Modula urgencia y ocasión de consumo'],
+    ['Frecuencia', s.frequency+' impactos', 'Permite secuenciar teaser, continuidad o urgencia'],
+    ['Estado', label('stage',s.stage), 'Cambia el objetivo: jugar, completar o redimir']
+  ];
+  $('feedTable').innerHTML = rows.map(x=>`<tr><td><b>${x[0]}</b></td><td>${x[1]}</td><td>${x[2]}</td></tr>`).join('');
+}
+function label(k,v){
+  const map={
+    gamer_core:'Gamer core',gamer_casual:'Gamer casual',family_gamer:'Padre/madre gamer',snack_lover:'Snack lover',
+    gaming:'Web de videojuegos',esports:'Contenido eSports',streaming:'Streaming / entretenimiento',food:'Recetas / alimentación',
+    mobile:'Mobile',desktop:'Desktop',ctv:'CTV',afternoon:'Tarde',night:'Noche',weekend:'Fin de semana',morning:'Mañana',
+    new:'Primer contacto',started:'Reto iniciado',almost:'Casi completado',completed:'Completado'
+  }; return map[v]||v;
+}
+stateKeys.forEach(k=>$(k).addEventListener('input',render));
+$('randomize').addEventListener('click',()=>{
+  const vals={audience:['gamer_core','gamer_casual','family_gamer','snack_lover'],context:['gaming','esports','streaming','food'],device:['mobile','desktop','ctv'],moment:['afternoon','night','weekend','morning'],stage:['new','started','almost','completed']};
+  Object.keys(vals).forEach(k=>$(k).value=vals[k][Math.floor(Math.random()*vals[k].length)]);
+  $('frequency').value=1+Math.floor(Math.random()*7); render();
+});
+$('reset').addEventListener('click',()=>{ $('audience').value='gamer_core'; $('context').value='gaming'; $('device').value='mobile'; $('moment').value='afternoon'; $('frequency').value=1; $('stage').value='new'; render(); });
+render();
+</script>
+</body>
+</html>
