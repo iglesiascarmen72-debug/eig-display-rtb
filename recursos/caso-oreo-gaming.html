@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caso Oreo · Cuando el display se convierte en juego · ESIC</title>
+<template id="__bundler_thumbnail" data-bg-color="#1a1830">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#1a1830"/>
+    <circle cx="600" cy="360" r="150" fill="#2b2550" stroke="#c4b5fd" stroke-width="10"/>
+    <circle cx="600" cy="360" r="60" fill="#c4b5fd"/>
+    <text x="600" y="620" font-family="Inter,Arial,sans-serif" font-size="70" font-weight="900" fill="#ffffff" text-anchor="middle">OREO</text>
+    <text x="600" y="690" font-family="Inter,Arial,sans-serif" font-size="34" font-weight="400" fill="#c4b5fd" text-anchor="middle">Display que se convierte en juego</text>
+  </svg>
+</template>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/dynamic.css">
+<style>
+  .res-top {
+    background: var(--navy-dark); color: #fff;
+    padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  }
+  .res-top-brand { display: flex; align-items: center; gap: 12px; }
+  .res-top-brand svg { height: 20px; }
+  .res-back {
+    font-size: 13px; font-weight: 700; text-decoration: none; color: #cbd5e1;
+    display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px;
+    border-radius: 999px; border: 1px solid rgba(255,255,255,.22); transition: background .15s, color .15s;
+  }
+  .res-back:hover { background: rgba(255,255,255,.1); color: #fff; }
+  .res-main { max-width: 920px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .oreo-hero {
+    background: linear-gradient(135deg, #1a1830, #2b2550);
+    color: #fff; border-radius: 20px; padding: 34px 34px 30px; margin-bottom: 28px;
+  }
+  .oreo-hero .eyebrow { color: #c4b5fd; }
+  .oreo-hero h2 { font-size: 30px; font-weight: 900; letter-spacing: -.02em; margin: 8px 0 10px; color: #fff; }
+  .oreo-hero p { margin: 0; color: #cbd5e1; font-size: 15px; max-width: 60ch; }
+
+  .oreo-block { margin: 26px 0; }
+  .oreo-block > h3 {
+    font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--teoria); margin: 0 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line);
+  }
+
+  .oreo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 620px) { .oreo-grid { grid-template-columns: 1fr; } }
+
+  .oreo-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; box-shadow: var(--shadow-sm); }
+  .oreo-card .lbl { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .oreo-card h4 { margin: 0 0 6px; font-size: 16px; color: var(--navy); }
+  .oreo-card p { margin: 0; font-size: 13.5px; color: var(--muted); }
+  .oreo-card ul { margin: 6px 0 0; padding-left: 18px; }
+  .oreo-card li { font-size: 13.5px; color: var(--muted); margin: 3px 0; }
+
+  .oreo-goals { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 10px; }
+  .oreo-goals li {
+    background: var(--practica-bg); color: var(--practica); border: 1px solid #99f6e4;
+    border-radius: 12px; padding: 12px 14px; font-weight: 700; font-size: 13.5px;
+  }
+
+  .oreo-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .oreo-chips span {
+    background: var(--silver); border: 1px solid var(--line); border-radius: 999px;
+    padding: 8px 14px; font-size: 13px; font-weight: 700; color: var(--navy);
+  }
+
+  .oreo-idea {
+    background: #fff8ec; border: 1px solid #fcd34d; border-left: 4px solid var(--reto);
+    border-radius: 14px; padding: 20px 22px; font-size: 16px; color: #7c4a03; font-weight: 600;
+  }
+
+  .oreo-steps { display: grid; gap: 12px; }
+  .oreo-step { display: flex; gap: 14px; align-items: flex-start; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; box-shadow: var(--shadow-sm); }
+  .oreo-step .n { flex: none; width: 30px; height: 30px; border-radius: 999px; background: var(--teoria); color: #fff; font-weight: 900; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+  .oreo-step .txt { font-size: 14px; color: var(--navy); }
+  .oreo-step .txt b { color: var(--teoria); }
+</style>
+</head>
+<body>
+
+<header class="res-top">
+  <div class="res-top-brand">
+    <svg viewBox="0 0 120 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ESIC University">
+      <text x="0" y="22" font-family="Inter,sans-serif" font-weight="900" font-size="24" fill="white" letter-spacing="-1">ESIC</text>
+      <text x="58" y="22" font-family="Inter,sans-serif" font-weight="400" font-size="12" fill="#94a3b8" letter-spacing="1">UNIVERSITY</text>
+    </svg>
+  </div>
+  <a class="res-back" href="../index.html#s02">← Volver a la sesión</a>
+</header>
+
+<main class="res-main">
+
+  <div class="oreo-hero">
+    <p class="eyebrow">Recurso · Ejercicio de aula — DCO &amp; gamificación</p>
+    <h2>Caso Oreo: cuando el display se convierte en juego</h2>
+    <p>Oreo quiere conectar con un público gamer joven en canales programáticos sin usar un banner tradicional: una experiencia interactiva que dispare recuerdo, interacción y participación.</p>
+  </div>
+
+  <!-- Briefing -->
+  <div class="oreo-block">
+    <h3>Briefing</h3>
+    <p class="lead" style="margin:0 0 14px;">Oreo no quiere un banner tradicional. Quiere una experiencia interactiva que aumente:</p>
+    <ul class="oreo-goals">
+      <li>Recuerdo de marca</li>
+      <li>Interacción</li>
+      <li>Tiempo con la creatividad</li>
+      <li>Tráfico a la landing</li>
+      <li>Participación en el reto</li>
+    </ul>
+  </div>
+
+  <!-- Audiencia -->
+  <div class="oreo-block">
+    <h3>Audiencia</h3>
+    <div class="oreo-grid">
+      <div class="oreo-card">
+        <p class="lbl">Perfil</p>
+        <h4>Gamer casual / gamer Xbox</h4>
+        <p>Edad: 18–34</p>
+      </div>
+      <div class="oreo-card">
+        <p class="lbl">Intereses y contexto</p>
+        <p><b>Intereses:</b> videojuegos, consolas, eSports, entretenimiento digital.</p>
+        <p style="margin-top:6px;"><b>Contexto:</b> webs gaming, Twitch display, apps, YouTube, medios tech.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Idea creativa -->
+  <div class="oreo-block">
+    <h3>Idea creativa</h3>
+    <div class="oreo-idea">
+      Las Oreo funcionan como <b>códigos secretos</b>. Cada combinación visual de galletas desbloquea una recompensa.
+    </div>
+  </div>
+
+  <!-- Formatos -->
+  <div class="oreo-block">
+    <h3>Formatos</h3>
+    <div class="oreo-chips">
+      <span>Display HTML5 300×250</span>
+      <span>Display HTML5 300×600</span>
+      <span>Rich media expandable</span>
+      <span>Vídeo programático</span>
+      <span>Landing gamificada</span>
+    </div>
+  </div>
+
+  <!-- Lógica programática -->
+  <div class="oreo-block">
+    <h3>Lógica programática</h3>
+    <div class="oreo-grid">
+      <div class="oreo-card">
+        <p class="lbl">La DSP</p>
+        <h4>Decide a quién impactar</h4>
+        <p>Selecciona qué usuario recibe el anuncio según audiencia y contexto.</p>
+      </div>
+      <div class="oreo-card">
+        <p class="lbl">El DCO / gamificación</p>
+        <h4>Decide qué reto mostrar</h4>
+        <p>Elige la creatividad y el reto adecuados para ese usuario en ese momento.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Variables dinámicas -->
+  <div class="oreo-block">
+    <h3>Variables dinámicas</h3>
+    <div class="oreo-chips">
+      <span>Nivel de dificultad</span>
+      <span>Mensaje inicial</span>
+      <span>Código visual</span>
+      <span>Premio sugerido</span>
+      <span>CTA</span>
+      <span>Creatividad según frecuencia</span>
+    </div>
+  </div>
+
+  <!-- Ejemplo de reglas -->
+  <div class="oreo-block">
+    <h3>Ejemplo de reglas (por frecuencia)</h3>
+    <div class="oreo-steps">
+      <div class="oreo-step"><span class="n">1</span><span class="txt"><b>Impacto 1</b> — "Descubre el código secreto"</span></div>
+      <div class="oreo-step"><span class="n">2</span><span class="txt"><b>Impacto 2</b> — "Te falta una combinación por resolver"</span></div>
+      <div class="oreo-step"><span class="n">3</span><span class="txt"><b>Impacto 3</b> — "Última oportunidad para desbloquear la recompensa"</span></div>
+    </div>
+  </div>
+
+  <div class="oreo-block">
+    <h3>Vuestro trabajo</h3>
+    <div class="oreo-steps">
+      <div class="oreo-step"><span class="n">1</span><span class="txt">Identificad los <b>principales KPIs</b> de la campaña.</span></div>
+      <div class="oreo-step"><span class="n">2</span><span class="txt">¿Qué <b>métricas</b> seguiríais?</span></div>
+      <div class="oreo-step"><span class="n">3</span><span class="txt">¿Qué <b>formatos</b> vais a utilizar? (mínimo 3)</span></div>
+      <div class="oreo-step"><span class="n">4</span><span class="txt">¿Qué <b>segmentación</b> específica aplicaríais?</span></div>
+      <div class="oreo-step"><span class="n">5</span><span class="txt">Definid la <b>frequency capping</b> y la secuenciación: ¿cuántos impactos por usuario y qué pasa tras el impacto 3?</span></div>
+      <div class="oreo-step"><span class="n">6</span><span class="txt"><b>Landing gamificada</b>: ¿qué acción de conversión mide (registro, redención de código…) para cerrar el funnel?</span></div>
+    </div>
+  </div>
+
+</main>
+
+</body>
+</html>
