@@ -143,6 +143,13 @@
   });
 
   /* ==========================================================
+     4b) TARJETAS DE CONCEPTO EXPANDIBLES (S07)
+     ========================================================== */
+  document.querySelectorAll('.qcard-ex[data-expand]').forEach(card => {
+    card.addEventListener('click', () => card.classList.toggle('active'));
+  });
+
+  /* ==========================================================
      5) SELECTOR "Evolución de la compra"  ·  portado de app.js
      ========================================================== */
   document.querySelectorAll('.evolution-interactive').forEach(block => {

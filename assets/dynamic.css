@@ -177,6 +177,20 @@
 .qcard b { display: block; font-size: 16px; color: var(--navy); margin-bottom: 4px; }
 .qcard span { color: var(--muted); font-size: 13.5px; }
 
+/* Tarjetas de concepto expandibles (S07) */
+.qcard-ex { cursor: pointer; text-align: left; font: inherit; width: 100%; display: block; }
+.qcard-ex.active { border-color: var(--teoria); box-shadow: 0 0 0 2px rgba(29,78,216,.14), var(--shadow); }
+.qcard-ex-body {
+  max-height: 0; overflow: hidden; opacity: 0;
+  margin-top: 0; padding-top: 0; border-top: 1px solid transparent;
+  color: var(--navy); font-size: 13.5px; line-height: 1.5;
+  transition: max-height .25s ease, opacity .2s ease, margin-top .25s ease, padding-top .25s ease;
+}
+.qcard-ex.active .qcard-ex-body {
+  max-height: 200px; opacity: 1;
+  margin-top: 12px; padding-top: 12px; border-top-color: var(--line);
+}
+
 /* Tarjetas de canal clicables (S02) */
 .channel-card { font-family: var(--font); text-align: left; cursor: pointer; transition: background .25s, color .25s, transform .18s, box-shadow .18s; }
 .channel-card.active {
