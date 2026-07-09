@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AdTech Inspector AI · Traductor de DevTools</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --esic:#004B93; --esic-2:#0B63CE; --red:#E30613; --ink:#101828; --muted:#667085;
+      --line:#D0D5DD; --soft:#F2F4F7; --soft2:#F8FAFC; --white:#fff; --ok:#067647;
+      --warn:#B54708; --danger:#B42318; --purple:#6941C6; --blue-soft:#EAF3FF;
+      --green-soft:#E8F5EE; --amber-soft:#FFF4E5; --red-soft:#FEEDEC; --purple-soft:#F4F0FF;
+      --shadow:0 14px 40px rgba(16,24,40,.10); --r:18px; --r2:12px;
+      --ui:"Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{margin:0;font-family:var(--ui);color:var(--ink);background:linear-gradient(180deg,#F7F9FC 0%,#EEF2F7 100%);line-height:1.55}
+    button,textarea{font:inherit} button{cursor:pointer}
+    .topbar{height:8px;background:linear-gradient(90deg,var(--esic),var(--esic-2),var(--red))}
+    .page{max-width:1180px;margin:0 auto;padding:34px 22px 56px}
+    .hero{background:var(--white);border:1px solid #EAECF0;border-radius:28px;padding:34px;box-shadow:var(--shadow);display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:center;position:relative;overflow:hidden}
+    .hero:after{content:"";position:absolute;right:-120px;top:-120px;width:360px;height:360px;background:radial-gradient(circle,var(--blue-soft),transparent 65%);z-index:0}
+    .hero > *{position:relative;z-index:1}.eyebrow{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.13em;color:var(--red);margin-bottom:10px}
+    h1{font-size:clamp(34px,5vw,58px);line-height:.98;margin:0 0 16px;letter-spacing:-.055em;color:#07172F}.hero p{font-size:18px;color:#475467;margin:0;max-width:720px}
+    .mini-card{background:#07172F;color:#EAF3FF;border-radius:22px;padding:22px;border:1px solid rgba(255,255,255,.12)}
+    .mini-card h2{font-size:16px;margin:0 0 14px;color:white}.mini-card ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}.mini-card li{display:flex;gap:9px;align-items:flex-start;color:#D5E6FF;font-size:14px}.mini-card li span{color:#7DD3FC}
+    .main{display:grid;grid-template-columns:1fr 380px;gap:22px;margin-top:22px}.card{background:var(--white);border:1px solid #EAECF0;border-radius:var(--r);box-shadow:0 8px 24px rgba(16,24,40,.06);overflow:hidden}.card-pad{padding:24px}.section-title{font-size:18px;font-weight:800;margin:0 0 6px;color:#101828}.section-sub{font-size:14px;color:var(--muted);margin:0 0 16px}
+    textarea{width:100%;min-height:280px;resize:vertical;border:1px solid var(--line);border-radius:14px;padding:16px;background:#FCFCFD;font-family:var(--mono);font-size:13px;line-height:1.55;color:#1D2939;outline:none;transition:.15s}textarea:focus{border-color:var(--esic-2);box-shadow:0 0 0 4px rgba(11,99,206,.10)}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.btn{border:none;border-radius:12px;padding:12px 17px;font-weight:800;font-size:14px;background:var(--esic);color:white}.btn:hover{background:#003B76}.btn.secondary{background:#F2F4F7;color:#344054}.btn.secondary:hover{background:#E4E7EC}.btn.red{background:var(--red)}
+    .examples{display:grid;gap:10px}.ex{width:100%;text-align:left;border:1px solid #EAECF0;background:#FCFCFD;border-radius:13px;padding:13px;transition:.15s}.ex:hover{border-color:var(--esic-2);background:#F5FAFF;transform:translateY(-1px)}.ex b{display:block;font-size:13px;color:#101828}.ex span{display:block;font-size:12px;color:#667085;margin-top:2px}
+    .results{display:none;margin-top:22px}.results.show{display:block}.result-head{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:start;padding:24px;border-bottom:1px solid #EAECF0;background:linear-gradient(180deg,#fff,#F9FAFB)}.detected{display:flex;gap:15px;align-items:flex-start}.icon{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;font-size:25px;background:var(--blue-soft)}.detected h2{font-size:25px;line-height:1.15;margin:0 0 5px;letter-spacing:-.03em}.detected p{margin:0;color:var(--muted);font-size:14px}.level{border-radius:999px;padding:8px 13px;font-size:12px;font-weight:800;white-space:nowrap}.level.basic{background:var(--green-soft);color:var(--ok)}.level.medium{background:var(--amber-soft);color:var(--warn)}.level.advanced{background:var(--red-soft);color:var(--danger)}
+    .result-body{padding:24px;display:grid;gap:20px}.summary{font-size:16px;color:#344054;background:#F8FAFC;border-left:4px solid var(--esic-2);padding:16px 18px;border-radius:0 14px 14px 0}.summary p{margin:0 0 8px}.summary p:last-child{margin:0}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.param{border:1px solid #EAECF0;background:#fff;border-radius:14px;padding:14px;min-height:92px}.param .k{font-size:11px;color:#667085;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}.param .v{font-size:15px;color:#101828;font-weight:750;word-break:break-word}.param .v.mono{font-family:var(--mono);font-size:12px;font-weight:600}
+    .devtools{background:#07172F;color:#EAF3FF;border-radius:18px;padding:20px}.devtools h3,.curiosity h3,.evidence h3{margin:0 0 12px;font-size:16px}.search-list{display:flex;flex-wrap:wrap;gap:8px}.pill{font-family:var(--mono);font-size:12px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.13);color:#EAF3FF}.curiosity{background:var(--purple-soft);border:1px solid #E9D7FE;border-radius:18px;padding:20px}.curiosity p{margin:0;color:#42307D}.evidence{background:#FCFCFD;border:1px dashed #D0D5DD;border-radius:18px;padding:20px}.evidence ul{margin:0;padding-left:20px;color:#475467}.evidence li{margin:5px 0}.raw-toggle{margin-top:6px}.raw{display:none;background:#0B1220;color:#D7E4FF;border-radius:14px;padding:14px;font-family:var(--mono);font-size:12px;white-space:pre-wrap;overflow:auto;max-height:220px}.raw.show{display:block}
+    .empty{padding:42px;text-align:center;color:#667085}.empty .big{font-size:38px;margin-bottom:8px}.helper{background:#FFF8E8;border:1px solid #FEC84B;border-radius:var(--r);padding:18px;color:#7A4A00}.helper h3{margin:0 0 8px;font-size:15px}.helper p{margin:0;font-size:13px}.footnote{margin-top:18px;color:#667085;font-size:12px;text-align:center}
+
+    .translation{border:1px solid #D9E8FF;background:linear-gradient(180deg,#F8FBFF,#FFFFFF);border-radius:18px;padding:20px}
+    .translation h3{margin:0 0 14px;font-size:18px;color:#07172F}
+    .translation-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .tcard{border:1px solid #EAECF0;background:#fff;border-radius:14px;padding:15px}
+    .tcard .q{font-size:12px;color:#004B93;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+    .tcard .ans{font-size:17px;color:#101828;font-weight:800;word-break:break-word}
+    .tcard .ans.mono{font-family:var(--mono);font-size:13px;font-weight:700}
+    .tcard .note{margin-top:6px;font-size:13px;color:#667085;line-height:1.45}
+    .meaning{margin-top:14px;background:#F2F4F7;border-left:4px solid var(--red);padding:13px 15px;border-radius:0 12px 12px 0;color:#344054;font-size:14px}
+    .meaning strong{color:#101828}
+    @media(max-width:980px){.hero,.main{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.translation-grid{grid-template-columns:1fr}.result-head{grid-template-columns:1fr}.level{justify-self:start}}
+    @media(max-width:560px){.page{padding:22px 14px 40px}.hero{padding:24px;border-radius:20px}.grid{grid-template-columns:1fr}.card-pad,.result-body,.result-head{padding:18px}.actions .btn{width:100%}}
+  </style>
+
+<style id="request-translation-styles">
+.request-translation-block{
+  margin:28px auto;
+  padding:22px;
+  max-width:1100px;
+  border:1px solid #E2E6ED;
+  border-radius:18px;
+  background:#FFFFFF;
+  box-shadow:0 12px 34px rgba(14,17,22,.06);
+  color:#18202A;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+.translation-header{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  align-items:flex-start;
+  margin-bottom:18px;
+}
+.translation-kicker{
+  display:inline-block;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:#C3002F;
+  margin-bottom:4px;
+}
+.translation-header h2{
+  margin:0;
+  font-size:24px;
+  line-height:1.2;
+}
+.translation-badge{
+  display:inline-flex;
+  align-items:center;
+  padding:6px 10px;
+  border-radius:999px;
+  background:#F3F5F8;
+  color:#4D5968;
+  font-size:12px;
+  font-weight:700;
+  white-space:nowrap;
+}
+.translation-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+}
+.translation-card{
+  border:1px solid #E4E7EC;
+  background:#FAFBFC;
+  border-radius:14px;
+  padding:16px;
+  min-height:160px;
+}
+.translation-card.wide{
+  grid-column:span 4;
+  min-height:auto;
+}
+.translation-question{
+  color:#5E6A78;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:8px;
+}
+.translation-value{
+  font-size:20px;
+  line-height:1.25;
+  font-weight:800;
+  color:#111827;
+  margin-bottom:8px;
+  word-break:break-word;
+}
+.translation-value.mono{
+  font-family:"JetBrains Mono",Consolas,monospace;
+  font-size:15px;
+}
+.translation-card p{
+  margin:0 0 12px;
+  color:#4B5563;
+  font-size:13px;
+  line-height:1.55;
+}
+.translation-card code,
+.translation-warning code{
+  display:inline-block;
+  padding:2px 7px;
+  border-radius:7px;
+  background:#EEF2F7;
+  color:#253044;
+  font-family:"JetBrains Mono",Consolas,monospace;
+  font-size:12px;
+}
+.translation-summary{
+  margin-top:14px;
+  padding:15px 16px;
+  border-radius:14px;
+  background:#EEF6FF;
+  border:1px solid #CFE4FF;
+  color:#0B3768;
+  font-size:15px;
+  line-height:1.55;
+}
+.translation-warning{
+  margin-top:10px;
+  padding:13px 16px;
+  border-radius:14px;
+  background:#FFF7E8;
+  border:1px solid #F3D19B;
+  color:#67430A;
+  font-size:14px;
+  line-height:1.55;
+}
+@media(max-width:900px){
+  .translation-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .translation-card.wide{grid-column:span 2;}
+}
+@media(max-width:620px){
+  .translation-header{flex-direction:column;}
+  .translation-grid{grid-template-columns:1fr;}
+  .translation-card.wide{grid-column:span 1;}
+}
+</style>
+
+</head>
+<body>
+  <div class="topbar"></div>
+  <div class="page">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Recurso de aula · Display & RTB</div>
+        <h1>AdTech Inspector AI</h1>
+        <p>Pega un fragmento copiado desde DevTools y descubre qué significa. La herramienta no sustituye DevTools: te ayuda a leerlo las primeras veces.</p>
+      </div>
+      <aside class="mini-card">
+        <h2>Qué puedes pegar</h2>
+        <ul>
+          <li><span>✓</span> HTML copiado desde <b>Elements</b></li>
+          <li><span>✓</span> URL/request copiada desde <b>Network</b></li>
+          <li><span>✓</span> Click trackers, iframes, GPT, GAM, Header Bidding o creatividades HTML5</li>
+        </ul>
+      </aside>
+    </section>
+
+    <main class="main">
+      <section class="card">
+        <div class="card-pad">
+          <h2 class="section-title">Pega aquí el fragmento</h2>
+          <p class="section-sub">Copia desde DevTools → pega aquí → pulsa Analizar. Si el fragmento está incompleto, intentaremos rescatar lo importante.</p>
+          <textarea id="input" spellcheck="false" placeholder="Ejemplo: /gampad/ads?... o <div id='google_ads_iframe_...'>...</div>"></textarea>
+          <div class="actions">
+            <button class="btn" id="analyzeBtn">Analizar</button>
+            <button class="btn secondary" id="clearBtn">Limpiar</button>
+            <button class="btn secondary" id="sampleBtn">Cargar ejemplo rápido</button>
+          </div>
+        </div>
+      </section>
+
+      <aside class="card">
+        <div class="card-pad">
+          <h2 class="section-title">Ejemplos de prueba</h2>
+          <p class="section-sub">Úsalos para probar antes de clase.</p>
+          <div class="examples" id="examples"></div>
+        </div>
+      </aside>
+    </main>
+
+    <section class="card results" id="results">
+      <div class="result-head">
+        <div class="detected">
+          <div class="icon" id="resultIcon">🌐</div>
+          <div>
+            <h2 id="resultTitle">¿Qué acabas de copiar?</h2>
+            <p id="resultSubtitle">Resultado del análisis</p>
+          </div>
+        </div>
+        <div class="level medium" id="resultLevel">Intermedio</div>
+      </div>
+      <div class="result-body">
+        <div class="summary" id="summary"></div>
+        <div class="translation" id="translationBox" style="display:none">
+          <h3>📖 Traducción del código</h3>
+          <div class="translation-grid" id="translationGrid"></div>
+          <div class="meaning" id="meaning"></div>
+        </div>
+        <div>
+          <h3 class="section-title">Parámetros importantes</h3>
+          <div class="grid" id="params"></div>
+        </div>
+        <div class="devtools">
+          <h3>🔎 Cuando vuelvas a DevTools, busca esto</h3>
+          <div class="search-list" id="lookFor"></div>
+        </div>
+        <div class="curiosity">
+          <h3>💡 ¿Sabías que...?</h3>
+          <p id="curiosity"></p>
+        </div>
+        <div class="evidence">
+          <h3>Detectores activados</h3>
+          <ul id="evidence"></ul>
+          <div class="actions raw-toggle"><button class="btn secondary" id="rawBtn">Ver fragmento analizado</button></div>
+          <pre class="raw" id="raw"></pre>
+        </div>
+      </div>
+    </section>
+
+    <div class="helper" style="margin-top:22px">
+      <h3>Regla de uso en clase</h3>
+      <p>No gana quien más términos técnicos use. Gana quien vuelve a DevTools y sabe explicar qué está viendo.</p>
+    </div>
+    <div class="footnote">AdTech Inspector AI v1.0 · herramienta docente para formación Display & RTB</div>
+  </div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const decode = (s) => {
+  if(!s) return "";
+  let out = String(s).replace(/&amp;/g,"&").replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&lt;/g,"<").replace(/&gt;/g,">");
+  for(let i=0;i<3;i++){
+    try{ const d = decodeURIComponent(out); if(d===out) break; out=d; }catch(e){ break; }
+  }
+  return out;
+};
+const hostOf = (u) => { try { return new URL(u.startsWith("http") ? u : "https://dummy.test"+u).hostname.replace(/^www\./,""); } catch(e){ return ""; } };
+const queryParams = (txt) => {
+  const clean = decode(txt.trim());
+  const q = clean.includes("?") ? clean.split("?").slice(1).join("?") : clean;
+  const p = new URLSearchParams(q.replace(/^.*?\?/,""));
+  const o = {}; p.forEach((v,k)=>{ o[k]=decode(v); }); return o;
+};
+const findAttr = (txt, attr) => {
+  const re = new RegExp(attr + `\\s*=\\s*["']([^"']+)["']`, "i");
+  const m = txt.match(re); return m ? decode(m[1]) : "";
+};
+const allMatches = (txt, re) => [...txt.matchAll(re)].map(m=>m[1]||m[0]);
+const truncate = (s,n=76)=> !s ? "" : (s.length>n ? s.slice(0,n-1)+"…" : s);
+const bidderInfo = (b) => {
+  const key = String(b||"").toLowerCase();
+  const map = {
+    pubmatic:["PubMatic","SSP / Ad Exchange"], criteo:["Criteo","Commerce Media / demand partner"],
+    ttd:["The Trade Desk","DSP"], ix:["Index Exchange","SSP / Ad Exchange"],
+    rubicon:["Magnite","SSP / Ad Exchange"], openx:["OpenX","SSP / Ad Exchange"],
+    appnexus:["Xandr / Microsoft Monetize","SSP / Exchange"], ra_wemass:["WEMASS","SSP / Sales house"],
+    richaudience:["RichAudience","SSP / Demand partner"], pubstack_server:["Pubstack Server","Server-side bidder"],
+    optidigital:["Opti Digital","Yield / bidder"], amazon:["Amazon","Demand partner"]
+  };
+  return map[key] || [b, "Plataforma que participa en Header Bidding"];
+};
+const iabFormat = (s) => {
+  const key = String(s||"").trim();
+  const map = {"300x250":"Medium Rectangle / Robapáginas","300x600":"Half Page","728x90":"Leaderboard","970x250":"Billboard","970x90":"Large Leaderboard","300x100":"Mobile banner grande","300x300":"Square","1x1":"Tamaño técnico / tracking / formato especial"};
+  return map[key] || "Formato display";
+};
+const cpmNote = (v) => {
+  const n = parseFloat(String(v).replace(',', '.'));
+  return isFinite(n) ? `${String(v).replace('.', ',')} € por cada 1.000 impresiones · ≈ ${(n/1000).toFixed(5).replace('.', ',')} € por impresión` : "Valor CPM enviado a GAM como price bucket";
+};
+
+
+const examples = [
+  {name:"Request GAM + Header Bidding", desc:"gampad/ads con hb_bidder y hb_pb", value:"/gampad/ads?gdfp_req=1&iu_parts=1018282%2Cxataka%2Chomepage&prev_iu_szs=728x90%7C970x250&dids=div-gpt-top&url=https%3A%2F%2Fwww.xataka.com%2F&gdpr=1&prev_scp=hb_bidder%3Dpubmatic%26hb_pb%3D0.66%26hb_size%3D300x250%26hb_adid%3D501d383fef7a0ef%26hb_source%3Dclient&cust_params=site%3DXTK%26vertical%3DTechnology%26visitor_country%3DES"},
+  {name:"Contenedor GPT", desc:"div-gpt + google_ads_iframe", value:`<div class="ad-box" id="div-gpt-top" data-google-query-id="CIDM3NmIpZUDFezcDQkdHYEUTg"><div id="google_ads_iframe_/1018282/xataka/homepage_5__container__"><iframe id="google_ads_iframe_/1018282/xataka/homepage_5" width="1" height="1" aria-label="Anuncio" data-load-complete="true"></iframe></div></div>`},
+  {name:"Creatividad HTML5", desc:"clickTag + canvas 300x600", value:`<div id="animation_container" style="width:300px; height:600px"><div onclick="javascript:window.open(window.clickTag)" id="zoneclic"><canvas id="canvas" width="369" height="738" style="width:300px;height:600px"></canvas></div></div>`},
+  {name:"Iframe 2mdn", desc:"HTML5 servido desde CDN Google", value:`<iframe id="200_287_express_html_inpage_0.if" src="https://s0.2mdn.net/sadbundle/5089934298353873331/MONOGRAFICOPERFUMERIAVERANO-P1_300x600_HTML5_18062026_PROMOCION.html?ev=01_262" width="300" height="600" frameborder="0" scrolling="no"></iframe>`},
+  {name:"Click Tracker", desc:"DoubleClick + adurl final", value:`<a href="https://ad.doubleclick.net/pcs/click?nx=489&ny=46&dim=728x90&adurl=https://www.warnerbros.es/peliculas/supergirl%3Futm_source%3Delpaises%26utm_medium%3Ddisplay%26utm_campaign%3DWb_theatrical_emea_es_supergirl_2026_display_directo%26gad_campaignid%3D23961510670"><img src="https://s0.2mdn.net/simgad/11997353435248000239" width="728" height="90"></a>`},
+  {name:"Amazon afiliación", desc:"Landing directa con ASIN y tag", value:`<a id="adLink" href="https://www.amazon.es/dp/B0761W9JBZ?aref=pMxgNDXlPs&aaxitk=c7a7596c6c3d9d91ce4a21e7e78d1198&language=es_ES&tag=ss-us-20&ref=dacx_dp_588890834809120221_591729908500464902" target="_blank"></a>`},
+  {name:"No publicidad", desc:"Enlace editorial", value:`<a class="ue-c-cover-content__link" href="https://www.elmundo.es/ofertas-regalos/2026/06/26/6a3d2b39fc6c83ea638b4595.html"><h2>Los chollos del último día del Amazon Prime Day...</h2></a>`}
+];
+
+function detect(txt){
+  const raw = txt.trim(); const low = raw.toLowerCase(); const decoded = decode(raw); const dlow = decoded.toLowerCase();
+  const params = queryParams(decoded); const ev=[]; const cards=[]; let look=[]; let result={icon:"🧩", type:"Fragmento parcialmente reconocido", level:"medium", summary:[], curiosity:"Cuando el fragmento parece raro, no hay que forzar conclusiones: primero identifica qué señales sí están presentes.", evidence:ev, cards, lookFor:look, translation:[], meaning:""};
+  const add=(k,v,mono=false)=>{ if(v!==undefined && v!==null && String(v)!=="") cards.push({k,v:String(v),mono}); };
+  const found=(s)=>ev.push(s);
+  const has = (s)=> dlow.includes(s.toLowerCase());
+
+  const isHTML = /<\/?[a-z][\s\S]*>/i.test(raw);
+  const isRequest = /^https?:\/\//i.test(decoded) || /^\/gampad\/ads/i.test(decoded) || decoded.includes("/gampad/ads?");
+
+  if(has("/gampad/ads")){
+    found("Google Ad Manager: patrón /gampad/ads"); result={...result, icon:"⚙️", type:"Petición de Google Ad Manager", level:"advanced"};
+    result.summary=["Has copiado una request de Network.","Representa la llamada que hace la página a Google Ad Manager para solicitar publicidad.","Puede contener inventario, tamaños, contexto de página, consentimiento y señales de Header Bidding."];
+    add("Ad Server","Google Ad Manager");
+    if(params.iu) add("Ad Unit",params.iu,true);
+    if(params.iu_parts) add("Inventario",params.iu_parts.replace(/,/g," / "),true);
+    if(params.prev_iu_szs || params.sz || params.pb_szs) add("Tamaños",(params.prev_iu_szs||params.sz||params.pb_szs).replace(/[|~]/g," · "),true);
+    if(params.dids) add("Div / Slot",params.dids.replace(/~/g," · "),true);
+    if(params.url) add("Página",hostOf(params.url) || params.url,true);
+    if(params.gdpr) add("GDPR",params.gdpr === "1" ? "Activo" : params.gdpr);
+    const scp = decode((params.prev_scp||"") + "&" + (params.cust_params||""));
+    if(/hb_/i.test(scp+decoded)){
+      found("Header Bidding: parámetros hb_ detectados"); add("Header Bidding","Detectado");
+      const hb = queryParams(scp);
+      if(hb.hb_bidder) add("Bidder",hb.hb_bidder,true);
+      if(hb.hb_pb) add("CPM",hb.hb_pb,true);
+      if(hb.hb_size) add("Tamaño HB",hb.hb_size,true);
+      if(hb.hb_source) add("Fuente",hb.hb_source,true);
+    }
+    const cust = queryParams(params.cust_params||"");
+    if(cust.vertical) add("Vertical",cust.vertical);
+    if(cust.visitor_country) add("País",cust.visitor_country);
+
+    const hb = queryParams(scp);
+    const inv = params.iu || (params.iu_parts ? "/" + params.iu_parts.replace(/,/g,"/") : "");
+    const bidder = hb.hb_bidder ? bidderInfo(hb.hb_bidder) : null;
+    const tr=[];
+    if(bidder) tr.push({q:"¿Quién ha realizado la puja?", ans:bidder[0], note:bidder[1]});
+    if(hb.hb_pb) tr.push({q:"¿Cuánto está dispuesto a pagar?", ans:String(hb.hb_pb).replace('.', ',') + " € CPM", note:cpmNote(hb.hb_pb)});
+    if(hb.hb_size) tr.push({q:"¿Qué tamaño de banner quiere mostrar?", ans:hb.hb_size.replace('x',' × ') + " px", note:iabFormat(hb.hb_size)});
+    if(inv) tr.push({q:"¿Qué espacio publicitario está solicitando?", ans:inv, note:"Inventario solicitado en Google Ad Manager", mono:true});
+    const ctx=[]; if(cust.site) ctx.push("site=" + cust.site); if(cust.vertical) ctx.push("vertical=" + cust.vertical); if(cust.visitor_country) ctx.push("país=" + cust.visitor_country);
+    if(ctx.length) tr.push({q:"¿Qué contexto envía el publisher?", ans:ctx.join(" · "), note:"Información contextual enviada a GAM", mono:true});
+    result.translation=tr;
+    if(bidder || hb.hb_pb || hb.hb_size){
+      result.meaning = `${bidder ? "<strong>"+bidder[0]+"</strong>" : "Un bidder"}${hb.hb_pb ? " ha ofertado <strong>"+String(hb.hb_pb).replace('.', ',')+" € CPM</strong>" : " ha enviado una oferta"}${hb.hb_size ? " para mostrar un banner <strong>"+hb.hb_size.replace('x','×')+"</strong>" : ""}${inv ? " en <strong>"+inv+"</strong>" : ""}.`;
+    }
+    look=["gampad/ads","iu_parts / iu","prev_iu_szs / sz","cust_params","hb_bidder","hb_pb","gdpr","url"];
+    result.curiosity="La request de GAM no es la creatividad final. Es la petición que lleva el contexto y las señales de subasta para que el ad server decida qué servir.";
+    result.lookFor=look; return result;
+  }
+
+  if(has("google_ads_iframe_") || has("div-gpt") || has("data-google-query-id")){
+    found("GPT/GAM renderizado: div-gpt o google_ads_iframe detectado"); result={...result, icon:"📦", type:"Contenedor GPT / Google Ad Manager", level:"medium"};
+    result.summary=["Has copiado HTML desde Elements.","Representa el contenedor publicitario que Google Publisher Tag ha creado o rellenado en la página.","No siempre contiene la request original ni la puja; para eso hay que ir a Network."];
+    add("Tipo","Contenedor publicitario");
+    const id = findAttr(raw,"id"); if(id) add("ID",id,true);
+    const qid = findAttr(raw,"data-google-query-id"); if(qid) add("Query ID",qid,true);
+    const iframe = decoded.match(/google_ads_iframe_([^"'\s<]+)/i); if(iframe) add("Iframe GAM",truncate(iframe[0],70),true);
+    const adunit = decoded.match(/google_ads_iframe_\/?([^"'\s_]+)/i); if(adunit) add("Ad Unit probable",adunit[1],true);
+    const w = findAttr(raw,"width"), h=findAttr(raw,"height"); if(w&&h) add("Tamaño iframe",`${w}x${h}`);
+    if(has("data-load-complete=\"true\"") || has("data-load-complete='true'")) add("Carga","Completa");
+    look=["div-gpt-*","google_ads_iframe_*","data-google-query-id","data-load-complete","width / height"];
+    result.curiosity="En Elements ves el resultado renderizado en la página. Para entender cómo se pidió ese anuncio, debes buscar la request gampad/ads en Network.";
+    result.lookFor=look; return result;
+  }
+
+  if(has("adclick.g.doubleclick") || has("ad.doubleclick.net/pcs/click") || has("/aclk?")){
+    found("Click tracker: dominio DoubleClick/Google Ads detectado"); result={...result, icon:"🎯", type:"Click Tracker", level:"medium"};
+    result.summary=["Has copiado un enlace de clic publicitario.","El usuario no va directamente al anunciante: antes pasa por Google/DoubleClick para registrar el clic.","La landing final suele estar dentro del parámetro adurl."];
+    const href = findAttr(raw,"href") || decoded; const p=queryParams(href);
+    add("Proveedor", has("/aclk?") ? "Google Ads / AdSense" : "DoubleClick");
+    if(p.client) add("Publisher",p.client,true);
+    if(p.dim) add("Dimensión",p.dim);
+    if(p.gclid) add("GCLID","Presente");
+    if(p.adurl){ add("Landing final",hostOf(p.adurl)||truncate(p.adurl,60),true); const lp=queryParams(p.adurl); if(lp.utm_source) add("UTM source",lp.utm_source); if(lp.utm_medium) add("UTM medium",lp.utm_medium); if(lp.utm_campaign) add("UTM campaign",truncate(lp.utm_campaign,60),true); if(lp.gad_campaignid) add("Google Campaign ID",lp.gad_campaignid,true); }
+    const img = decoded.match(/https?:\/\/s0\.2mdn\.net\/simgad\/\d+/i); if(img){ found("Asset 2mdn/simgad detectado"); add("Asset creativo",img[0].split('/').pop(),true); }
+    look=["href","adurl","gclid","utm_source","utm_campaign","simgad","dim"];
+    result.curiosity="El click tracker separa dos cosas: medir el clic y llevar al usuario a la landing. Por eso una URL de anuncio puede tener varias capas de redirección.";
+    result.lookFor=look; return result;
+  }
+
+  if(has("2mdn.net") || has("gcdn.2mdn.net")){
+    found("CDN de Google para creatividades: 2mdn detectado"); result={...result, icon:"🖼️", type:"Creatividad servida desde Google CDN", level:"basic"};
+    result.summary=["Has copiado una pieza de creatividad o un iframe publicitario.","El asset se está cargando desde servidores de Google, normalmente usados por Campaign Manager, Google Ads o GAM.","Esto muestra la creatividad, no necesariamente la subasta completa."];
+    add("Proveedor","Google / 2mdn");
+    const src = findAttr(raw,"src") || (decoded.match(/https?:\/\/[^\s"']*2mdn[^\s"']+/i)||[])[0]; if(src){ add("URL del asset",truncate(src,80),true); if(src.includes("simgad")) add("ID simgad",src.split('/').pop().split('?')[0],true); }
+    const w=findAttr(raw,"width"), h=findAttr(raw,"height"); if(w&&h) add("Tamaño",`${w}x${h}`);
+    if(/\.html/i.test(src||decoded)) add("Tipo","HTML5 en iframe");
+    look=["iframe src","s0.2mdn.net","simgad","width / height","archivo .html"];
+    result.curiosity="2mdn es habitual en creatividades alojadas por Google. Verlo no prueba por sí solo Header Bidding: solo indica dónde vive el asset creativo.";
+    result.lookFor=look; return result;
+  }
+
+  if(has("clicktag") || has("<canvas") || has("gwd-") || has("gwd-image") || has("gwd-video") || has("gwd-taparea")){
+    found("Creatividad HTML5: clickTag, canvas o componentes GWD detectados"); result={...result, icon:"🎬", type:"Creatividad HTML5", level:"basic"};
+    result.summary=["Has copiado HTML de una creatividad.","Puede contener animaciones, imágenes, vídeo, canvas o zonas clicables.","Este fragmento normalmente no incluye la request de GAM ni la subasta."];
+    add("Tipo","HTML5");
+    if(has("clicktag")) add("clickTag","Detectado");
+    if(has("<canvas")) add("Canvas","Detectado");
+    if(has("gwd-")){ add("Herramienta probable","Google Web Designer"); found("Google Web Designer: etiquetas gwd-* detectadas"); }
+    const imgs=allMatches(decoded,/<img\b/gi).length; if(imgs) add("Imágenes",imgs);
+    const vids=allMatches(decoded,/<video\b|<gwd-video\b/gi).length; if(vids) add("Vídeos",vids);
+    const taps=allMatches(decoded,/<gwd-taparea\b/gi).length; if(taps) add("Tap areas",taps);
+    const wh = decoded.match(/width\s*:\s*(\d+)px[\s\S]{0,40}height\s*:\s*(\d+)px/i) || decoded.match(/width=["'](\d+)["'][\s\S]{0,80}height=["'](\d+)["']/i); if(wh) add("Tamaño probable",`${wh[1]}x${wh[2]}`);
+    look=["clickTag","canvas","gwd-image","gwd-video","gwd-taparea","width / height"];
+    result.curiosity="En banners HTML5, clickTag suele ser una variable. El diseñador no pone la URL final: el ad server la inserta al servir la campaña.";
+    result.lookFor=look; return result;
+  }
+
+  if(has("activeview") || has("googleactiveviewelement") || has("data-google-av-")){
+    found("Active View: medición de viewability detectada"); result={...result, icon:"📊", type:"Medición Active View", level:"advanced"};
+    result.summary=["Has copiado una capa de medición publicitaria de Google.","Sirve para medir si el anuncio ha sido visible y durante cuánto tiempo.","No es el banner en sí: es parte de la medición que acompaña a la impresión."];
+    add("Medición","Active View"); add("Proveedor","Google");
+    const adk=findAttr(raw,"data-google-av-adk"); if(adk) add("Ad Key",adk,true);
+    const cxn=findAttr(raw,"data-google-av-cxn"); if(cxn) add("Endpoint",hostOf(cxn),true);
+    look=["GoogleActiveViewElement","data-google-av-*","activeview","viewability"];
+    result.curiosity="Una impresión servida no siempre equivale a una impresión vista. Active View intenta medir esa diferencia.";
+    result.lookFor=look; return result;
+  }
+
+  if(has("amazon.es") || has("/dp/") && has("tag=")){
+    found("Amazon / afiliación: ASIN o tag detectado"); result={...result, icon:"🛒", type:"Enlace a Amazon con tracking", level:"basic"};
+    result.summary=["Has copiado un enlace publicitario o de afiliación.","No parece pasar por DoubleClick; el clic va al anunciante con parámetros de atribución.","Es útil para explicar que no toda publicidad usa el mismo flujo técnico."];
+    const href=findAttr(raw,"href")||decoded; const p=queryParams(href); const asin=(href.match(/\/dp\/([A-Z0-9]+)/i)||[])[1];
+    add("Destino",hostOf(href)||"Amazon"); if(asin) add("ASIN",asin,true); if(p.tag) add("Tag afiliado",p.tag,true); if(p.ref) add("Referencia",truncate(p.ref,65),true);
+    look=["href","/dp/ASIN","tag=","ref="];
+    result.curiosity="Los parámetros de afiliación permiten atribuir ventas o clics a un partner, aunque no exista una request GAM visible en ese fragmento.";
+    result.lookFor=look; return result;
+  }
+
+  if(has("data:image") || has("base64")){
+    found("Imagen embebida en base64 detectada"); result={...result, icon:"🧱", type:"Imagen embebida / capa visual", level:"basic"};
+    result.summary=["Has copiado una capa visual embebida en el HTML.","Puede ser una marca de agua, patrón, fondo o recurso técnico.","No representa por sí misma una subasta ni un click tracker."];
+    add("Tipo","Base64 / data image"); if(has("background-image")) add("Uso","Fondo CSS"); if(has("watermark")) add("Señal","Watermark");
+    look=["data:image","base64","background-image","watermark"];
+    result.curiosity="No todo lo que aparece dentro de una creatividad es medición publicitaria. Hay mucho 'ruido técnico' que conviene aprender a descartar.";
+    result.lookFor=look; return result;
+  }
+
+  if(isHTML){
+    found("HTML detectado, pero sin señales publicitarias fuertes"); result={...result, icon:"🚫", type:"No parece un elemento publicitario", level:"basic"};
+    result.summary=["Has copiado HTML, pero no aparecen señales claras de AdTech.","Podría ser un enlace editorial, contenido de página o un fragmento demasiado parcial.","Vuelve a DevTools y busca contenedores con div-gpt, iframe publicitario, adclick, gampad o hb_."];
+    const href=findAttr(raw,"href"); if(href) add("Enlace",hostOf(href)||truncate(href,60),true);
+    const text=(decoded.match(/<h\d[^>]*>(.*?)<\/h\d>/i)||[])[1]; if(text) add("Texto detectado",text.replace(/<[^>]+>/g,""));
+    look=["div-gpt","google_ads_iframe","gampad/ads","adclick","hb_","2mdn"];
+    result.curiosity="Esta respuesta también es útil: aprender AdTech implica distinguir qué pertenece al anuncio y qué pertenece simplemente a la página.";
+    result.lookFor=look; return result;
+  }
+
+  if(isRequest){
+    found("URL/request detectada, pero sin patrón publicitario fuerte"); result={...result, icon:"🌐", type:"Request o URL no clasificada", level:"basic"};
+    result.summary=["Has copiado una URL o request.","No contiene patrones suficientes para clasificarla como GAM, click tracker o Header Bidding.","Puede ser un recurso normal de la página o una parte incompleta de la cadena publicitaria."];
+    add("Dominio",hostOf(decoded),true); look=["gampad/ads","adclick","hb_","utm_","gclid","2mdn"];
+    result.curiosity="En Network hay cientos de requests. La habilidad no es mirarlas todas, sino filtrar las que cuentan la historia publicitaria.";
+    result.lookFor=look; return result;
+  }
+
+  found("No se pudo clasificar con seguridad");
+  result.summary=["No reconozco completamente este fragmento.","Aun así, la recomendación es volver a DevTools y copiar un contenedor más amplio o la URL completa de Network.","Busca señales como gampad/ads, div-gpt, google_ads_iframe, hb_, adclick o clickTag."];
+  add("Estado","Análisis parcial"); result.lookFor=["gampad/ads","div-gpt","google_ads_iframe","hb_","adclick","clickTag"];
+  return result;
+}
+
+function render(res, raw){
+  $("results").classList.add("show");
+  $("resultIcon").textContent=res.icon;
+  $("resultTitle").textContent=res.type;
+  $("resultSubtitle").textContent="¿Qué acabas de copiar?";
+  const lvl=$("resultLevel"); lvl.className="level "+(res.level||"medium"); lvl.textContent=res.level==="advanced"?"Avanzado":res.level==="basic"?"Básico":"Intermedio";
+  $("summary").innerHTML=res.summary.map(p=>`<p>${p}</p>`).join("");
+  const tbox=$("translationBox");
+  if(res.translation && res.translation.length){
+    tbox.style.display="block";
+    $("translationGrid").innerHTML=res.translation.map(t=>`<div class="tcard"><div class="q">${t.q}</div><div class="ans ${t.mono?'mono':''}">${t.ans}</div>${t.note?`<div class="note">${t.note}</div>`:""}</div>`).join("");
+    $("meaning").innerHTML=res.meaning || "";
+    $("meaning").style.display=res.meaning ? "block" : "none";
+  } else {
+    tbox.style.display="none";
+    $("translationGrid").innerHTML="";
+    $("meaning").innerHTML="";
+  }
+  $("params").innerHTML=(res.cards.length?res.cards:[{k:"Resultado",v:"No hay parámetros claros",mono:false}]).slice(0,10).map(c=>`<div class="param"><div class="k">${c.k}</div><div class="v ${c.mono?'mono':''}">${c.v}</div></div>`).join("");
+  $("lookFor").innerHTML=(res.lookFor||[]).map(x=>`<span class="pill">${x}</span>`).join("");
+  $("curiosity").textContent=res.curiosity||"La clave es volver siempre a DevTools y comprobar las señales en su contexto original.";
+  $("evidence").innerHTML=(res.evidence||[]).map(x=>`<li>${x}</li>`).join("");
+  $("raw").textContent=raw;
+  $("raw").classList.remove("show");
+  setTimeout(()=>$("results").scrollIntoView({block:"start"}),50);
+}
+
+function analyze(){ const raw=$("input").value.trim(); if(!raw){ alert("Pega primero un fragmento de DevTools."); return; } render(detect(raw), raw); }
+$("analyzeBtn").addEventListener("click", analyze);
+$("clearBtn").addEventListener("click",()=>{ $("input").value=""; $("results").classList.remove("show"); $("input").focus(); });
+$("sampleBtn").addEventListener("click",()=>{ $("input").value=examples[0].value; analyze(); });
+$("rawBtn").addEventListener("click",()=>$("raw").classList.toggle("show"));
+$("examples").innerHTML=examples.map((e,i)=>`<button class="ex" data-i="${i}"><b>${e.name}</b><span>${e.desc}</span></button>`).join("");
+document.querySelectorAll(".ex").forEach(b=>b.addEventListener("click",()=>{ $("input").value=examples[+b.dataset.i].value; analyze(); }));
+</script>
+<section style="margin:24px;padding:18px;border:1px solid #ccc;border-radius:8px;background:#fafafa">
+<h2>🧠 Parámetros que debes aprender</h2>
+<ul>
+<li><b>iu</b>: Ad Unit solicitado.</li>
+<li><b>hb_bidder</b>: Plataforma (SSP/Exchange) que realiza la puja.</li>
+<li><b>hb_pb</b>: CPM ofertado (price bucket) por cada 1.000 impresiones.</li>
+<li><b>hb_size</b>: Tamaño del banner al que corresponde la puja.</li>
+<li><b>cust_params</b>: Contexto enviado por el publisher.</li>
+</ul>
+<p><b>⚠️ No los confundas</b>: <code>hb_size=300x250</code> = tamaño del banner. <code>hb_pb=0.66</code> = 0,66 € CPM.</p>
+<h3>Diccionario de bidders</h3>
+<ul><li>pubmatic → SSP / Ad Exchange</li><li>criteo → Commerce Media</li><li>ttd → The Trade Desk</li><li>ix → Index Exchange</li><li>rubicon → Magnite</li><li>openx → OpenX</li><li>appnexus → Xandr</li></ul>
+</section>
+<!-- BLOQUE FINAL · TRADUCCIÓN DE LA REQUEST -->
+<section id="request-translation-block" class="request-translation-block" aria-labelledby="request-translation-title">
+  <div class="translation-header">
+    <div>
+      <span class="translation-kicker">Bloque docente</span>
+      <h2 id="request-translation-title">📖 Traducción de la request</h2>
+    </div>
+    <span class="translation-badge">DevTools → lenguaje humano</span>
+  </div>
+
+  <div class="translation-grid">
+    <article class="translation-card">
+      <div class="translation-question">¿Quién puja?</div>
+      <div class="translation-value" id="translation-bidder">PubMatic</div>
+      <p>SSP / Ad Exchange que participa en Header Bidding intentando comprar esta impresión.</p>
+      <code>hb_bidder</code>
+    </article>
+
+    <article class="translation-card">
+      <div class="translation-question">¿Cuánto ofrece?</div>
+      <div class="translation-value" id="translation-cpm">0,66 € CPM</div>
+      <p>Es decir: 0,66 € por cada 1.000 impresiones. Aproximadamente 0,00066 € por una sola impresión.</p>
+      <code>hb_pb</code>
+    </article>
+
+    <article class="translation-card">
+      <div class="translation-question">¿Qué banner quiere mostrar?</div>
+      <div class="translation-value" id="translation-size">300 × 250 px</div>
+      <p>Formato IAB: Medium Rectangle / Robapáginas.</p>
+      <code>hb_size</code>
+    </article>
+
+    <article class="translation-card">
+      <div class="translation-question">¿Dónde quiere mostrarlo?</div>
+      <div class="translation-value mono" id="translation-inventory">/1018282/xataka/homepage</div>
+      <p>Inventario solicitado a Google Ad Manager.</p>
+      <code>iu</code>
+    </article>
+
+    <article class="translation-card wide">
+      <div class="translation-question">¿Qué información conoce del contexto?</div>
+      <div class="translation-value" id="translation-context">Site: XTK · Vertical: Technology · País: ES</div>
+      <p>El publisher envía información contextual para ayudar a GAM a decidir qué anuncio servir.</p>
+      <code>cust_params</code>
+    </article>
+  </div>
+
+  <div class="translation-summary" id="translation-summary">
+    <strong>🧠 En una frase:</strong>
+    PubMatic ha ofertado <strong>0,66 € CPM</strong> para mostrar un banner <strong>300×250</strong> en el espacio publicitario <strong>homepage</strong> de Xataka.
+  </div>
+
+  <div class="translation-warning">
+    <strong>⚠️ No los confundas:</strong>
+    <code>hb_size=300x250</code> indica el tamaño del banner. 
+    <code>hb_pb=0.66</code> indica el CPM ofertado.
+  </div>
+</section>
+
+
+<script id="request-translation-dynamic">
+(function(){
+  function decodeDeep(value){
+    if(!value) return "";
+    let out = String(value).replace(/&amp;/g,"&");
+    for(let i=0;i<3;i++){
+      try {
+        const dec = decodeURIComponent(out);
+        if(dec === out) break;
+        out = dec;
+      } catch(e){ break; }
+    }
+    return out;
+  }
+  function getParam(text, key){
+    const decoded = decodeDeep(text);
+    const re = new RegExp("(?:[?&]|^|%26|&amp;|&)" + key.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + "=([^&%\\s<>\"']+)", "i");
+    const m = decoded.match(re);
+    return m ? decodeDeep(m[1]) : "";
+  }
+  function inferFormat(size){
+    const map = {
+      "300x250":"Medium Rectangle / Robapáginas",
+      "300x600":"Half Page",
+      "728x90":"Leaderboard",
+      "970x250":"Billboard",
+      "970x90":"Super Leaderboard",
+      "320x50":"Mobile Banner",
+      "300x100":"Mobile / banner compacto",
+      "300x300":"Square"
+    };
+    return map[size] || "Formato display";
+  }
+  function knownBidder(v){
+    const b = (v || "").toLowerCase();
+    const map = {
+      "pubmatic":"PubMatic",
+      "criteo":"Criteo",
+      "ttd":"The Trade Desk",
+      "ix":"Index Exchange",
+      "rubicon":"Magnite",
+      "openx":"OpenX",
+      "appnexus":"Xandr",
+      "ra_wemass":"Wemass",
+      "richaudience":"Richaudience",
+      "pubstack_server":"Pubstack Server",
+      "optidigital":"Opti Digital"
+    };
+    return map[b] || v || "No detectado";
+  }
+  function updateTranslation(text){
+    if(!text) return;
+    const bidderRaw = getParam(text, "hb_bidder");
+    const bidder = knownBidder(bidderRaw);
+    const pb = getParam(text, "hb_pb");
+    const size = getParam(text, "hb_size") || getParam(text, "sz");
+    const iu = getParam(text, "iu") || (decodeDeep(text).match(/\/\d+\/[A-Za-z0-9_\/.-]+/)||[""])[0];
+    const cust = getParam(text, "cust_params") || getParam(text, "prev_scp");
+    const decodedCust = decodeDeep(cust);
+    const site = getParam(decodedCust, "site");
+    const vertical = getParam(decodedCust, "vertical");
+    const country = getParam(decodedCust, "visitor_country");
+
+    const set = (id, val) => { const el=document.getElementById(id); if(el && val) el.textContent=val; };
+    set("translation-bidder", bidder);
+    if(pb) set("translation-cpm", pb.replace(".", ",") + " € CPM");
+    if(size) set("translation-size", size.replace("x"," × ") + " px");
+    if(iu) set("translation-inventory", iu);
+    const ctx = [];
+    if(site) ctx.push("Site: " + site);
+    if(vertical) ctx.push("Vertical: " + vertical);
+    if(country) ctx.push("País: " + country);
+    if(ctx.length) set("translation-context", ctx.join(" · "));
+
+    const summary = document.getElementById("translation-summary");
+    if(summary && (bidderRaw || pb || size || iu)){
+      summary.innerHTML = "<strong>🧠 En una frase:</strong> " +
+        (bidder !== "No detectado" ? bidder + " ha ofertado " : "La request indica una oferta ") +
+        (pb ? "<strong>" + pb.replace(".", ",") + " € CPM</strong> " : "") +
+        (size ? "para mostrar un banner <strong>" + size + "</strong> " : "") +
+        (iu ? "en el inventario <strong>" + iu + "</strong>." : ".");
+    }
+  }
+  function findInputText(){
+    const active = document.activeElement && (document.activeElement.tagName === "TEXTAREA" || document.activeElement.tagName === "INPUT") ? document.activeElement.value : "";
+    const areas = Array.from(document.querySelectorAll("textarea,input[type='text'],input:not([type])"));
+    const longest = areas.map(a=>a.value||"").sort((a,b)=>b.length-a.length)[0] || "";
+    return longest || active;
+  }
+  document.addEventListener("click", function(e){
+    const t = (e.target.textContent || "").toLowerCase();
+    if(t.includes("analizar")){
+      setTimeout(()=>updateTranslation(findInputText()), 80);
+    }
+  });
+  document.addEventListener("input", function(e){
+    if(e.target && (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT")){
+      updateTranslation(e.target.value);
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
