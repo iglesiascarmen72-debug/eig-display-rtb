@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reto 1 · Experiencia Oreo Gaming · solución · ESIC</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/dynamic.css">
+<style>
+  .res-top{background:var(--navy-dark);color:#fff;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+  .res-back{font-size:13px;font-weight:700;text-decoration:none;color:#cbd5e1;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.22);transition:background .15s,color .15s;}
+  .res-back:hover{background:rgba(255,255,255,.1);color:#fff;}
+  .res-main{max-width:980px;margin:0 auto;padding:40px 24px 80px;}
+  .dh-hero{background:linear-gradient(135deg,#7c2d12,#b45309);color:#fff;border-radius:20px;padding:34px;margin-bottom:28px;position:relative;overflow:hidden;}
+  .dh-hero::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--esic-red),#fbbf24);}
+  .dh-hero .eyebrow{color:#fde68a;}
+  .dh-hero h2{font-size:30px;font-weight:900;letter-spacing:-.02em;margin:8px 0 10px;color:#fff;}
+  .dh-hero p{margin:0;color:#fde9d6;font-size:15px;max-width:64ch;}
+  .dh-block{margin:32px 0;}
+  .dh-block>h3{font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--esic-red);margin:0 0 6px;}
+  .dh-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:7px;background:var(--esic-red);color:#fff;font-size:12px;font-weight:900;margin-right:8px;}
+  .dh-lead{margin:2px 0 16px;color:var(--muted);max-width:80ch;}
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 22px;box-shadow:var(--shadow-sm);}
+  .card+.card{margin-top:14px;}
+  .card h4{margin:0 0 8px;font-size:17px;color:var(--navy);}
+  .card p{margin:0 0 6px;font-size:14px;color:var(--ink-mid);line-height:1.5;}
+  .seq{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  @media(max-width:640px){.seq{grid-template-columns:1fr;}}
+  .seq .step{background:var(--silver);border:1px solid var(--line);border-radius:14px;padding:16px 17px;position:relative;}
+  .seq .step .n{font-size:11px;font-weight:900;letter-spacing:.06em;color:var(--esic-red);text-transform:uppercase;}
+  .seq .step b{display:block;margin:6px 0 4px;color:var(--navy);font-size:15px;}
+  .seq .step span{font-size:13px;color:var(--muted);}
+  .kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+  @media(max-width:560px){.kpis{grid-template-columns:1fr;}}
+  .kpis .k{background:#fff;border:1px solid var(--line);border-left:4px solid var(--practica);border-radius:12px;padding:14px 16px;}
+  .kpis .k b{display:block;color:var(--navy);font-size:14px;}
+  .kpis .k span{font-size:13px;color:var(--muted);}
+  .pill{display:inline-block;font-size:12px;font-weight:800;color:#7c2d12;background:#fef3c7;border:1px solid #fcd34d;border-radius:999px;padding:4px 12px;margin:2px 4px 2px 0;}
+  .disc{background:#f8fafc;border:1px dashed var(--line);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--muted);}
+</style>
+</head>
+<body>
+
+<header class="res-top">
+  <svg width="120" height="28" viewBox="0 0 120 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ESIC University" style="flex:0 0 auto;display:block;">
+    <text x="0" y="22" font-family="Inter,sans-serif" font-weight="900" font-size="24" fill="white" letter-spacing="-1">ESIC</text>
+    <text x="58" y="22" font-family="Inter,sans-serif" font-weight="400" font-size="12" fill="#94a3b8" letter-spacing="1">UNIVERSITY</text>
+  </svg>
+  <a class="res-back" href="../index.html#s02r">← Volver a la sesión</a>
+</header>
+
+<main class="res-main">
+
+  <div class="dh-hero">
+    <p class="eyebrow">Reto 1 · solución de ejemplo</p>
+    <h2>Experiencia Oreo Gaming · «Twist &amp; Win»</h2>
+    <p>Una propuesta posible. No es la única respuesta correcta: es un ejemplo que conecta formato, mecánica y medición. Lo importante es que cada decisión pueda justificarse.</p>
+  </div>
+
+  <div class="disc" style="margin-bottom:26px;">Recordatorio: el display programático no es un banner que se mira, es una experiencia con la que el usuario interactúa. Por eso el KPI principal no es el clic, sino la interacción y su finalización.</div>
+
+  <!-- 1 Formato -->
+  <div class="dh-block">
+    <h3><span class="dh-num">1</span>Formato elegido</h3>
+    <div class="card">
+      <h4>Rich media expandable · 300×250 que despliega a 970×250</h4>
+      <p>Arranca como un MPU estándar (inventario abundante y barato) y, al interactuar, se expande a un lienzo tipo billboard donde ocurre el mini-juego. Así compramos inventario asequible pero abrimos una experiencia de alto impacto solo con quien muestra interés.</p>
+      <p><span class="pill">Rich media</span><span class="pill">Expandable</span><span class="pill">HTML5 jugable</span><span class="pill">Fallback estático</span></p>
+    </div>
+  </div>
+
+  <!-- 2 Mecánica -->
+  <div class="dh-block">
+    <h3><span class="dh-num">2</span>Mecánica</h3>
+    <div class="card">
+      <h4>«Twist the Oreo» — gira, moja y desbloquea</h4>
+      <p>El gesto icónico de la galleta se convierte en mecánica: el usuario <b>gira</b> la Oreo (drag/rotación) para revelar un mini-nivel gamer y, al completarlo, desbloquea una recompensa digital (skin, código, sorteo). Una acción física de marca reconvertida en interacción jugable.</p>
+      <p class="disc" style="margin-top:10px;">Regla de diseño: si el usuario solo puede <i>mirar</i>, no hay experiencia. Debe poder <i>hacer</i> algo en menos de 3 segundos.</p>
+    </div>
+  </div>
+
+  <!-- 3 Secuencia -->
+  <div class="dh-block">
+    <h3><span class="dh-num">3</span>Secuencia de impactos</h3>
+    <p class="dh-lead">Tres impactos con frequency capping y mensaje progresivo, no la misma pieza repetida.</p>
+    <div class="seq">
+      <div class="step"><span class="n">Impacto 1 · Descubrir</span><b>«Gira para jugar»</b><span>Presentación de la mecánica. Objetivo: game start.</span></div>
+      <div class="step"><span class="n">Impacto 2 · Retar</span><b>«Supera tu récord»</b><span>Sube dificultad / reto entre amigos. Objetivo: completion + tiempo.</span></div>
+      <div class="step"><span class="n">Impacto 3 · Convertir</span><b>«Reclama tu recompensa»</b><span>CTA a landing con registro. Objetivo: clic cualificado + lead.</span></div>
+    </div>
+  </div>
+
+  <!-- 4 DCO -->
+  <div class="dh-block">
+    <h3><span class="dh-num">4</span>Variables DCO</h3>
+    <div class="card">
+      <p>Una única plantilla creativa que se personaliza en tiempo real según usuario y contexto:</p>
+      <p><span class="pill">Plataforma del site (Xbox / PC / mobile)</span><span class="pill">Género de juego del contexto</span><span class="pill">Hora del día → recompensa</span><span class="pill">Franja/idioma</span><span class="pill">Frecuencia → mensaje 1/2/3</span></p>
+      <p style="margin-top:8px;">Ej.: en un review de un juego de Xbox mostramos skin de Xbox; en la 3ª impresión saltamos directamente al mensaje de recompensa.</p>
+    </div>
+  </div>
+
+  <!-- 5 KPIs creativos -->
+  <div class="dh-block">
+    <h3><span class="dh-num">5</span>KPIs creativos</h3>
+    <p class="dh-lead">Miden la calidad de la experiencia, no solo la exposición.</p>
+    <div class="kpis">
+      <div class="k"><b>Interaction rate</b><span>% de impresiones que generan una interacción. Objetivo &gt; 4 %.</span></div>
+      <div class="k"><b>Dwell time</b><span>Tiempo medio de interacción con la pieza. Objetivo &gt; 8 s.</span></div>
+      <div class="k"><b>Game start</b><span>% que inicia el mini-juego tras interactuar.</span></div>
+      <div class="k"><b>Completion rate</b><span>% que termina el reto. Es el KPI creativo estrella, no el CTR.</span></div>
+    </div>
+  </div>
+
+  <!-- 6 Medición -->
+  <div class="dh-block">
+    <h3><span class="dh-num">6</span>Fuente de medición</h3>
+    <div class="card">
+      <p><b>Rich media / plataforma DCO</b> (p.ej. Celtra, Flashtalking, Studio) → interaction rate, dwell time, game start, completion y variantes DCO servidas.</p>
+      <p><b>Ad server</b> → impresiones, viewability y clics.</p>
+      <p><b>GA4</b> (si hay landing) → sesiones, inicio de reto en site, finalización y registro, enlazando la interacción creativa con la conversión.</p>
+    </div>
+  </div>
+
+  <div class="disc">Puente al Reto 2: esta experiencia ya define <i>qué</i> medir en creatividad. El Reto 2 decide <i>dónde comprarla, cómo servirla y cómo medir el negocio</i> con 100.000 € de presupuesto.</div>
+
+</main>
+</body>
+</html>

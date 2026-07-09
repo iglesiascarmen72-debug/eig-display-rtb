@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reto 2 · Compra, sirve y mide · solución · ESIC</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/dynamic.css">
+<style>
+  .res-top{background:var(--navy-dark);color:#fff;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+  .res-back{font-size:13px;font-weight:700;text-decoration:none;color:#cbd5e1;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.22);transition:background .15s,color .15s;}
+  .res-back:hover{background:rgba(255,255,255,.1);color:#fff;}
+  .res-main{max-width:1000px;margin:0 auto;padding:40px 24px 80px;}
+  .dh-hero{background:linear-gradient(135deg,#0D1F3C,#1A3058);color:#fff;border-radius:20px;padding:34px;margin-bottom:28px;position:relative;overflow:hidden;}
+  .dh-hero::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--esic-red),#14b8a6);}
+  .dh-hero .eyebrow{color:#93c5fd;}
+  .dh-hero h2{font-size:30px;font-weight:900;letter-spacing:-.02em;margin:8px 0 10px;color:#fff;}
+  .dh-hero p{margin:0;color:#cbd5e1;font-size:15px;max-width:66ch;}
+  .budget{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;}
+  .budget .b{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:10px 14px;}
+  .budget .b .v{display:block;font-size:22px;font-weight:900;color:#fff;letter-spacing:-.02em;}
+  .budget .b .l{font-size:11px;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
+  .dh-block{margin:32px 0;}
+  .dh-block>h3{font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--esic-red);margin:0 0 6px;}
+  .dh-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:7px;background:var(--esic-red);color:#fff;font-size:12px;font-weight:900;margin-right:8px;}
+  .dh-lead{margin:2px 0 16px;color:var(--muted);max-width:82ch;}
+  .plan{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media(max-width:760px){.plan{grid-template-columns:1fr;}}
+  .site{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow-sm);}
+  .site .top{padding:14px 16px;color:#fff;}
+  .site.s1 .top{background:linear-gradient(135deg,#5b21b6,#7c3aed);}
+  .site.s2 .top{background:linear-gradient(135deg,#0f766e,#14b8a6);}
+  .site.s3 .top{background:linear-gradient(135deg,#b45309,#f59e0b);}
+  .site .top .ctx{font-size:11px;font-weight:700;opacity:.85;text-transform:uppercase;letter-spacing:.05em;}
+  .site .top h4{margin:4px 0 0;font-size:17px;font-weight:900;}
+  .site .top .inv{font-size:13px;font-weight:800;margin-top:6px;background:rgba(255,255,255,.18);display:inline-block;padding:3px 10px;border-radius:999px;}
+  .site .body{padding:14px 16px;}
+  .site .row{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px;}
+  .site .row:last-child{border-bottom:none;}
+  .site .row .lbl{color:var(--muted);font-weight:600;}
+  .site .row .val{color:var(--navy);font-weight:700;text-align:right;}
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 22px;box-shadow:var(--shadow-sm);}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:680px){.cols{grid-template-columns:1fr;}}
+  .funnel{list-style:none;margin:0;padding:0;}
+  .funnel li{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);}
+  .funnel li:last-child{border-bottom:none;}
+  .funnel .st{font-weight:700;color:var(--navy);font-size:14px;}
+  .funnel .mt{font-size:12px;color:var(--muted);}
+  .funnel .nm{font-weight:900;color:var(--esic-red);font-size:15px;}
+  .pill{display:inline-block;font-size:12px;font-weight:800;color:var(--navy);background:var(--silver);border:1px solid var(--line);border-radius:999px;padding:4px 12px;margin:2px 4px 2px 0;}
+  .decide{border-left:4px solid var(--reto);background:var(--reto-bg);border-radius:12px;padding:14px 16px;margin-top:12px;}
+  .decide b{color:#7c4a03;}
+  .decide p{margin:0;color:#7c4a03;font-size:14px;}
+  .disc{background:#f8fafc;border:1px dashed var(--line);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--muted);}
+</style>
+</head>
+<body>
+
+<header class="res-top">
+  <svg width="120" height="28" viewBox="0 0 120 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ESIC University" style="flex:0 0 auto;display:block;">
+    <text x="0" y="22" font-family="Inter,sans-serif" font-weight="900" font-size="24" fill="white" letter-spacing="-1">ESIC</text>
+    <text x="58" y="22" font-family="Inter,sans-serif" font-weight="400" font-size="12" fill="#94a3b8" letter-spacing="1">UNIVERSITY</text>
+  </svg>
+  <a class="res-back" href="../index.html#s11">← Volver a la sesión</a>
+</header>
+
+<main class="res-main">
+
+  <div class="dh-hero">
+    <p class="eyebrow">Reto 2 · solución de ejemplo</p>
+    <h2>Compra, sirve y mide · Oreo Gaming con 100.000 €</h2>
+    <p>Un plan posible para llevar la experiencia «Twist &amp; Win» al mercado. Cada decisión —dónde comprar, cómo servir y cómo medir— se justifica con lo aprendido sobre inventario, subasta, viewability y medición.</p>
+    <div class="budget">
+      <div class="b"><span class="v">100.000 €</span><span class="l">Presupuesto total</span></div>
+      <div class="b"><span class="v">3</span><span class="l">Sites / contextos</span></div>
+      <div class="b"><span class="v">~23,8M</span><span class="l">Impresiones estimadas</span></div>
+      <div class="b"><span class="v">4,20 €</span><span class="l">CPM medio objetivo</span></div>
+    </div>
+  </div>
+
+  <!-- 1 Plan de medios + tipo de compra + formatos + inversión -->
+  <div class="dh-block">
+    <h3><span class="dh-num">1</span>Plan de medios · reparto de los 100.000 €</h3>
+    <p class="dh-lead">Tres contextos gaming complementarios. Cada uno con su tipo de compra y su formato, según lo que mejor encaja con el inventario y el objetivo.</p>
+    <div class="plan">
+      <div class="site s1">
+        <div class="top"><span class="ctx">Streaming · comunidad</span><h4>Twitch</h4><span class="inv">40.000 € · 40 %</span></div>
+        <div class="body">
+          <div class="row"><span class="lbl">Compra</span><span class="val">PMP (deal ID)</span></div>
+          <div class="row"><span class="lbl">Formato</span><span class="val">Rich media expandable + display 300×250</span></div>
+          <div class="row"><span class="lbl">Por qué</span><span class="val">Audiencia gamer pura; PMP asegura calidad y viewability</span></div>
+          <div class="row"><span class="lbl">CPM objetivo</span><span class="val">~6,0 €</span></div>
+        </div>
+      </div>
+      <div class="site s2">
+        <div class="top"><span class="ctx">Medios gaming</span><h4>IGN · 3DJuegos · Vandal</h4><span class="inv">35.000 € · 35 %</span></div>
+        <div class="body">
+          <div class="row"><span class="lbl">Compra</span><span class="val">Open auction (RTB)</span></div>
+          <div class="row"><span class="lbl">Formato</span><span class="val">Expandable 300×600 + billboard 970×250</span></div>
+          <div class="row"><span class="lbl">Por qué</span><span class="val">Escala y contexto afín a coste eficiente; alto impacto above the fold</span></div>
+          <div class="row"><span class="lbl">CPM objetivo</span><span class="val">~3,2 €</span></div>
+        </div>
+      </div>
+      <div class="site s3">
+        <div class="top"><span class="ctx">Mobile · in-app</span><h4>YouTube Gaming · apps rewarded</h4><span class="inv">25.000 € · 25 %</span></div>
+        <div class="body">
+          <div class="row"><span class="lbl">Compra</span><span class="val">Programática garantizada + open</span></div>
+          <div class="row"><span class="lbl">Formato</span><span class="val">Vídeo banner + rewarded jugable</span></div>
+          <div class="row"><span class="lbl">Por qué</span><span class="val">Completion alta en rewarded; refuerza el mini-juego en mobile</span></div>
+          <div class="row"><span class="lbl">CPM objetivo</span><span class="val">~4,5 €</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="disc" style="margin-top:14px;">Suma: 40.000 + 35.000 + 25.000 = <b>100.000 €</b>. Mezcla deliberada de tipos de compra: PMP para calidad, open auction para escala eficiente, garantizada para asegurar volumen premium.</div>
+  </div>
+
+  <!-- 2 KPIs -->
+  <div class="dh-block">
+    <h3><span class="dh-num">2</span>KPIs de medios y de landing</h3>
+    <p class="dh-lead">Dos capas: la compra/entrega (¿llega y se ve?) y el negocio en la landing (¿convierte?).</p>
+    <div class="cols">
+      <div class="card">
+        <h4 style="margin:0 0 10px;color:var(--navy);font-size:15px;">KPIs de medios</h4>
+        <ul class="funnel">
+          <li><span class="st">Impresiones</span><span class="nm">23,8M</span></li>
+          <li><span class="st">Viewability <span class="mt">· objetivo &gt;70 %</span></span><span class="nm">68 %</span></li>
+          <li><span class="st">CPM / vCPM</span><span class="nm">4,20 € / 6,17 €</span></li>
+          <li><span class="st">CTR</span><span class="nm">0,12 %</span></li>
+          <li><span class="st">Frecuencia media</span><span class="nm">4,0</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4 style="margin:0 0 10px;color:var(--navy);font-size:15px;">KPIs de landing (funnel)</h4>
+        <ul class="funnel">
+          <li><span class="st">Sesiones</span><span class="nm">72.000</span></li>
+          <li><span class="st">Inicio del reto</span><span class="nm">41.000</span></li>
+          <li><span class="st">Finalización</span><span class="nm">23.500</span></li>
+          <li><span class="st">Registro</span><span class="nm">6.100</span></li>
+          <li><span class="st">CPA (coste/registro)</span><span class="nm">22,00 €</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 Fuente de datos -->
+  <div class="dh-block">
+    <h3><span class="dh-num">3</span>Fuente de datos</h3>
+    <div class="card">
+      <p style="margin:0 0 10px;">Cada métrica tiene su fuente; el error clásico es mezclarlas o dar por buena una sola cifra:</p>
+      <p><span class="pill">DSP → puja, impresiones, CPM, frecuencia</span><span class="pill">Ad server → entrega, viewability</span><span class="pill">Rich media / DCO → interacción, completion</span><span class="pill">GA4 → sesiones, funnel de landing</span><span class="pill">CRM → registros cualificados</span></p>
+    </div>
+  </div>
+
+  <!-- 4 Optimización -->
+  <div class="dh-block">
+    <h3><span class="dh-num">4</span>Optimización · qué decidiríamos</h3>
+    <p class="dh-lead">La lectura honesta: compramos afín y con buena interacción, pero <b>1 de cada 3 impresiones no llega a verse</b>. El CPM parece barato; el vCPM (6,17 €) cuenta la verdad.</p>
+    <div class="card">
+      <div class="decide"><p><b>Viewability 68 % (&lt; objetivo).</b> Subir el floor de viewability y podar dominios/placements de baja visibilidad en el open auction (site 2). Reasignar ese gasto a PMP de Twitch.</p></div>
+      <div class="decide"><p><b>vCPM +47 % sobre CPM.</b> Optimizar hacia inventario visible: el coste servido engaña, el coste visible manda.</p></div>
+      <div class="decide"><p><b>Rewarded con alta completion.</b> Aumentar la inversión del site 3 si mantiene CPA ≤ 22 €.</p></div>
+      <div class="decide"><p><b>Frecuencia 4,0.</b> En rango (3–5); mantener el capping para no saturar y proteger la percepción de marca.</p></div>
+    </div>
+  </div>
+
+  <div class="disc">El detalle de la medición vive en el <a href="dashboard-oreo-gaming.html" style="color:var(--esic-red);font-weight:700;">dashboard de control</a>: las mismas cifras, leídas como panel de negocio.</div>
+
+</main>
+</body>
+</html>

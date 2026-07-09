@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard de control · Oreo Gaming · ESIC</title>
+<template id="__bundler_thumbnail" data-bg-color="#0D1F3C">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0D1F3C"/>
+    <rect x="360" y="250" width="200" height="130" rx="16" fill="#1A3058" stroke="#34d399" stroke-width="6"/>
+    <rect x="620" y="250" width="200" height="130" rx="16" fill="#1A3058" stroke="#f59e0b" stroke-width="6"/>
+    <rect x="490" y="410" width="200" height="130" rx="16" fill="#1A3058" stroke="#C8102E" stroke-width="6"/>
+    <text x="600" y="650" font-family="Inter,Arial,sans-serif" font-size="58" font-weight="900" fill="#ffffff" text-anchor="middle">Dashboard RTB</text>
+    <text x="600" y="710" font-family="Inter,Arial,sans-serif" font-size="30" font-weight="400" fill="#94a3b8" text-anchor="middle">Oreo · Gaming Squad</text>
+  </svg>
+</template>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/dynamic.css">
+<style>
+  .res-top {
+    background: var(--navy-dark); color: #fff;
+    padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  }
+  .res-top-brand { display: flex; align-items: center; gap: 12px; }
+  .res-back {
+    font-size: 13px; font-weight: 700; text-decoration: none; color: #cbd5e1;
+    display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px;
+    border-radius: 999px; border: 1px solid rgba(255,255,255,.22); transition: background .15s, color .15s;
+  }
+  .res-back:hover { background: rgba(255,255,255,.1); color: #fff; }
+  .res-main { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .dh-hero {
+    background: linear-gradient(135deg, #0D1F3C, #1A3058);
+    color: #fff; border-radius: 20px; padding: 34px 34px 30px; margin-bottom: 28px;
+    position: relative; overflow: hidden;
+  }
+  .dh-hero::before { content:""; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(90deg, var(--esic-red), #f59e0b); }
+  .dh-hero .eyebrow { color: #fca5a5; }
+  .dh-hero h2 { font-size: 30px; font-weight: 900; letter-spacing: -.02em; margin: 8px 0 10px; color: #fff; }
+  .dh-hero p { margin: 0; color: #cbd5e1; font-size: 15px; max-width: 64ch; }
+
+  .dh-block { margin: 30px 0; }
+  .dh-block > h3 {
+    font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--esic-red); margin: 0 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line);
+  }
+  .dh-lead { margin: -4px 0 16px; color: var(--muted); max-width: 78ch; }
+
+  /* Encargo */
+  .dh-brief { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 640px){ .dh-brief { grid-template-columns: 1fr; } }
+  .dh-brief-card { background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 20px; box-shadow: var(--shadow-sm); }
+  .dh-brief-card .lbl { font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+  .dh-brief-card h4 { margin:0 0 6px; font-size:16px; color:var(--navy); }
+  .dh-brief-card p { margin:0; font-size:13.5px; color:var(--muted); }
+
+  /* 6 preguntas */
+  .dh-q { list-style:none; padding:0; margin:0; display:grid; grid-template-columns:repeat(3,1fr); gap:12px; counter-reset:q; }
+  @media (max-width:760px){ .dh-q { grid-template-columns:1fr 1fr; } }
+  @media (max-width:480px){ .dh-q { grid-template-columns:1fr; } }
+  .dh-q li { background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px 17px; box-shadow:var(--shadow-sm); position:relative; }
+  .dh-q li::before { counter-increment:q; content:"0" counter(q); display:block; font-size:22px; font-weight:900; color:var(--esic-red); letter-spacing:-.03em; margin-bottom:8px; }
+  .dh-q b { display:block; font-size:14px; color:var(--navy); margin-bottom:4px; }
+  .dh-q span { font-size:13px; color:var(--muted); }
+
+  /* Dashboard */
+  .dash{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);}
+  .dash-bar{background:var(--navy);color:#fff;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;padding:16px 22px;}
+  .dash-bar h4{margin:0;font-size:16px;font-weight:800;letter-spacing:-.01em;display:flex;align-items:center;gap:9px;}
+  .dash-bar h4 .dash-dot{width:8px;height:8px;border-radius:50%;background:#34d399;box-shadow:0 0 0 4px rgba(52,211,153,.2);}
+  .dash-bar .dash-sub{font-size:12px;color:#94a3b8;font-weight:600;}
+  .dash-filters{display:flex;flex-wrap:wrap;gap:6px;}
+  .dash-filters span{font-size:11px;font-weight:700;color:#cbd5e1;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:4px 11px;}
+  .dash-body{padding:22px;}
+  .kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .kpi{background:var(--silver);border:1px solid var(--line);border-radius:14px;padding:16px 17px;position:relative;overflow:hidden;}
+  .kpi::before{content:"";position:absolute;top:0;left:0;width:4px;height:100%;background:var(--kc,var(--muted));}
+  .kpi-q{display:block;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:9px;}
+  .kpi-val{display:block;font-size:34px;font-weight:900;line-height:1;color:var(--navy);letter-spacing:-.03em;}
+  .kpi-val small{font-size:16px;font-weight:800;color:var(--muted);margin-left:2px;}
+  .kpi-lbl{display:block;font-size:12px;color:var(--ink-mid);margin:8px 0 11px;line-height:1.35;}
+  .kpi-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;border-radius:999px;padding:4px 10px;}
+  .kpi.good{--kc:var(--practica);} .kpi.good .kpi-badge{background:var(--practica-bg);color:var(--practica);border:1px solid #99f6e4;}
+  .kpi.warn{--kc:var(--reto);}     .kpi.warn .kpi-badge{background:var(--reto-bg);color:var(--reto);border:1px solid #fcd34d;}
+  .kpi.info{--kc:var(--teoria);}    .kpi.info .kpi-badge{background:var(--teoria-bg);color:var(--teoria);border:1px solid #bfdbfe;}
+  .kpi-new{position:absolute;top:12px;right:12px;font-size:9px;font-weight:900;letter-spacing:.06em;color:#fff;background:var(--esic-red);border-radius:6px;padding:3px 6px;}
+  @media (max-width:820px){.kpi-grid{grid-template-columns:1fr 1fr;}}
+  @media (max-width:560px){.kpi-grid{grid-template-columns:1fr;}}
+
+  .dh-read { background:#fff8ec; border:1px solid #fcd34d; border-left:4px solid var(--reto); border-radius:14px; padding:20px 22px; font-size:15px; color:#7c4a03; }
+  .dh-read b { color:#7c4a03; }
+</style>
+</head>
+<body>
+
+<header class="res-top">
+  <div class="res-top-brand">
+    <svg width="120" height="28" viewBox="0 0 120 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ESIC University" style="flex:0 0 auto;display:block;">
+      <text x="0" y="22" font-family="Inter,sans-serif" font-weight="900" font-size="24" fill="white" letter-spacing="-1">ESIC</text>
+      <text x="58" y="22" font-family="Inter,sans-serif" font-weight="400" font-size="12" fill="#94a3b8" letter-spacing="1">UNIVERSITY</text>
+    </svg>
+  </div>
+  <a class="res-back" href="../index.html#s11">← Volver a la sesión</a>
+</header>
+
+<main class="res-main">
+
+  <div class="dh-hero">
+    <p class="eyebrow">Recurso · Reto final — solución de ejemplo</p>
+    <h2>Dashboard de control · Oreo Gaming</h2>
+    <p>Un mini-dashboard para una campaña RTB de Oreo dirigida a audiencia gamer, con un presupuesto de 100.000 €. No acumula métricas: cada bloque existe para responder a una pregunta de negocio. En rojo, las métricas que añadiríamos tras entender el viaje de una impresión.</p>
+  </div>
+
+  <!-- El encargo -->
+  <div class="dh-block">
+    <h3>El encargo</h3>
+    <div class="dh-brief">
+      <div class="dh-brief-card">
+        <p class="lbl">Campaña</p>
+        <h4>Oreo · Gaming Squad (RTB)</h4>
+        <p>Objetivo: notoriedad afín en público gamer joven a través de canales programáticos. Inversión de referencia: 100.000 €.</p>
+      </div>
+      <div class="dh-brief-card">
+        <p class="lbl">Audiencia</p>
+        <h4>Gamer casual / Xbox · 18–34</h4>
+        <p>Contexto: webs gaming, Twitch display, apps, YouTube y medios tech. Formatos display + rich media.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Las 6 preguntas -->
+  <div class="dh-block">
+    <h3>Seis preguntas que el dashboard debe responder</h3>
+    <p class="dh-lead">Si una métrica no ayuda a contestar ninguna de estas preguntas, sobra en el panel.</p>
+    <ul class="dh-q">
+      <li><b>¿Compramos inventario afín?</b><span>Impacto sobre público realmente gamer, no tráfico genérico.</span></li>
+      <li><b>¿Hay cobertura suficiente?</b><span>Usuarios únicos alcanzados y presión publicitaria por persona.</span></li>
+      <li><b>¿Las impresiones son visibles?</b><span>No basta con servirlas: deben tener oportunidad real de verse.</span></li>
+      <li><b>¿La creatividad interactúa?</b><span>Clic e interacción como señal de resonancia del mensaje.</span></li>
+      <li><b>¿El coste es razonable?</b><span>Coste por mil, por clic y por acción dentro de lo esperable.</span></li>
+      <li><b>¿Hay señales de optimización?</b><span>Ritmo de gasto y tendencia que permitan decidir a tiempo.</span></li>
+    </ul>
+  </div>
+
+  <!-- Dashboard vivo -->
+  <div class="dh-block">
+    <h3>Dashboard vivo · lectura a 7 días</h3>
+    <p class="dh-lead">Una lectura posible tras una semana de campaña. Cada tarjeta responde a una de las seis preguntas.</p>
+    <div class="dash">
+      <div class="dash-bar">
+        <h4><span class="dash-dot"></span>Oreo · Gaming Squad · Campaña RTB</h4>
+        <div class="dash-filters">
+          <span>Vista de campaña</span><span>DSP · Open + PMP</span><span>Display + Rich media</span>
+        </div>
+        <span class="dash-sub">Inversión: 100.000 € · Objetivo: notoriedad afín</span>
+      </div>
+      <div class="dash-body">
+        <div class="kpi-grid">
+          <div class="kpi good">
+            <span class="kpi-q">01 · Afinidad</span>
+            <b class="kpi-val">78<small>%</small></b>
+            <span class="kpi-lbl">Impresiones servidas en inventario <b>gaming afín</b> (in-target rate)</span>
+            <span class="kpi-badge">Objetivo &gt;70 % · ✓ en rango</span>
+          </div>
+          <div class="kpi good">
+            <span class="kpi-q">02 · Cobertura</span>
+            <b class="kpi-val">5,9<small>M</small></b>
+            <span class="kpi-lbl">Usuarios únicos alcanzados · <b>Frecuencia media 4,0</b> · 23,8M impresiones</span>
+            <span class="kpi-badge">Frecuencia objetivo 3–5 · ✓</span>
+          </div>
+          <div class="kpi warn">
+            <span class="kpi-new">NUEVA</span>
+            <span class="kpi-q">03 · Visibilidad</span>
+            <b class="kpi-val">68<small>%</small></b>
+            <span class="kpi-lbl"><b>Viewability</b> · impresiones con oportunidad real de ser vistas</span>
+            <span class="kpi-badge">Benchmark &gt;70 % · ⚠ a mejorar</span>
+          </div>
+          <div class="kpi warn">
+            <span class="kpi-new">NUEVA</span>
+            <span class="kpi-q">03 · Coste real visible</span>
+            <b class="kpi-val">6,17<small>€</small></b>
+            <span class="kpi-lbl"><b>vCPM</b> · coste por mil impresiones <b>visibles</b> (CPM servido: 4,20 €)</span>
+            <span class="kpi-badge">+47 % sobre CPM · ⚠ vigilar</span>
+          </div>
+          <div class="kpi good">
+            <span class="kpi-q">04 · Interacción</span>
+            <b class="kpi-val">0,12<small>%</small></b>
+            <span class="kpi-lbl"><b>CTR</b> · interacción rich media 4,6 %</span>
+            <span class="kpi-badge">Benchmark 0,08 % · ✓ supera</span>
+          </div>
+          <div class="kpi info">
+            <span class="kpi-q">05 · Coste</span>
+            <b class="kpi-val">4,20<small>€</small></b>
+            <span class="kpi-lbl"><b>CPM</b> 4,20 € · <b>CPC</b> 3,50 € · <b>CPA</b> 22,00 €</span>
+            <span class="kpi-badge">Dentro de lo previsto</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;">
+          <div class="kpi good" style="--kc:var(--esic-red);">
+            <span class="kpi-q">06 · Optimización</span>
+            <b class="kpi-val">96<small>%</small></b>
+            <span class="kpi-lbl"><b>Pacing</b> del gasto · vCPM ↓ 8 % vs. semana anterior tras excluir inventario poco visible</span>
+            <span class="kpi-badge">Señal positiva · seguir optimizando</span>
+          </div>
+          <div class="kpi info" style="--kc:var(--teoria);">
+            <span class="kpi-q">Lectura de negocio</span>
+            <span class="kpi-lbl" style="margin-top:2px;">Compramos <b>afín</b> y con buena interacción, pero <b>1 de cada 3 impresiones no llega a verse</b>. El CPM parece barato; el <b>vCPM cuenta la verdad</b>. Acción: subir el floor de viewability y podar dominios de baja visibilidad.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Métricas nuevas -->
+  <div class="dh-block">
+    <h3>Lo que cambia respecto al inicio de la sesión</h3>
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Métrica nueva</th><th>Qué mide</th><th>Por qué la añadimos ahora</th></tr></thead>
+        <tbody>
+          <tr><td><b>Viewability</b></td><td>% de impresiones con oportunidad real de ser vistas (≥50 % del píxel ≥1 s).</td><td>Servido ≠ visto. Sin ella, el resto de métricas engañan.</td></tr>
+          <tr><td><b>vCPM</b></td><td>Coste por mil impresiones <b>visibles</b>, no servidas.</td><td>Es el coste honesto: revela lo que de verdad pagamos por impacto útil.</td></tr>
+          <tr><td><b>In-target / Afinidad</b></td><td>% de impacto dentro del segmento gamer objetivo.</td><td>Diferencia comprar audiencia de comprar tráfico barato.</td></tr>
+          <tr><td><b>Frecuencia</b></td><td>Impresiones medias por usuario único.</td><td>Controla la saturación: cobertura sin frecuencia desbocada.</td></tr>
+          <tr><td><b>Interacción rich media</b></td><td>Engagements con la creatividad jugable / impresiones.</td><td>El caso Oreo es gamificado: el clic no basta, importa la interacción.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Cierre -->
+  <div class="dh-block">
+    <div class="dh-read">
+      Un buen dashboard no acumula métricas: <b>responde preguntas</b>. Tras entender el viaje de la impresión, la pregunta ya no es «¿cuántas servimos?» sino <b>«¿cuántas se vieron y a qué coste real?»</b>.
+    </div>
+  </div>
+
+</main>
+
+</body>
+</html>

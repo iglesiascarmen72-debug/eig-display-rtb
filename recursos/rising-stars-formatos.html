@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Formatos Rising Stars (IAB) · ESIC</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/dynamic.css">
+<style>
+  .res-top{background:var(--navy-dark);color:#fff;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;z-index:20;}
+  .res-back{font-size:13px;font-weight:700;text-decoration:none;color:#cbd5e1;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.22);transition:background .15s,color .15s;}
+  .res-back:hover{background:rgba(255,255,255,.1);color:#fff;}
+  .res-main{max-width:1040px;margin:0 auto;padding:40px 24px 90px;}
+  .rs-hero{background:linear-gradient(135deg,#0D1F3C,#3a1d5c);color:#fff;border-radius:22px;padding:38px 34px;margin-bottom:14px;position:relative;overflow:hidden;}
+  .rs-hero::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,#f59e0b,var(--esic-red),#8b5cf6);}
+  .rs-hero .eyebrow{color:#c4b5fd;}
+  .rs-hero h1{font-size:34px;font-weight:900;letter-spacing:-.03em;margin:8px 0 12px;color:#fff;line-height:1.05;}
+  .rs-hero p{margin:0;color:#cbd5e1;font-size:15.5px;max-width:70ch;line-height:1.6;}
+  .rs-hero .star{color:#fbbf24;}
+  .rs-note{font-size:13px;color:var(--muted);margin:18px 2px 34px;display:flex;align-items:center;gap:8px;}
+  .rs-note b{color:var(--navy);}
+
+  .fmt{margin:0 0 26px;border:1px solid var(--line);border-radius:20px;background:#fff;box-shadow:var(--shadow-sm);overflow:hidden;}
+  .fmt-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 14px;padding:20px 24px 0;}
+  .fmt-num{font-size:13px;font-weight:900;color:#fff;background:var(--esic-red);border-radius:8px;width:26px;height:26px;display:grid;place-items:center;flex:0 0 auto;align-self:center;}
+  .fmt-head h2{margin:0;font-size:21px;font-weight:900;color:var(--navy);letter-spacing:-.02em;}
+  .fmt-size{font-size:12px;font-weight:800;color:#6d28d9;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:999px;padding:4px 11px;}
+  .fmt-desc{padding:8px 24px 0;color:var(--ink-mid);font-size:14px;line-height:1.6;max-width:82ch;}
+  .fmt-desc b{color:var(--navy);}
+  .fmt-stage{margin:18px 24px 0;background:linear-gradient(180deg,#eef2f8,#e2e8f0);border:1px solid var(--line);border-radius:14px;padding:18px;position:relative;}
+  .fmt-hint{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:0 0 12px;display:flex;align-items:center;gap:7px;}
+  .fmt-hint .dot{width:7px;height:7px;border-radius:50%;background:var(--practica);box-shadow:0 0 0 4px var(--practica-bg);}
+  .fmt-foot{display:flex;flex-wrap:wrap;gap:8px;padding:16px 24px 22px;}
+  .chip{font-size:12px;font-weight:700;color:var(--navy);background:var(--silver);border:1px solid var(--line);border-radius:999px;padding:5px 12px;}
+  .chip.k{background:var(--practica-bg);color:#0f766e;border-color:#99f6e4;}
+
+  /* Mock page scaffolding used inside demos */
+  .pg{background:#fff;border-radius:9px;border:1px solid #dbe2ea;overflow:hidden;}
+  .pg-bar{height:22px;background:#f1f5f9;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;gap:5px;padding:0 9px;}
+  .pg-bar i{width:8px;height:8px;border-radius:50%;background:#cbd5e1;display:block;}
+  .pg-txt{height:9px;border-radius:5px;background:#e9eef4;margin:9px 14px;}
+  .pg-txt.s{width:55%;} .pg-txt.m{width:78%;} .pg-txt.l{width:92%;}
+  .ad{background:linear-gradient(135deg,var(--esic-red),#e05a6d);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-weight:800;position:relative;transition:all .5s cubic-bezier(.4,0,.2,1);}
+  .ad .brand{font-size:15px;letter-spacing:.02em;}
+  .ad .sub{font-size:10.5px;font-weight:600;opacity:.9;margin-top:3px;}
+  .ad .x{position:absolute;top:5px;right:7px;font-size:12px;opacity:.85;background:rgba(0,0,0,.2);width:16px;height:16px;border-radius:50%;display:grid;place-items:center;}
+  .go{appearance:none;border:0;cursor:pointer;font-family:inherit;font-weight:800;font-size:12.5px;color:#fff;background:var(--navy);border-radius:999px;padding:8px 16px;transition:background .15s;}
+  .go:hover{background:#13294f;}
+  .go.on{background:#0f766e;}
+  .demo-actions{display:flex;align-items:center;gap:10px;margin-top:12px;}
+  .demo-actions .state{font-size:12px;color:var(--muted);font-weight:600;}
+</style>
+</head>
+<body>
+
+<header class="res-top">
+  <svg width="120" height="28" viewBox="0 0 120 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ESIC University" style="flex:0 0 auto;display:block;">
+    <text x="0" y="22" font-family="Inter,sans-serif" font-weight="900" font-size="24" fill="white" letter-spacing="-1">ESIC</text>
+    <text x="58" y="22" font-family="Inter,sans-serif" font-weight="400" font-size="12" fill="#94a3b8" letter-spacing="1">UNIVERSITY</text>
+  </svg>
+  <a class="res-back" href="../index.html#s02">← Volver a la sesión</a>
+</header>
+
+<main class="res-main">
+
+  <div class="rs-hero">
+    <p class="eyebrow">Recurso · Formatos IAB</p>
+    <h1>Rising Stars <span class="star">★</span><br>los banners más interactivos</h1>
+    <p>El IAB bautizó como <b style="color:#fff;">Rising Stars</b> a una familia de formatos que rompen con el banner estático: <b style="color:#fff;">contienen toda la información de la marca dentro del propio anuncio</b> y el usuario interactúa con ellos como si fueran una landing, sin salir de la web. Toca cada demo para ver cómo se comportan.</p>
+  </div>
+
+  <p class="rs-note">👆 <b>Interactúa</b> con cada formato: los botones expanden, despliegan o cierran igual que las piezas reales.</p>
+
+  <!-- 1 · Billboard -->
+  <div class="fmt">
+    <div class="fmt-head"><span class="fmt-num">1</span><h2>Billboard</h2><span class="fmt-size">970 × 250 px</span></div>
+    <p class="fmt-desc">Formato horizontal en la <b>parte superior</b> de la página. Permite ver e interactuar con el contenido de la marca ahí mismo. Su rasgo distintivo: un <b>botón de cierre</b> que hace desaparecer el anuncio.</p>
+    <div class="fmt-stage">
+      <p class="fmt-hint"><span class="dot"></span>Pulsa la «×» para cerrar el anuncio</p>
+      <div class="pg">
+        <div class="pg-bar"><i></i><i></i><i></i></div>
+        <div id="bb-ad" class="ad" style="height:78px;border-radius:0;">
+          <span class="x" onclick="document.getElementById('bb-wrap').style.display='none';document.getElementById('bb-closed').style.display='block';">✕</span>
+          <span class="brand">OREO · Billboard 970×250</span>
+          <span class="sub">Contenido de marca interactivo, sin salir de la web</span>
+        </div>
+        <div id="bb-wrap"></div>
+        <div id="bb-closed" style="display:none;text-align:center;font-size:11px;color:#94a3b8;padding:8px;">Anuncio cerrado por el usuario</div>
+        <div class="pg-txt l"></div><div class="pg-txt m"></div><div class="pg-txt l"></div><div class="pg-txt s"></div>
+      </div>
+      <div class="demo-actions">
+        <button type="button" class="go" onclick="document.getElementById('bb-wrap').parentElement.querySelector('#bb-ad').style.display='flex';document.getElementById('bb-closed').style.display='none';">Restaurar anuncio</button>
+      </div>
+    </div>
+    <div class="fmt-foot"><span class="chip">Superior de página</span><span class="chip">Horizontal</span><span class="chip k">Botón de cierre</span></div>
+  </div>
+
+  <!-- 2 · Filmstrip -->
+  <div class="fmt">
+    <div class="fmt-head"><span class="fmt-num">2</span><h2>Filmstrip</h2><span class="fmt-size">300 × 3000 px · 5 segmentos</span></div>
+    <p class="fmt-desc">Una tira de <b>300 × 3000 px</b> dividida en <b>cinco segmentos de 300 × 600</b>. El usuario ve solo el primero y, al interactuar, <b>desliza</b> entre el resto del banner.</p>
+    <div class="fmt-stage">
+      <p class="fmt-hint"><span class="dot"></span>Usa las flechas para recorrer los 5 segmentos</p>
+      <div style="display:flex;gap:16px;align-items:center;justify-content:center;">
+        <button type="button" class="go" onclick="fsMove(-1)">▲</button>
+        <div style="width:150px;height:150px;overflow:hidden;border-radius:10px;border:1px solid #cbd5e1;">
+          <div id="fs-track" style="transition:transform .45s cubic-bezier(.4,0,.2,1);">
+            <div class="ad" style="height:150px;background:linear-gradient(135deg,#C8102E,#e05a6d);">
+              <span class="brand">Segmento 1</span><span class="sub">Portada de marca</span></div>
+            <div class="ad" style="height:150px;background:linear-gradient(135deg,#7c3aed,#a78bfa);">
+              <span class="brand">Segmento 2</span><span class="sub">Producto</span></div>
+            <div class="ad" style="height:150px;background:linear-gradient(135deg,#0f766e,#14b8a6);">
+              <span class="brand">Segmento 3</span><span class="sub">Vídeo</span></div>
+            <div class="ad" style="height:150px;background:linear-gradient(135deg,#b45309,#f59e0b);">
+              <span class="brand">Segmento 4</span><span class="sub">Galería</span></div>
+            <div class="ad" style="height:150px;background:linear-gradient(135deg,#0D1F3C,#334e73);">
+              <span class="brand">Segmento 5</span><span class="sub">Llamada a la acción</span></div>
+          </div>
+        </div>
+        <button type="button" class="go" onclick="fsMove(1)">▼</button>
+      </div>
+      <p style="text-align:center;font-size:12px;color:var(--muted);margin:12px 0 0;font-weight:600;">Segmento <b id="fs-n" style="color:var(--navy)">1</b> de 5</p>
+    </div>
+    <div class="fmt-foot"><span class="chip">Vertical</span><span class="chip">5 × 300×600</span><span class="chip k">Deslizable</span></div>
+  </div>
+
+  <!-- 3 · Portrait -->
+  <div class="fmt">
+    <div class="fmt-head"><span class="fmt-num">3</span><h2>Portrait</h2><span class="fmt-size">300 × 1050 px · 3 módulos</span></div>
+    <p class="fmt-desc">Ocupa la <b>columna derecha</b> con <b>3 módulos interactivos independientes</b>: pueden contener una galería de fotos, un vídeo, redes sociales… Cada módulo se maneja por separado.</p>
+    <div class="fmt-stage">
+      <p class="fmt-hint"><span class="dot"></span>Activa cada módulo por separado</p>
+      <div style="display:flex;gap:16px;">
+        <div class="pg" style="flex:1;">
+          <div class="pg-bar"><i></i><i></i><i></i></div>
+          <div class="pg-txt l"></div><div class="pg-txt m"></div><div class="pg-txt l"></div><div class="pg-txt s"></div><div class="pg-txt m"></div><div class="pg-txt l"></div>
+        </div>
+        <div style="width:120px;display:flex;flex-direction:column;gap:6px;">
+          <button type="button" class="pt-mod go" data-pt="Galería de fotos ▸ abierta" style="height:70px;border-radius:8px;flex-direction:column;background:linear-gradient(135deg,#C8102E,#e05a6d);">📷 Módulo 1</button>
+          <button type="button" class="pt-mod go" data-pt="Vídeo ▸ reproduciendo" style="height:70px;border-radius:8px;flex-direction:column;background:linear-gradient(135deg,#7c3aed,#a78bfa);">▶ Módulo 2</button>
+          <button type="button" class="pt-mod go" data-pt="Redes sociales ▸ desplegado" style="height:70px;border-radius:8px;flex-direction:column;background:linear-gradient(135deg,#0f766e,#14b8a6);">♥ Módulo 3</button>
+        </div>
+      </div>
+      <p style="text-align:center;font-size:12px;color:var(--muted);margin:12px 0 0;font-weight:600;" id="pt-state">Ningún módulo activado</p>
+    </div>
+    <div class="fmt-foot"><span class="chip">Columna derecha</span><span class="chip">3 módulos</span><span class="chip k">Independientes</span></div>
+  </div>
+
+  <!-- 4 · Pushdown -->
+  <div class="fmt">
+    <div class="fmt-head"><span class="fmt-num">4</span><h2>Pushdown</h2><span class="fmt-size">970 × 90 → 970 × 415 px</span></div>
+    <p class="fmt-desc">Empieza como un banner de <b>970 × 90</b> y se <b>expande hasta 970 × 415</b>. Su novedad: al abrirse <b>empuja el contenido de la web hacia abajo</b> en lugar de taparlo — nunca oculta información.</p>
+    <div class="fmt-stage">
+      <p class="fmt-hint"><span class="dot"></span>Expande: el contenido se desplaza hacia abajo, no se tapa</p>
+      <div class="pg">
+        <div class="pg-bar"><i></i><i></i><i></i></div>
+        <div id="pd-ad" class="ad" style="height:44px;border-radius:0;">
+          <span class="brand">OREO · Pushdown</span>
+        </div>
+        <div class="pg-txt l"></div><div class="pg-txt m"></div><div class="pg-txt l"></div><div class="pg-txt s"></div>
+      </div>
+      <div class="demo-actions">
+        <button type="button" class="go" id="pd-btn" onclick="pdToggle()">Expandir ▾</button>
+        <span class="state" id="pd-state">Estado: contraído (970×90)</span>
+      </div>
+    </div>
+    <div class="fmt-foot"><span class="chip">Superior</span><span class="chip">Expandible</span><span class="chip k">Empuja el contenido</span></div>
+  </div>
+
+  <!-- 5 · Sidekick -->
+  <div class="fmt">
+    <div class="fmt-head"><span class="fmt-num">5</span><h2>Sidekick</h2><span class="fmt-size">300×250 / 300×600 / 970×250 → 970×550</span></div>
+    <p class="fmt-desc">Arranca como un banner normal. Al interactuar, <b>la web se desplaza a la izquierda</b> y se despliega un lienzo de <b>970 × 550</b> con toda la experiencia de marca.</p>
+    <div class="fmt-stage">
+      <p class="fmt-hint"><span class="dot"></span>Activa: la página se desliza y aparece el panel de marca</p>
+      <div style="overflow:hidden;border-radius:10px;border:1px solid #cbd5e1;">
+        <div id="sk-row" style="display:flex;width:200%;transition:transform .5s cubic-bezier(.4,0,.2,1);">
+          <div style="width:50%;">
+            <div class="pg" style="border-radius:0;border:0;">
+              <div class="pg-bar"><i></i><i></i><i></i></div>
+              <div style="display:flex;gap:10px;padding:10px;">
+                <div style="flex:1;"><div class="pg-txt l" style="margin:6px 0;"></div><div class="pg-txt m" style="margin:6px 0;"></div><div class="pg-txt l" style="margin:6px 0;"></div><div class="pg-txt s" style="margin:6px 0;"></div></div>
+                <div class="ad" style="width:70px;height:92px;border-radius:8px;"><span style="font-size:10px;">300×250</span></div>
+              </div>
+            </div>
+          </div>
+          <div style="width:50%;">
+            <div class="ad" style="width:100%;height:100%;min-height:140px;background:linear-gradient(135deg,#7c3aed,#C8102E);">
+              <span class="brand">OREO · Sidekick 970×550</span>
+              <span class="sub">Experiencia de marca a pantalla lateral completa</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-actions">
+        <button type="button" class="go" id="sk-btn" onclick="skToggle()">Interactuar ▸</button>
+        <span class="state" id="sk-state">Estado: banner en su sitio</span>
+      </div>
+    </div>
+    <div class="fmt-foot"><span class="chip">Lateral</span><span class="chip">3 tamaños de inicio</span><span class="chip k">Desplaza la web</span></div>
+  </div>
+
+  <!-- 6 · Slider -->
+  <div class="fmt">
+    <div class="fmt-head"><span class="fmt-num">6</span><h2>Slider</h2><span class="fmt-size">970 × 90 → 970 × 550 px</span></div>
+    <p class="fmt-desc">Una franja de <b>970 × 90</b> anclada <b>al fondo</b> de la página. Al interactuar, desplaza el contenido a la izquierda y se expande a <b>970 × 550</b>, con un botón para volver a mostrar la web.</p>
+    <div class="fmt-stage">
+      <p class="fmt-hint"><span class="dot"></span>Anclado abajo · pulsa para expandir e interactuar</p>
+      <div class="pg" style="position:relative;height:190px;overflow:hidden;">
+        <div class="pg-bar"><i></i><i></i><i></i></div>
+        <div class="pg-txt l"></div><div class="pg-txt m"></div><div class="pg-txt l"></div><div class="pg-txt s"></div><div class="pg-txt m"></div>
+        <div id="sl-ad" class="ad" style="position:absolute;left:0;right:0;bottom:0;height:34px;border-radius:0;transition:height .5s cubic-bezier(.4,0,.2,1);">
+          <span class="x" id="sl-x" style="display:none;" onclick="slToggle()">✕</span>
+          <span class="brand" id="sl-brand">OREO · Slider (barra inferior)</span>
+        </div>
+      </div>
+      <div class="demo-actions">
+        <button type="button" class="go" id="sl-btn" onclick="slToggle()">Expandir ▴</button>
+        <span class="state" id="sl-state">Estado: barra inferior 970×90</span>
+      </div>
+    </div>
+    <div class="fmt-foot"><span class="chip">Inferior (sticky)</span><span class="chip">Superposición</span><span class="chip k">Expande y recupera</span></div>
+  </div>
+
+  <p style="font-size:13px;color:var(--muted);text-align:center;margin-top:8px;">Especificaciones oficiales: <a href="https://www.iab.com/guidelines/display-rising-stars-ad-units/" target="_blank" rel="noopener" style="color:var(--esic-red);font-weight:700;">IAB · Display Rising Stars Ad Units →</a></p>
+
+</main>
+
+<script>
+  // Filmstrip
+  var fsIdx=0;
+  function fsMove(d){fsIdx=Math.max(0,Math.min(4,fsIdx+d));document.getElementById('fs-track').style.transform='translateY(-'+(fsIdx*150)+'px)';document.getElementById('fs-n').textContent=fsIdx+1;}
+  // Portrait
+  document.querySelectorAll('.pt-mod').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('.pt-mod').forEach(function(x){x.classList.remove('on');});b.classList.add('on');document.getElementById('pt-state').innerHTML='Activo → <b style=\"color:var(--navy)\">'+b.dataset.pt+'</b>';});});
+  // Pushdown
+  var pdOpen=false;
+  function pdToggle(){pdOpen=!pdOpen;var a=document.getElementById('pd-ad');a.style.height=pdOpen?'150px':'44px';a.innerHTML=pdOpen?'<span class="brand">OREO · Pushdown 970×415</span><span class="sub">La web se ha desplazado hacia abajo — nada queda tapado</span>':'<span class="brand">OREO · Pushdown</span>';document.getElementById('pd-btn').textContent=pdOpen?'Contraer ▴':'Expandir ▾';document.getElementById('pd-btn').classList.toggle('on',pdOpen);document.getElementById('pd-state').textContent='Estado: '+(pdOpen?'expandido (970×415)':'contraído (970×90)');}
+  // Sidekick
+  var skOpen=false;
+  function skToggle(){skOpen=!skOpen;document.getElementById('sk-row').style.transform=skOpen?'translateX(-50%)':'translateX(0)';document.getElementById('sk-btn').textContent=skOpen?'◂ Volver a la web':'Interactuar ▸';document.getElementById('sk-btn').classList.toggle('on',skOpen);document.getElementById('sk-state').textContent='Estado: '+(skOpen?'panel de marca 970×550 desplegado':'banner en su sitio');}
+  // Slider
+  var slOpen=false;
+  function slToggle(){slOpen=!slOpen;var a=document.getElementById('sl-ad');a.style.height=slOpen?'150px':'34px';a.style.flexDirection='column';document.getElementById('sl-brand').innerHTML=slOpen?'OREO · Slider 970×550<span class="sub" style="display:block">Experiencia expandida — pulsa ✕ para recuperar la web</span>':'OREO · Slider (barra inferior)';document.getElementById('sl-x').style.display=slOpen?'grid':'none';document.getElementById('sl-btn').textContent=slOpen?'Contraer ▾':'Expandir ▴';document.getElementById('sl-btn').classList.toggle('on',slOpen);document.getElementById('sl-state').textContent='Estado: '+(slOpen?'expandido (970×550)':'barra inferior 970×90');}
+</script>
+
+</body>
+</html>
