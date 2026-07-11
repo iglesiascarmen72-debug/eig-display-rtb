@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Display &amp; RTB — Esquemas de clase | ESIC</title>
+<style>
+  :root {
+    --ink: #2C2C2A;
+    --ink-soft: #5F5E5A;
+    --line: #D3D1C7;
+    --bg: #FFFFFF;
+    --bg-soft: #F9F8F5;
+    --accent: #0F6E56;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+  }
+  header {
+    padding: 40px 24px 28px;
+    border-bottom: 3px solid var(--accent);
+    background: var(--bg-soft);
+  }
+  header .eyebrow {
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+  header h1 {
+    margin: 0 0 8px;
+    font-size: 28px;
+    font-weight: 600;
+  }
+  header p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 15px;
+  }
+  nav {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  nav a {
+    font-size: 13px;
+    color: var(--accent);
+    text-decoration: none;
+    border: 1px solid var(--line);
+    padding: 6px 12px;
+    border-radius: 20px;
+  }
+  nav a:hover { border-color: var(--accent); }
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px 60px;
+  }
+  section {
+    padding: 48px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  section:last-child { border-bottom: none; }
+  section h2 {
+    font-size: 21px;
+    font-weight: 600;
+    margin: 0 0 4px;
+  }
+  section .subtitle {
+    color: var(--ink-soft);
+    font-size: 14px;
+    margin: 0 0 20px;
+  }
+  .diagram-card {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+  .diagram-card svg { width: 100%; height: auto; display: block; }
+  .note {
+    background: var(--bg-soft);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    font-size: 14.5px;
+  }
+  .note strong { color: var(--ink); }
+  .whiteboard {
+    margin-top: 16px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    background: var(--bg-soft);
+    border: 1px dashed var(--ink-soft);
+    border-radius: 8px;
+    padding: 14px 18px;
+    white-space: pre;
+    overflow-x: auto;
+    color: var(--ink);
+  }
+  footer {
+    text-align: center;
+    padding: 30px 24px 50px;
+    color: var(--ink-soft);
+    font-size: 13px;
+  }
+  /* Diagram color system */
+  text { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+  .th { font-size: 14px; font-weight: 500; }
+  .ts { font-size: 12px; font-weight: 400; }
+  .box rect { fill: #F7F6F2; stroke: #B4B2A9; }
+  .box text { fill: #2C2C2A; }
+  .c-teal rect { fill: #E1F5EE; stroke: #0F6E56; }
+  .c-teal .th { fill: #085041; }
+  .c-teal .ts { fill: #0F6E56; }
+  .c-coral rect { fill: #FAECE7; stroke: #993C1D; }
+  .c-coral .th { fill: #712B13; }
+  .c-coral .ts { fill: #993C1D; }
+  .c-blue rect { fill: #E6F1FB; stroke: #185FA5; }
+  .c-blue .th { fill: #0C447C; }
+  .c-blue .ts { fill: #185FA5; }
+  .c-pink rect { fill: #FBEAF0; stroke: #993556; }
+  .c-pink .th { fill: #72243E; }
+  .c-pink .ts { fill: #993556; }
+  .c-gray rect { fill: #F1EFE8; stroke: #5F5E5A; }
+  .c-gray .th { fill: #444441; }
+  .c-gray .ts { fill: #5F5E5A; }
+  .arr { stroke: #73726c; }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">ESIC · Máster en Marketing Digital · Tráfico Digital</p>
+  <h1>Display &amp; RTB — esquemas de clase</h1>
+  <p>Material de apoyo visual para la sesión. Carmen Iglesias.</p>
+</header>
+
+<nav>
+  <a href="#actores">1. Actores: open web vs walled gardens</a>
+  <a href="#mix-simple">2. Meta Ads, Google Ads y RTB conviviendo</a>
+</nav>
+
+<main>
+
+<section id="actores">
+  <h2>1. Actores: open web vs walled gardens</h2>
+  <p class="subtitle">Dos ecosistemas con lógicas de control distintas</p>
+
+  <div class="diagram-card">
+  <svg viewBox="0 0 680 620" role="img">
+  <title>Comparación Open Web RTB vs Walled Gardens</title>
+  <desc>Diagrama de dos columnas mostrando los actores del ecosistema Open Web frente al modelo cerrado de Walled Gardens.</desc>
+  <defs>
+  <marker id="arrow1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  </defs>
+  <g class="c-teal">
+  <rect x="40" y="30" width="280" height="550" rx="20" fill="none" stroke-width="0.5"/>
+  <text class="th" x="180" y="58" text-anchor="middle" dominant-baseline="central">Open web (RTB)</text>
+  <text class="ts" x="180" y="76" text-anchor="middle" dominant-baseline="central">Múltiples actores independientes</text>
+  </g>
+  <g class="c-blue"><rect x="60" y="100" width="240" height="44" rx="8" stroke-width="0.5"/>
+  <text class="th" x="180" y="122" text-anchor="middle" dominant-baseline="central">Anunciante</text></g>
+  <line x1="180" y1="144" x2="180" y2="172" class="arr" stroke-width="1.5" marker-end="url(#arrow1)"/>
+  <g class="c-blue"><rect x="60" y="172" width="240" height="56" rx="8" stroke-width="0.5"/>
+  <text class="th" x="180" y="192" text-anchor="middle" dominant-baseline="central">Agencia / trading desk</text>
+  <text class="ts" x="180" y="212" text-anchor="middle" dominant-baseline="central">Compra en su nombre</text></g>
+  <line x1="180" y1="228" x2="180" y2="256" class="arr" stroke-width="1.5" marker-end="url(#arrow1)"/>
+  <g class="c-blue"><rect x="60" y="256" width="240" height="56" rx="8" stroke-width="0.5"/>
+  <text class="th" x="180" y="276" text-anchor="middle" dominant-baseline="central">DSP</text>
+  <text class="ts" x="180" y="296" text-anchor="middle" dominant-baseline="central">Demand side platform</text></g>
+  <line x1="180" y1="312" x2="180" y2="340" class="arr" stroke-width="1.5" marker-end="url(#arrow1)"/>
+  <g class="c-blue"><rect x="60" y="340" width="240" height="56" rx="8" stroke-width="0.5"/>
+  <text class="th" x="180" y="360" text-anchor="middle" dominant-baseline="central">SSP / ad exchange</text>
+  <text class="ts" x="180" y="380" text-anchor="middle" dominant-baseline="central">Varias plataformas compiten</text></g>
+  <line x1="180" y1="396" x2="180" y2="424" class="arr" stroke-width="1.5" marker-end="url(#arrow1)"/>
+  <g class="c-blue"><rect x="60" y="424" width="240" height="56" rx="8" stroke-width="0.5"/>
+  <text class="th" x="180" y="444" text-anchor="middle" dominant-baseline="central">Ad server (GAM)</text>
+  <text class="ts" x="180" y="464" text-anchor="middle" dominant-baseline="central">Gestiona el inventario</text></g>
+  <line x1="180" y1="480" x2="180" y2="508" class="arr" stroke-width="1.5" marker-end="url(#arrow1)"/>
+  <g class="c-blue"><rect x="60" y="508" width="240" height="44" rx="8" stroke-width="0.5"/>
+  <text class="th" x="180" y="530" text-anchor="middle" dominant-baseline="central">Publisher / web</text></g>
+
+  <g class="c-coral">
+  <rect x="340" y="30" width="280" height="550" rx="20" fill="none" stroke-width="0.5"/>
+  <text class="th" x="480" y="58" text-anchor="middle" dominant-baseline="central">Walled gardens</text>
+  <text class="ts" x="480" y="76" text-anchor="middle" dominant-baseline="central">Un solo actor controla todo</text>
+  </g>
+  <g class="c-pink"><rect x="360" y="100" width="240" height="44" rx="8" stroke-width="0.5"/>
+  <text class="th" x="480" y="122" text-anchor="middle" dominant-baseline="central">Anunciante</text></g>
+  <line x1="480" y1="144" x2="480" y2="172" class="arr" stroke-width="1.5" marker-end="url(#arrow1)"/>
+  <g class="c-pink"><rect x="360" y="172" width="110" height="56" rx="8" stroke-width="0.5"/>
+  <text class="th" x="415" y="192" text-anchor="middle" dominant-baseline="central">Meta ads</text>
+  <text class="ts" x="415" y="212" text-anchor="middle" dominant-baseline="central">IG, FB</text></g>
+  <g class="c-pink"><rect x="490" y="172" width="110" height="56" rx="8" stroke-width="0.5"/>
+  <text class="th" x="545" y="192" text-anchor="middle" dominant-baseline="central">Google ads</text>
+  <text class="ts" x="545" y="212" text-anchor="middle" dominant-baseline="central">Search, YT</text></g>
+  <line x1="415" y1="228" x2="415" y2="256" class="arr" stroke-width="1.5" marker-end="url(#arrow1)"/>
+  <line x1="545" y1="228" x2="545" y2="256" class="arr" stroke-width="1.5" marker-end="url(#arrow1)"/>
+  <g class="c-pink"><rect x="360" y="256" width="240" height="56" rx="8" stroke-width="0.5"/>
+  <text class="th" x="480" y="276" text-anchor="middle" dominant-baseline="central">Inventario propio</text>
+  <text class="ts" x="480" y="296" text-anchor="middle" dominant-baseline="central">Mismo dueño: todo cerrado</text></g>
+  <g class="box"><rect x="360" y="340" width="240" height="44" rx="8" stroke-width="0.5"/>
+  <text class="ts" x="480" y="362" text-anchor="middle" dominant-baseline="central">Sin subastas externas</text></g>
+  </svg>
+  </div>
+
+  <div class="note">
+    En el <strong>open web</strong> cada eslabón es una empresa distinta y la subasta entre ellas es auditable.
+    En el <strong>walled garden</strong>, demanda, subasta, inventario y datos pertenecen al mismo dueño: no hay
+    SSP externo ni acceso de terceros a la puja.
+  </div>
+</section>
+
+<section id="mix-simple">
+  <h2>2. Cómo conviven Meta Ads, Google Ads y RTB</h2>
+  <p class="subtitle">Ejemplo simplificado — y el matiz de Google Display Network</p>
+
+  <div class="diagram-card">
+  <svg viewBox="0 0 680 410" role="img">
+  <title>Meta Ads, Google Ads, RTB y Google Display Network en una campaña X</title>
+  <desc>Tres canales conviviendo en una campaña X, con Google Display Network como puente entre demanda de Google Ads e inventario de la web abierta.</desc>
+  <defs>
+  <marker id="arrow4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  </defs>
+  <g class="c-gray"><rect x="220" y="30" width="240" height="56" rx="8" stroke-width="0.5"/>
+  <text class="th" x="340" y="50" text-anchor="middle" dominant-baseline="central">Campaña X</text>
+  <text class="ts" x="340" y="70" text-anchor="middle" dominant-baseline="central">Un mismo objetivo, tres canales</text></g>
+  <line x1="260" y1="86" x2="130" y2="150" class="arr" stroke-width="1.5" marker-end="url(#arrow4)"/>
+  <line x1="340" y1="86" x2="340" y2="150" class="arr" stroke-width="1.5" marker-end="url(#arrow4)"/>
+  <line x1="420" y1="86" x2="550" y2="150" class="arr" stroke-width="1.5" marker-end="url(#arrow4)"/>
+
+  <g class="c-coral"><rect x="40" y="150" width="180" height="80" rx="8" stroke-width="0.5"/>
+  <text class="th" x="130" y="172" text-anchor="middle" dominant-baseline="central">Meta ads</text>
+  <text class="ts" x="130" y="192" text-anchor="middle" dominant-baseline="central">Vídeo e imagen</text>
+  <text class="ts" x="130" y="210" text-anchor="middle" dominant-baseline="central">Retargeting IG/FB</text></g>
+  <g class="c-coral"><rect x="250" y="150" width="180" height="80" rx="8" stroke-width="0.5"/>
+  <text class="th" x="340" y="172" text-anchor="middle" dominant-baseline="central">Google ads</text>
+  <text class="ts" x="340" y="192" text-anchor="middle" dominant-baseline="central">Búsqueda de marca</text>
+  <text class="ts" x="340" y="210" text-anchor="middle" dominant-baseline="central">Vídeo en YouTube</text></g>
+  <g class="c-teal"><rect x="460" y="150" width="180" height="80" rx="8" stroke-width="0.5"/>
+  <text class="th" x="550" y="172" text-anchor="middle" dominant-baseline="central">RTB programático</text>
+  <text class="ts" x="550" y="192" text-anchor="middle" dominant-baseline="central">Display</text>
+  <text class="ts" x="550" y="210" text-anchor="middle" dominant-baseline="central">En el resto de la web</text></g>
+
+  <line x1="340" y1="230" x2="390" y2="250" stroke-dasharray="4 3" stroke="#73726c" stroke-width="0.5" fill="none" marker-end="url(#arrow4)"/>
+  <line x1="550" y1="230" x2="510" y2="250" stroke-dasharray="4 3" stroke="#73726c" stroke-width="0.5" fill="none" marker-end="url(#arrow4)"/>
+
+  <g class="box"><rect x="330" y="250" width="240" height="40" rx="8" stroke-width="0.5"/>
+  <text class="th" x="450" y="265" text-anchor="middle" dominant-baseline="central">Google display network</text>
+  <text class="ts" x="450" y="282" text-anchor="middle" dominant-baseline="central">Un mismo canal, dos mundos</text></g>
+  <g class="c-coral"><rect x="330" y="290" width="120" height="34" stroke-width="0.5"/>
+  <text class="ts" x="390" y="307" text-anchor="middle" dominant-baseline="central">Demanda</text></g>
+  <g class="c-teal"><rect x="450" y="290" width="120" height="34" stroke-width="0.5"/>
+  <text class="ts" x="510" y="307" text-anchor="middle" dominant-baseline="central">Inventario</text></g>
+
+  <rect x="200" y="345" width="16" height="16" rx="4" class="c-coral" stroke-width="0.5"/>
+  <text class="ts" x="222" y="353" dominant-baseline="central">Walled garden</text>
+  <rect x="420" y="345" width="16" height="16" rx="4" class="c-teal" stroke-width="0.5"/>
+  <text class="ts" x="442" y="353" dominant-baseline="central">Open web</text>
+  </svg>
+  </div>
+
+  <div class="note">
+    No compiten entre sí, se complementan: Meta entra donde el usuario ya está, Google Ads en el momento de
+    intención de búsqueda, RTB en todo el resto de internet. El matiz de GDN: la compra es cerrada (Google Ads),
+    pero el inventario final son webs de terceros — el mismo AdX/AdSense que ya vimos en el ecosistema open web.
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Material de apoyo — Display &amp; RTB, ESIC Máster en Marketing Digital · Carmen Iglesias
+</footer>
+
+</body>
+</html>
